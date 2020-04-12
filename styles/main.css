@@ -1,0 +1,22 @@
+.productgrid-container {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(300px, 1fr));
+    grid-template-rows: repeat(5, minmax(600px, 1fr));
+}
+
+.productcell {
+    display: flex;
+    flex-direction: column;
+}
+
+.productcell img {
+    width: 200px;
+    height: 200px;
+    align-self: center;
+
+}
+
+.productcell img:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+}
