@@ -24,7 +24,6 @@ function createProductCell(product) {
 
     let productImg = document.createElement('img');
     productImg.src = product.imgSrc;
-    productImg.addEventListener('click', onProductClick);
     productCell.appendChild(productImg);
 
     let priceText = document.createElement('p');
@@ -39,12 +38,19 @@ function createProductCell(product) {
     descriptionText.textContent = product.description;
     productCell.appendChild(descriptionText);
 
+    productCell.addEventListener('click', onProductClick);
+
     productCell.classList.add('productcell');
 
     return productCell;
 }
 
 function onProductClick(e) {
+    let productCell = e.target;
+    // TODO: need to fix to get correct target
+    let product = new Product(productCell.nameText.textContent, productCell.descriptionText.textContent, 
+        productCell.priceText.textContent, productCell.productImg.src);
+    sessionStorage.setItem('product', JSON.stringify(product));
     window.open('product.html', '_self');
 }
 
@@ -58,7 +64,7 @@ function Product(name, description, price, imgSrc){
 function testFillList(numberOfProducts) {
     var productList = [];
     for (let i = 0; i < numberOfProducts; i++) {
-        productList.push(new Product("Test", "This is a test product.", "$0.00", "images/default-product.png"))
+        productList.push(new Product("Test" + i, "This is test product " + i + ".", "$0.00", "images/default-product.png"))
     }
     return productList;
 }
