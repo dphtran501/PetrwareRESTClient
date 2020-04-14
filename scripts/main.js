@@ -24,18 +24,22 @@ function createProductCell(product) {
 
     let productImg = document.createElement('img');
     productImg.src = product.imgSrc;
+    productImg.classList.add('productimage');
     productCell.appendChild(productImg);
 
     let priceText = document.createElement('p');
     priceText.textContent = product.price;
+    priceText.classList.add('productprice');
     productCell.appendChild(priceText);
 
     let nameText = document.createElement('p');
     nameText.textContent = product.name;
+    nameText.classList.add('productname');
     productCell.appendChild(nameText);
 
     let descriptionText = document.createElement('p');
     descriptionText.textContent = product.description;
+    descriptionText.classList.add('productdescription');
     productCell.appendChild(descriptionText);
 
     productCell.addEventListener('click', onProductClick);
@@ -46,10 +50,12 @@ function createProductCell(product) {
 }
 
 function onProductClick(e) {
-    let productCell = e.target;
-    // TODO: need to fix to get correct target
-    let product = new Product(productCell.nameText.textContent, productCell.descriptionText.textContent, 
-        productCell.priceText.textContent, productCell.productImg.src);
+    let productCell = e.currentTarget;
+    let nameText = productCell.querySelector('.productname');
+    let descriptionText = productCell.querySelector('.productdescription');
+    let priceText = productCell.querySelector('.productprice');
+    let image = productCell.querySelector('.productimage')
+    let product = new Product(nameText.textContent, descriptionText.textContent, priceText.textContent, image.src);
     sessionStorage.setItem('product', JSON.stringify(product));
     window.open('product.html', '_self');
 }
