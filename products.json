@@ -1,0 +1,91 @@
+{
+    "cpu": [
+        {
+            "brand": "Intel",
+            "name": "Core i9-9900K",
+            "processorsType": "Desktop",
+            "model": "BX80684I99900K",
+            "socketType": "LGA 1151 (300 series)",
+            "coreName": "Coffee Lake",
+            "numOfCores": "8-Core",
+            "numOfThreads": "16",
+            "operatingFrequency": "3.6 GHz",
+            "maxTurboFrequency": "5.0 GHz",
+            "price": "$504.99",
+            "description": "Introducing the NEW 9th Gen Intel Core desktop processors the first unlocked mainstream desktop processor. When paired with Intel Optane memory, accelerates the loading and launching of the games you play. With up to 5GHz and 16-way multitasking, take your creativity to the next level with the power you need to create, edit, and share.",
+            "imgSrc": "core_i9-9900K.png"
+        },
+        {
+            "brand": "AMD",
+            "name": "Ryzen 5 3600",
+            "processorsType": "Desktop",
+            "model": "100-100000031BOX",
+            "socketType": "Socket AM4",
+            "coreName": "Matisse",
+            "numOfCores": "6-Core",
+            "numOfThreads": "12",
+            "operatingFrequency": "3.6 GHz",
+            "maxTurboFrequency": "4.2 GHz",
+            "price": "$174.99",
+            "description": "3rd Gen AMD Ryzen processors are built using the world's most advanced 7nm manufacturing technology. Paired with Wraith coolers, AMD Ryzen processors deliver game-winning performance while keeping your system astonishingly cool and quiet. Ryzen processors neural-net intelligence can adapt to your workload. That's the advantage you gain when you own the world's most advanced processor for gaming.",
+            "imgSrc": "ryzen_5_3600.png"
+        },{
+            "brand": "AMD",
+            "name": "Ryzen Threadripper 2990WX",
+            "processorsType": "Desktop",
+            "model": "YD299XAZAFWOF",
+            "socketType": "Socket sTR4",
+            "coreName": "",
+            "numOfCores": "32-Core",
+            "numOfThreads": "64",
+            "operatingFrequency": "3.0 GHz",
+            "maxTurboFrequency": "4.2 GHz",
+            "price": "$1539.99",
+            "description": "32 cores provide an astonishing 64 threads of simultaneous multi-processing power, while 80MB of combined cache and vast I/O from the enthusiast-grade AMD X399 platform work together to enable the world’s most powerful desktop processor.",
+            "imgSrc": "ryzen_threadripper_2990wx.png"
+        }
+    ],
+    "ram": [
+        {
+            "brand": "CORSAIR",
+            "series": "Vengeance RGB Pro",
+            "model": "CMW16GX4M2C3200C16",
+            "capacity": "16GB (2 x 8GB)",
+            "speed": "DDR4 3200 (PC4 25600)",
+            "latency": "16",
+            "timing": "16-18-18-36",
+            "color": "Black",
+            "colorLED": "RGB",
+            "price": "$99.99",
+            "description": "CORSAIR VENGEANCE RGB PRO Series DDR4 memory lights up your PC with mesmerizing dynamic multi-zone RGB lighting, while delivering the best in DDR4 performance and stability. Every module boasts ten individually controlled RGB LEDs, while wire-free design makes installation simple. Take control with CORSAIR iCUE software and completely customize every modules lighting to match your system, or easily synchronize lighting across all your CORSAIR products with Light LINK. A custom designed PCB provides the highest signal quality for the best level of performance and stability on the latest AMD and Intel DDR4 motherboards, while specially screened ICs unlock superior overclocking.",
+            "imgSrc": "vengeance_rgb_pro.png"
+        },
+        {
+            "brand": "G.SKILL",
+            "series": "TridentZ RGB Series",
+            "model": "F4-3200C16D-16GTZR",
+            "capacity": "16GB (2 x 8GB)",
+            "speed": "DDR4 3200 (PC4 25600)",
+            "latency": "16",
+            "timing": "16-18-18-38",
+            "color": "Black",
+            "colorLED": "RGB",
+            "price": "$99.99",
+            "description": "G.SKILL Trident Z RGB series is one of the worlds most revolutionary RGB lighting DDR4 memory kits. Featuring a complete row of LEDs brilliantly displayed through an uncovered full-length light bar, Trident Z RGB series is capable of displaying a wide range of vivid colors. Along with the strong foundation of G.SKILL overclocking memory development technology, highly screened components, and custom 10-layer PCB, the Trident Z RGB series is the ideal DDR4 solution for building an extremely stylish performance PCs.",
+            "imgSrc": "tridentz_rgb_series.png"
+        },{
+            "brand": "G.SKILL",
+            "series": "Trident Z Royal Series",
+            "model": "F4-3200C16D-16GTRG",
+            "capacity": "16GB (2 x 8GB)",
+            "speed": "DDR4 3200 (PC4 25600)",
+            "latency": "16",
+            "timing": "16-18-18-38",
+            "color": "Gold",
+            "colorLED": "RGB",
+            "price": "$124.99",
+            "description": "Trident Z Royal is the latest addition to the Trident Z flagship family and features a crown jewel design. Meticulously crafted to display just the right amount of light refraction, the crystalline light bar scatters the RGB colors in a magnificent display of LED lighting. Mirroring the high-class light bar design, polished aluminum heatspreaders of gold or silver colors cools the memory modules in the award-winning classic Trident Z tri-fin design.",
+            "imgSrc": "trident_z_royal_series.png"
+        }
+    ]
+}
