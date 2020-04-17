@@ -3,16 +3,12 @@ let defaultMaxColumns = 5;
 
 const productGrid = document.querySelector('.productgrid-container');
 
+const jsonObj = load();
 
-function init() {
-    let jsonObj = load();
+setProductGrid(defaultMaxColumns, defaultMaxRows, createProductList(jsonObj));
 
-    setProductGrid(defaultMaxColumns, defaultMaxRows, createProductList(jsonObj));
-}
-
-init();
-
-function Product(name, description, price, imgSrc){
+function Product(id, name, description, price, imgSrc){
+    this.id = id;
     this.name = name;
     this.description = description;
     this.price = price;
@@ -31,7 +27,7 @@ function createProductList(jsonObject) {
         }
         else if (item.category == "ram") {
             name = item.brand + " " + item.series;
-            description = "Capacity: " + item.capcity + "\n" 
+            description = "Capacity: " + item.capacity + "\n" 
                 + "Speed: " + item.speed + "\n" 
                 + "Color: " + item.color;
         }
@@ -44,7 +40,7 @@ function createProductList(jsonObject) {
         }
 
         let imageSrc = "images/" + item.imgSrc;
-        productList.push(new Product(name, description, item.price, imageSrc));
+        productList.push(new Product(item.model, name, description, item.price, imageSrc));
     })
 
     return productList;
@@ -70,6 +66,7 @@ function createProductCell(product) {
     let productImg = document.createElement('img');
     productImg.src = product.imgSrc;
     productImg.classList.add('productimage');
+    productImg.addEventListener('click', onProductClick);
     productCell.appendChild(productImg);
 
     let priceText = document.createElement('p');
@@ -87,20 +84,17 @@ function createProductCell(product) {
     descriptionText.classList.add('productdescription');
     productCell.appendChild(descriptionText);
 
-    productCell.addEventListener('click', onProductClick);
-
     productCell.classList.add('productcell');
+
+    productCell.id = product.id;
 
     return productCell;
 }
 
 function onProductClick(e) {
-    let productCell = e.currentTarget;
-    let nameText = productCell.querySelector('.productname');
-    let descriptionText = productCell.querySelector('.productdescription');
-    let priceText = productCell.querySelector('.productprice');
-    let image = productCell.querySelector('.productimage')
-    let product = new Product(nameText.textContent, descriptionText.textContent, priceText.textContent, image.src);
-    sessionStorage.setItem('product', JSON.stringify(product));
+    let productCell = e.target.parentElement;
+    let product = jsonObj.filter(item => item.model == productCell.id);
+    sessionStorage.setItem('product', JSON.stringify(product[0]));
     window.open('product.html', '_self');
 }
+
