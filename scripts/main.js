@@ -21,21 +21,21 @@ function createProductList(jsonObject) {
         let name, description;
         if (item.category == "cpu"){
             name = item.brand + " " + item.name;
-            description = "# of Cores: " + item.numOfCores + "\n" 
-                + "Frequency: " + item.operatingFrequency + "\n"
+            description = "# of Cores: " + item.numOfCores + "\r\n" 
+                + "Frequency: " + item.operatingFrequency + "\r\n"
                 + "Socket Type: " + item.socketType;
         }
         else if (item.category == "ram") {
             name = item.brand + " " + item.series;
-            description = "Capacity: " + item.capacity + "\n" 
-                + "Speed: " + item.speed + "\n" 
+            description = "Capacity: " + item.capacity + "\r\n" 
+                + "Speed: " + item.speed + "\r\n" 
                 + "Color: " + item.color;
         }
         else if(item.category == "videoCard") {
             name = item.brand + " " + (item.series == "" ? "" : (item.series + " ")) + item.gpu;
-            description = "Memory Size: " + item.memorySize + "\n" 
-                + "Memory Type: " + item.memoryType + "\n" 
-                + "Max GPU Length: " + item.maxGPULength + "\n" 
+            description = "Memory Size: " + item.memorySize + "\r\n" 
+                + "Memory Type: " + item.memoryType + "\r\n" 
+                + "Max GPU Length: " + item.maxGPULength + "\r\n" 
                 + "Dimensions: " + item.cardDimensions;
         }
 

@@ -16,6 +16,10 @@
 
 }
 
+.productcell p {
+    white-space: pre;
+}
+
 .productcell img:hover {
     transform: scale(1.1);
     cursor: pointer;
