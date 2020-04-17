@@ -104,11 +104,3 @@ function onProductClick(e) {
     sessionStorage.setItem('product', JSON.stringify(product));
     window.open('product.html', '_self');
 }
-
-// function testFillList(numberOfProducts) {
-//     var productList = [];
-//     for (let i = 0; i < numberOfProducts; i++) {
-//         productList.push(new Product("Test" + i, "This is test product " + i + ".", "$0.00", "images/default-product.png"))
-//     }
-//     return productList;
-// }
