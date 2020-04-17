@@ -3,7 +3,52 @@ let defaultMaxColumns = 5;
 
 const productGrid = document.querySelector('.productgrid-container');
 
-setProductGrid(defaultMaxColumns, defaultMaxRows, testFillList(25));
+
+function init() {
+    let jsonObj = load();
+
+    setProductGrid(defaultMaxColumns, defaultMaxRows, createProductList(jsonObj));
+}
+
+init();
+
+function Product(name, description, price, imgSrc){
+    this.name = name;
+    this.description = description;
+    this.price = price;
+    this.imgSrc = imgSrc;
+}
+
+function createProductList(jsonObject) {
+    var productList = [];
+    jsonObject.forEach(item => {
+        let name, description;
+        if (item.category == "cpu"){
+            name = item.brand + " " + item.name;
+            description = "# of Cores: " + item.numOfCores + "\n" 
+                + "Frequency: " + item.operatingFrequency + "\n"
+                + "Socket Type: " + item.socketType;
+        }
+        else if (item.category == "ram") {
+            name = item.brand + " " + item.series;
+            description = "Capacity: " + item.capcity + "\n" 
+                + "Speed: " + item.speed + "\n" 
+                + "Color: " + item.color;
+        }
+        else if(item.category == "videoCard") {
+            name = item.brand + " " + (item.series == "" ? "" : (item.series + " ")) + item.gpu;
+            description = "Memory Size: " + item.memorySize + "\n" 
+                + "Memory Type: " + item.memoryType + "\n" 
+                + "Max GPU Length: " + item.maxGPULength + "\n" 
+                + "Dimensions: " + item.cardDimensions;
+        }
+
+        let imageSrc = "images/" + item.imgSrc;
+        productList.push(new Product(name, description, item.price, imageSrc));
+    })
+
+    return productList;
+}
 
 function setProductGrid(numberOfColumns, numberOfRows, productList) {
     let currIdx = 0;
@@ -60,17 +105,10 @@ function onProductClick(e) {
     window.open('product.html', '_self');
 }
 
-function Product(name, description, price, imgSrc){
-    this.name = name;
-    this.description = description;
-    this.price = price;
-    this.imgSrc = imgSrc;
-}
-
-function testFillList(numberOfProducts) {
-    var productList = [];
-    for (let i = 0; i < numberOfProducts; i++) {
-        productList.push(new Product("Test" + i, "This is test product " + i + ".", "$0.00", "images/default-product.png"))
-    }
-    return productList;
-}
+// function testFillList(numberOfProducts) {
+//     var productList = [];
+//     for (let i = 0; i < numberOfProducts; i++) {
+//         productList.push(new Product("Test" + i, "This is test product " + i + ".", "$0.00", "images/default-product.png"))
+//     }
+//     return productList;
+// }
