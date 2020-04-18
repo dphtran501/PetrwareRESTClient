@@ -65,23 +65,24 @@ function createProductCell(product) {
 
     let productImg = document.createElement('img');
     productImg.src = product.imgSrc;
-    productImg.classList.add('productimage');
+    productImg.title = "View details";
+    productImg.classList.add('productcell__image');
     productImg.addEventListener('click', onProductClick);
     productCell.appendChild(productImg);
 
     let priceText = document.createElement('p');
     priceText.textContent = product.price;
-    priceText.classList.add('productprice');
+    priceText.classList.add('productcell__price');
     productCell.appendChild(priceText);
 
     let nameText = document.createElement('p');
     nameText.textContent = product.name;
-    nameText.classList.add('productname');
+    nameText.classList.add('productcell__name');
     productCell.appendChild(nameText);
 
     let descriptionText = document.createElement('p');
     descriptionText.textContent = product.description;
-    descriptionText.classList.add('productdescription');
+    descriptionText.classList.add('productcell__description');
     productCell.appendChild(descriptionText);
 
     productCell.classList.add('productcell');

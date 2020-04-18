@@ -22,9 +22,17 @@ header {
     margin: 0 0 75px;
 }
 
+header, header * {
+    background-color: #0064a4;
+}
+
 .siteName {
     cursor: pointer;
     font-size: 45px;
+}
+
+.siteName a {
+    color: rgba(255, 210, 0, 1);
 }
 
 .nav__links {
@@ -39,11 +47,12 @@ header {
 }
 
 .nav__links li a {
+    color: rgba(255, 210, 0, 1);
     transition: all 0.3s ease 0s;
 }
 
 .nav__links li a:hover {
-    color: #ffd200;
+    color:rgba(247, 235, 95, 1);
 }
 
 button {
@@ -57,7 +66,7 @@ button {
 }
 
 button:hover {
-    background-color: rgba(255, 210, 0, 0.8);
+    background-color: rgba(247, 235, 95, 1);
 }
 
 
@@ -65,21 +74,36 @@ button:hover {
     display: grid;
     grid-template-columns: repeat(5, minmax(300px, 1fr));
     grid-template-rows: repeat(5, minmax(600px, 1fr));
+    margin-left: 300px;
 }
 
 .productcell {
     display: flex;
     flex-direction: column;
+    padding: 15px;
+    border: 1px solid rgba(0, 62, 120, 0.1);
 }
 
-.productcell img {
+.productcell__image{
     width: 200px;
     height: 200px;
     align-self: center;
-
+    background-color: transparent;
+    margin-bottom: 30px;
 }
 
-.productcell p {
+.productcell__price {
+    font-size: 24px;
+    font-weight: 900;
+    margin-bottom: 10px;
+}
+
+.productcell__name {
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.productcell__description {
     white-space: pre;
 }
 
