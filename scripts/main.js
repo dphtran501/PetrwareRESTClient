@@ -1,4 +1,4 @@
-let defaultMaxRows = 5;
+let defaultMaxRows = 2;
 let defaultMaxColumns = 5;
 
 const productGrid = document.querySelector('.productgrid-container');
