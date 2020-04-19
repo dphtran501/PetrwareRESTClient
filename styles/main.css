@@ -72,9 +72,9 @@ button:hover {
 
 .productgrid-container {
     display: grid;
-    grid-template-columns: repeat(5, minmax(300px, 1fr));
-    grid-template-rows: repeat(2, minmax(600px, 1fr));
-    margin-left: 300px;
+    grid-template-columns: repeat(5, minmax(300px, 1fr));   /* default */
+    grid-template-rows: repeat(5, minmax(600px, 1fr));      /* default */
+    margin: 0 0 30px 300px;
 }
 
 .productcell {
@@ -103,8 +103,8 @@ button:hover {
     margin-bottom: 20px;
 }
 
-.productcell__description {
-    white-space: pre;
+*.productcell__description {
+    margin: 0 15px;
 }
 
 .productcell img:hover {

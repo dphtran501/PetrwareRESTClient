@@ -1,11 +1,11 @@
-let defaultMaxRows = 2;
+let defaultMaxRows = 5;
 let defaultMaxColumns = 5;
 
 const productGrid = document.querySelector('.productgrid-container');
 
 const jsonObj = load();
 
-setProductGrid(defaultMaxColumns, defaultMaxRows, createProductList(jsonObj));
+setProductGrid(defaultMaxColumns, Math.ceil(jsonObj.length / defaultMaxColumns), createProductList(jsonObj));
 
 function Product(id, name, description, price, imgSrc){
     this.id = id;
@@ -21,22 +21,25 @@ function createProductList(jsonObject) {
         let name, description;
         if (item.category == "cpu"){
             name = item.brand + " " + item.name;
-            description = "# of Cores: " + item.numOfCores + "\r\n" 
-                + "Frequency: " + item.operatingFrequency + "\r\n"
-                + "Socket Type: " + item.socketType;
+            description = ["Model: " + item.model, 
+                "# of Cores: " + item.numOfCores, 
+                "Frequency: " + item.operatingFrequency,
+                "Socket Type: " + item.socketType];
         }
         else if (item.category == "ram") {
             name = item.brand + " " + item.series;
-            description = "Capacity: " + item.capacity + "\r\n" 
-                + "Speed: " + item.speed + "\r\n" 
-                + "Color: " + item.color;
+            description = ["Model: " + item.model, 
+                "Capacity: " + item.capacity,
+                "Speed: " + item.speed,
+                "Color: " + item.color];
         }
         else if(item.category == "videoCard") {
             name = item.brand + " " + (item.series == "" ? "" : (item.series + " ")) + item.gpu;
-            description = "Memory Size: " + item.memorySize + "\r\n" 
-                + "Memory Type: " + item.memoryType + "\r\n" 
-                + "Max GPU Length: " + item.maxGPULength + "\r\n" 
-                + "Dimensions: " + item.cardDimensions;
+            description = ["Model: " + item.model, 
+                "Memory Size: " + item.memorySize, 
+                "Memory Type: " + item.memoryType,
+                "Max GPU Length: " + item.maxGPULength,
+                "Dimensions: " + item.cardDimensions];
         }
 
         let imageSrc = "images/" + item.imgSrc;
@@ -47,6 +50,11 @@ function createProductList(jsonObject) {
 }
 
 function setProductGrid(numberOfColumns, numberOfRows, productList) {
+    // Define number of rows and columns
+    productGrid.style.gridTemplateColumns = "repeat(" + numberOfColumns + ", minmax(300px, 1fr))";
+    productGrid.style.gridTemplateRows = "repeat(" + numberOfRows + ", minmax(600px, 1fr))";
+
+    // Fill product grid
     let currIdx = 0;
     for (let row = 1; row <= numberOfRows; row++){
         for (let col = 1; col <= numberOfColumns; col++){
@@ -86,10 +94,14 @@ function createProductCell(product) {
     nameText.classList.add('productcell__name');
     productCell.appendChild(nameText);
 
-    let descriptionText = document.createElement('p');
-    descriptionText.textContent = product.description;
-    descriptionText.classList.add('productcell__description');
-    productCell.appendChild(descriptionText);
+    let descriptionList = document.createElement('ul');
+    product.description.forEach(attribute => {
+        let listItem = document.createElement('li');
+        listItem.textContent = attribute;
+        descriptionList.appendChild(listItem);
+    });
+    descriptionList.classList.add('productcell__description');
+    productCell.appendChild(descriptionList);
 
     productCell.classList.add('productcell');
 
