@@ -54,6 +54,12 @@ function setProductGrid(numberOfColumns, numberOfRows, productList) {
             let productCell = createProductCell(productList[currIdx++])
             productCell.setAttribute("grid-column", col);
             productCell.setAttribute("grid-row", row);
+            if (row == 1) {
+                productCell.style.borderTop = "medium none transparent";
+            }
+            else if(row == numberOfRows) {
+                productCell.style.borderBottom = "medium none transparent";
+            }
             productGrid.appendChild(productCell);
         }
         if (currIdx == productList.length) break;

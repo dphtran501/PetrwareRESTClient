@@ -1,6 +1,7 @@
 const productImage = document.querySelector('#productimage');
 const productPriceText = document.querySelector('#productprice');
 const productNameText = document.querySelector('#productname');
+const productModelText = document.querySelector('#productmodel');
 const productionDescriptionText = document.querySelector('#productdetails');
 
 window.addEventListener('load', onLoad);
@@ -18,5 +19,6 @@ function onLoad() {
     else if(product.category == "videoCard") {
         productNameText.textContent = product.brand + " " + (product.series == "" ? "" : (product.series + " ")) + product.gpu;
     }
+    productModelText.textContent = "Model: " + product.model;
     productionDescriptionText.textContent = product.description;
 }
