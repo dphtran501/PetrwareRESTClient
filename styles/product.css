@@ -19,8 +19,8 @@ li, a, h1, div, button, p{
 }
 
 #productimage {
-    width: 400px;
-    height: auto;
+    width: auto;
+    height: 400px;
     display: block;
     margin-left: auto;
     margin-right: auto;
