@@ -1,11 +1,15 @@
-let defaultMaxRows = 5;
-let defaultMaxColumns = 5;
-
 const productGrid = document.querySelector('.productgrid-container');
 
 const jsonObj = load();
 
-setProductGrid(defaultMaxColumns, Math.ceil(jsonObj.length / defaultMaxColumns), createProductList(jsonObj));
+init();
+
+function init(){
+    populateProductGrid(createProductList(jsonObj));
+    removeGridBorderTop();
+    removeGridBorderBottom();
+    window.addEventListener('resize', onResize);
+}
 
 function Product(id, name, description, price, imgSrc){
     this.id = id;
@@ -49,29 +53,11 @@ function createProductList(jsonObject) {
     return productList;
 }
 
-function setProductGrid(numberOfColumns, numberOfRows, productList) {
-    // Define number of rows and columns
-    productGrid.style.gridTemplateColumns = "repeat(" + numberOfColumns + ", minmax(300px, 1fr))";
-    productGrid.style.gridTemplateRows = "repeat(" + numberOfRows + ", minmax(600px, 1fr))";
-
-    // Fill product grid
-    let currIdx = 0;
-    for (let row = 1; row <= numberOfRows; row++){
-        for (let col = 1; col <= numberOfColumns; col++){
-            if (currIdx == productList.length) break;
-            let productCell = createProductCell(productList[currIdx++])
-            productCell.setAttribute("grid-column", col);
-            productCell.setAttribute("grid-row", row);
-            if (row == 1) {
-                productCell.style.borderTop = "medium none transparent";
-            }
-            else if(row == numberOfRows) {
-                productCell.style.borderBottom = "medium none transparent";
-            }
-            productGrid.appendChild(productCell);
-        }
-        if (currIdx == productList.length) break;
-    }
+function populateProductGrid(productList) {
+    productList.forEach(product => {
+        let productCell = createProductCell(product);
+        productGrid.appendChild(productCell);
+    });
 }
 
 function createProductCell(product) {
@@ -115,5 +101,40 @@ function onProductClick(e) {
     let product = jsonObj.filter(item => item.model == productCell.id);
     sessionStorage.setItem('product', JSON.stringify(product[0]));
     window.open('product.html', '_self');
+}
+
+function onResize(e) {
+    removeGridBorderTop();
+    removeGridBorderBottom();
+}
+
+function removeGridBorderTop() {
+    let productGridComputedStyle = window.getComputedStyle(productGrid);
+    // grid-template-columns computed value is as specified but converted to absolute lengths (e.g. "300px 300px 300px")
+    let numberOfColumns = productGridComputedStyle.getPropertyValue("grid-template-columns").split(" ").length;
+    let firstRow = productGrid.querySelectorAll('.productcell:nth-child(-n+' + numberOfColumns + ')');
+    firstRow.forEach(productCell => {
+        productCell.style.borderTop = "medium none transparent";
+    });
+    // Cells moving from first to second row get their border tops again
+    let secondRow = productGrid.querySelectorAll('.productcell:nth-child(n+' + (numberOfColumns + 1) + '):nth-child(-n+' + (2 * numberOfColumns) + ')');
+    secondRow.forEach(productCell => {
+        productCell.style.borderTop = "1px solid rgba(0, 62, 120, 0.1)";
+    })
+}
+
+function removeGridBorderBottom() {
+    let productGridComputedStyle = window.getComputedStyle(productGrid);
+    // computed value is as specified but converted to absolute lengths (e.g. "300px 300px 300px")
+    let numberOfColumns = productGridComputedStyle.getPropertyValue("grid-template-columns").split(" ").length;
+    let numberOfRows = productGridComputedStyle.getPropertyValue("grid-template-rows").split(" ").length;
+    let lastRow = productGrid.querySelectorAll('.productcell:nth-child(n+' + ((numberOfRows - 1) * numberOfColumns + 1) + '):nth-child(-n+' + (numberOfRows * numberOfColumns) + ')');
+    lastRow.forEach(productCell => {
+        productCell.style.borderBottom = "medium none transparent";
+    });
+    let secondLastRow = productGrid.querySelectorAll('.productcell:nth-child(n+' + ((numberOfRows - 2) * numberOfColumns + 1) + '):nth-child(-n+' + ((numberOfRows - 1) * numberOfColumns) + ')');
+    secondLastRow.forEach(productCell => {
+        productCell.style.borderBottom = "1px solid rgba(0, 62, 120, 0.1)";
+    })
 }
 
