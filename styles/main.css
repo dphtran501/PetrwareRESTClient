@@ -55,6 +55,14 @@ header, header * {
     color:rgba(247, 235, 95, 1);
 }
 
+button #cart {
+    background-color: transparent;
+    display: inline-block;
+    vertical-align: middle;
+    height: 35px;
+    width: 35px;
+}
+
 button {
     padding: 9px 25px;
     font-size: 20px;
@@ -131,7 +139,7 @@ button:hover {
 
     header .cart {
         margin: auto;
-        width: 85%;
+        width: 75%;
     }
 
     .cart button {
