@@ -51,6 +51,11 @@ header, header * {
     transition: all 0.3s ease 0s;
 }
 
+.nav__links .current {
+    font-weight: bold;
+    text-decoration: underline;
+}
+
 .nav__links li a:hover {
     color:rgba(247, 235, 95, 1);
 }
