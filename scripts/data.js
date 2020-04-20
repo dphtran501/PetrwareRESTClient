@@ -123,7 +123,7 @@ let data = [
         "gpu": "Radeon RX 5700 XT",
         "memorySize": "8GB",
         "memoryType": "GDDR6",
-        "maxResolution": "HDMI: 4096 x 2160 @ 60 Hz\\nDisplayPort1.4: 5120 x 2880 @ 60 Hz",
+        "maxResolution": "HDMI: 4096 x 2160 @ 60 Hz\r\nDisplayPort1.4: 5120 x 2880 @ 60 Hz",
         "cooler": "Double Fans",
         "maxGPULength": "254 mm",
         "cardDimensions": "10.00\" x 5.31\"",
