@@ -1,5 +1,7 @@
 .cartItems {
     float: left;
+    position: relative;
+    left: 10%;
 }
 
 .li__container {
@@ -11,6 +13,71 @@
     height: 200px;
 }
 
+/* Checkout Section CSS */
+
 .checkoutPage {
+    display: table;
     float: right;
+    position: relative;
+    left: -10%;
 }
+
+.checkoutPage h1 {
+    text-align: center;
+}
+
+.checkoutPage form {
+    padding: 20px 0 5px 0px;
+}
+
+.checkoutPage div {
+    display: flex;
+    padding: 10px 0 10px 0;
+}
+
+#cardinfo {
+    padding: 50px 0 20px 50px;
+    width: 100%;
+}
+
+input {
+    border-top-style: hidden;
+    border-right-style: hidden;
+    border-left-style: hidden;
+    border-bottom: 1px solid #0064a4;
+    background-color: transparent;
+
+    position: absolute;
+    right: 0;
+    padding: 12px 10px 10px;
+    margin: 2px 0px 0 10px 0;
+}
+
+select {
+    position: absolute;
+    right: 57px;
+    margin-top: 10px;
+}
+
+#input-shipping {
+    right: 47px;
+}
+
+input:focus, select:focus {
+    outline: none;
+}
+
+select {
+    padding: 6px 0 6px 0;
+    margin: 4px 0 0 10px;
+
+    border-radius: 5px;
+    border-color: #0064a4;
+}
+
+label {
+    display: flex;
+    justify-content: left;
+    margin: 10px;
+}
+
