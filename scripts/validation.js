@@ -1,6 +1,3 @@
-// forms.js
-//
-
 const init = function(){
     document.getElementById('button-cancel').addEventListener('click', reset);
     document.getElementById('button-send').addEventListener('click', send);
