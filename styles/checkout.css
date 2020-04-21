@@ -1,3 +1,7 @@
+header {
+    margin-bottom: 0px;
+}
+
 .cartItems {
     float: left;
     position: relative;
@@ -16,10 +20,12 @@
 /* Checkout Section CSS */
 
 .checkoutPage {
-    display: table;
     float: right;
     position: relative;
-    left: -10%;
+    left: -5%;
+
+    padding-left: 30px;
+    border-left: 1px solid #0064a4;
 }
 
 .checkoutPage h1 {
@@ -87,3 +93,15 @@ button {
     right: 0;
 }
 
+.error::after{
+    background-color: hsl(10, 60%, 50%);
+    color: papayawhip;
+    font-size: 1rem;
+    line-height: 20px;
+    width: 170px;
+    margin-top: 38px;
+    padding-left: 1rem;
+    position:absolute;
+    right: 1%;
+    content: attr(data-errormsg);
+}

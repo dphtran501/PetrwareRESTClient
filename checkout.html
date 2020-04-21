@@ -33,7 +33,7 @@
     <div class="checkoutPage">
         <h1>Checkout</h1>
         
-        <form id="form-user" action="#" method="post">
+        <form id="form-user" action="placedOrder.html">
             <div class="form-box error" data-errormsg="">
                 <label for="input-first">First Name</label>
                 <input type="text" id="input-first" autofocus required placeholder="First Name" tabindex="1"/>
@@ -44,20 +44,21 @@
             </div>
             <div class="form-box" data-errormsg="">
                 <label for="input-phone">Phone #</label>
-                <input type="password" id="input-phone" required placeholder="(123)456-789" tabindex="2" />
+                <input type="text" id="input-phone" required placeholder="123-456-7890" tabindex="2" />
             </div>
             <div class="form-box error" data-errormsg="">
                 <label for="input-country">Country</label>
                 <input type="text" id="input-country" autofocus required placeholder="United States" tabindex="1"/>
             </div>
             <div class="form-box" data-errormsg="">
-                <label for="input-age">Country</label>
-                <select id="input-age" tabindex="4">
+                <label for="input-slctCountry">Country</label>
+                <select id="input-slctCountry" tabindex="4">
                     <option value="0">United States</option>
                     <option value="1">United Kingdom</option>
                     <option value="2">Korea</option>
                     <option value="3">Japan</option>
                     <option value="4">Vietnam</option>
+                    <option value="5">China</option>
                 </select>
             </div>
             <div class="form-box error" data-errormsg="">
@@ -70,7 +71,7 @@
             </div>
             <div class="form-box error" data-errormsg="">
                 <label for="input-zipcode">Zipcode</label>
-                <input type="text" id="input-zipcode" autofocus required placeholder="12345" tabindex="1"/>
+                <input type="number" id="input-zipcode" autofocus required placeholder="12345" tabindex="1"/>
             </div>
             <div class="form-box" data-errormsg="">
                 <label for="input-shipping">Shipping Method:</label>
@@ -78,57 +79,37 @@
                     <option value="0">Anteater Express</option>
                     <option value="1">2 Days Expedited</option>
                     <option value="2">Over Weekend</option>
-                    <option value="3">7 Day Shippinh</option>
+                    <option value="3">7 Day Shipping</option>
                 </select>
             </div>
             <div class="form-box" data-errormsg="">
-                <label for="input-email">E-mail:</label>
-                <input type="email" id="input-email" required placeholder="E-mail Address" tabindex="3" />
+                <label for="input-email">E-mail</label>
+                <input type="email" id="input-email" required placeholder="petranteater@uci.edu" tabindex="3" />
             </div>
 
             <!-- Credit Info Section -->
             <h1 id="cardinfo">Credit Card Information</h1>
             <div class="form-box error" data-errormsg="">
-                <label for="input-cardNumber">Card Number:</label>
+                <label for="input-cardNumber">Card Number</label>
                 <input type="text" id="input-cardNumber" maxlength="19" autofocus required placeholder="Card Number" tabindex="1"/>
             </div>
             <div class="form-box error" data-errormsg="">
-                <label for="input-expiration">Expiration Date:</label>
+                <label for="input-expiration">Expiration Date</label>
                 <input type="text" id="input-expiration" autofocus required placeholder="Month/Year - 04/2020" tabindex="1"/>
             </div>
             <div class="form-box error" data-errormsg="">
-                <label for="input-securityCode">Card Security Code:</label>
-                <input type="text" id="input-securityCode" autofocus required placeholder="Card Security Code" tabindex="1"/>
+                <label for="input-securityCode">Card Security Code</label>
+                <input type="number" id="input-securityCode" autofocus required placeholder="123" tabindex="1"/>
             </div>
             <div class="form-box">
                 <button id="button-cancel">Cancel</button>
                 <button id="button-submit">Submit</button>
             </div>
         </form>
-
-
-        <!-- Credit Info Section -->
-        <!-- <h1 id="cardinfo">Credit Card Information</h1>
-        <form id="form-user" action="#" method="post">
-            <div class="form-box error" data-errormsg="">
-                <label for="input-cardNumber">Card Number:</label>
-                <input type="text" id="input-cardNumber" maxlength="19" autofocus required placeholder="Card Number" tabindex="1"/>
-            </div>
-            <div class="form-box error" data-errormsg="">
-                <label for="input-expiration">Expiration Date:</label>
-                <input type="text" id="input-expiration" autofocus required placeholder="Month/Year - 04/2020" tabindex="1"/>
-            </div>
-            <div class="form-box error" data-errormsg="">
-                <label for="input-securityCode">Card Security Code:</label>
-                <input type="text" id="input-securityCode" autofocus required placeholder="Card Security Code" tabindex="1"/>
-            </div>
-            <div class="form-box">
-                <button id="button-cancel">Cancel</button>
-                <button id="button-send">Submit</button>
-            </div>
-        </form> -->
     </div>
+
     <script src="scripts/checkout.js"></script>
+    <script src="scripts/validation.js"></script>
 
 </body>
 </html>
