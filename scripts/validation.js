@@ -1,6 +1,6 @@
 const init = function(){
     document.getElementById('button-cancel').addEventListener('click', reset);
-    document.getElementById('button-send').addEventListener('click', send);
+    document.getElementById('button-submit').addEventListener('click', submit);
 }
 
 const reset = function(ev){
@@ -12,7 +12,7 @@ const reset = function(ev){
     //if you want to do anything else...
 }
 
-const send = function(ev){
+const submit = function(ev){
     ev.preventDefault(); 
     ev.stopPropagation();
     //or the click will travel to the form and the form will submit
@@ -49,13 +49,7 @@ const validate = function(ev){
         failures.push({input: 'input-alive', msg: 'Must be alive to submit.'})
     }
 
-    //select
-    let select = document.getElementById('input-age');
-    // .selectedIndex  .options  .length   .selectedValue  .value
-    if( select.selectedIndex === 0 ){
-        failures.push({input:'input-age', msg:'Too young'})
-    }
-
+    
     //inputs for text, email, tel, color, number...
     let first = document.getElementById('input-first');
     let password = document.getElementById('input-password');
@@ -71,6 +65,13 @@ const validate = function(ev){
         failures.push({input:'input-email', msg:'Required Field'})
     }
     
+    //select inputs
+    let select = document.getElementById('input-age');
+    // .selectedIndex  .options  .length   .selectedValue  .value
+    if( select.selectedIndex === 0 ){
+        failures.push({input:'input-age', msg:'Too young'})
+    }
+
     //return a boolean || an object with details about the failures
     return failures;
 }

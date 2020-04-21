@@ -24,6 +24,8 @@
 
 .checkoutPage h1 {
     text-align: center;
+    font-size: 35px;
+    font-weight: bold;
 }
 
 .checkoutPage form {
@@ -36,7 +38,7 @@
 }
 
 #cardinfo {
-    padding: 50px 0 20px 50px;
+    padding: 50px 0 20px 10px;
     width: 100%;
 }
 
@@ -57,27 +59,31 @@ select {
     position: absolute;
     right: 57px;
     margin-top: 10px;
+    padding: 6px 0 6px 10px;
+    border-radius: 5px;
+    border-color: #0064a4;
 }
 
 #input-shipping {
-    right: 47px;
+    right: 55px;
 }
 
 input:focus, select:focus {
     outline: none;
 }
 
-select {
-    padding: 6px 0 6px 0;
-    margin: 4px 0 0 10px;
-
-    border-radius: 5px;
-    border-color: #0064a4;
-}
-
 label {
     display: flex;
     justify-content: left;
     margin: 10px;
+}
+
+/* Buttons */
+button {
+    margin-top: 10px;
+}
+#button-submit {
+    position: absolute;
+    right: 0;
 }
 

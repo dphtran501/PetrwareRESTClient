@@ -5,10 +5,10 @@
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
+    font-family: "Ubuntu", sans-serif;
 }
 
 li, a, h1, div, button {
-    font-family: "Ubuntu", sans-serif;
     font-weight: 400;
     text-decoration: none;
     color: #0064a4;
