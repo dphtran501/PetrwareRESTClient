@@ -2,6 +2,15 @@
     float: left;
 }
 
+.li__container {
+    display: flex;
+}
+
+.li__container img {
+    width: auto;
+    height: 200px;
+}
+
 .checkoutPage {
     float: right;
 }

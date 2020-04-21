@@ -4,6 +4,7 @@ const productNameText = document.querySelector('#productname');
 const productModelText = document.querySelector('#productmodel');
 const productDescriptionText = document.querySelector('#productdetails');
 const productDescriptionTable = document.querySelector('#producttable');
+const quantityInput = document.querySelector('#quantityinput');
 const addButton = document.querySelector('#addbutton');
 
 window.addEventListener('load', onLoad);
@@ -29,15 +30,26 @@ function onLoad() {
 }
 
 function onAddClick() {
-    let cartList = [];
-    let cartData = sessionStorage.getItem('cartData');
-    if (cartData != null) {
-        cartList = JSON.parse(cartData);
-    }
+    if (Number(quantityInput.value) > 0) {
+        // Get cart list
+        let cartList = [];
+        let cartData = sessionStorage.getItem('cartData');
+        if (cartData != null) {
+            cartList = JSON.parse(cartData);
+        }
+        // Update cart item quantity if already in cart list, else add to list
+        let product = JSON.parse(sessionStorage.getItem('product'));
+        let itemIndex = cartList.findIndex(item => (item.model == product.model));
+        if (itemIndex < 0){
+            product.quantity = Number(quantityInput.value);
+            cartList.push(product);
+        }
+        else {
+            cartList[itemIndex].quantity = Number(cartList[itemIndex].quantity) + Number(quantityInput.value);
+        }
 
-    let product = JSON.parse(sessionStorage.getItem('product'));
-    cartList.push(product);
-    sessionStorage.setItem('cartData', JSON.stringify(cartList));
+        sessionStorage.setItem('cartData', JSON.stringify(cartList));
+    }
 }
 
 function loadTable(product) {
