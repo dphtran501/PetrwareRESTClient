@@ -46,7 +46,7 @@ function addCartListItem(listItem) {
 }
 
 function addToTotalCost(itemPrice, quantity) {
-    let currentTotalCost = (totalCost.textContent != "") ?  Number(totalCost.textContent.substring(1)) : 0.00;
-    currentTotalCost += Number(quantity) * Number(itemPrice.substring(1));
-    totalCost.textContent = "$" + currentTotalCost;
+    let currentTotalCost = (totalCost.textContent != "") ?  parseFloat(totalCost.textContent.substring(1)) : 0.00;
+    currentTotalCost += parseFloat(quantity) * parseFloat(itemPrice.substring(1));
+    totalCost.textContent = "$" + currentTotalCost.toFixed(2);
 }
