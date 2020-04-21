@@ -46,7 +46,8 @@ function addCartListItem(listItem) {
 }
 
 function addToTotalCost(itemPrice, quantity) {
-    let currentTotalCost = (totalCost.textContent != "") ?  parseFloat(totalCost.textContent.substring(1)) : 0.00;
-    currentTotalCost += parseFloat(quantity) * parseFloat(itemPrice.substring(1));
-    totalCost.textContent = "$" + currentTotalCost.toFixed(2);
+    let currentTotalCost = (totalCost.textContent != "") ?  parseFloat(totalCost.textContent.substring(1).replace(/,/g, '')) : 0.00;
+    currentTotalCost += parseFloat(quantity) * parseFloat(itemPrice.substring(1).replace(/,/g, ''));
+    //totalCost.textContent = "$" + currentTotalCost.toFixed(2);
+    totalCost.textContent = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(currentTotalCost);
 }
