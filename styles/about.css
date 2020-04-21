@@ -80,14 +80,32 @@ header {
 
 /* About Page Specific CSS */
 
-#sources {
-    list-style: none;
+.sources {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.source_image__container {
+    width: 200px;
+    height: 100px;
+    text-emphasis: center;
+    display: block
+}
+
+.source_image__container img{
+    height: 100%;
+    width: auto;
+}
+
+.sources a {
+    color: rgba(255, 210, 0, 1);
 }
 
 table {
     display: inline-block;
     text-align: center;
-    justify-content: space-between;
+    justify-content: space-evenly;
 }
 
 th {
