@@ -1,0 +1,99 @@
+* {
+    background-color: transparent;
+}
+
+body, html {
+    height: 100%;
+    margin: 0;
+    font-size: 1rem;
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
+    line-height: 1.8em;
+    color: #666;
+}
+
+header {
+    margin: 0 0 0 0;
+}
+
+.pimg1, .pimg2, .pimg3, .pimg4, .pimg5 {
+    position: relative;
+    opacity: 1.0;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+
+    /* Set to Normal if you want Parallax removed */
+    background-attachment: fixed;
+}
+
+.pimg1 {
+    background-image: url('../background/abstract.jpg');
+    min-height: 100%;
+}
+
+.pimg2 {
+    background-image: url('../background/greenkeys.jpg');
+    min-height: 600px;
+}
+
+.pimg3 {
+    background-image: url('../background/storage.jpg');
+    min-height: 600px;
+}
+
+.pimg4 {
+    background-image: url('../background/laptop.jpg');
+    min-height: 600px;
+}
+
+.pimg5 {
+    background-image: url('../background/night.jpg');
+    min-height: 600px;
+}
+
+.section {
+    text-align: center;
+    padding: 50px 80px;
+}
+
+.section-blue {
+    background-color: #0064a4;
+    color: rgba(255, 210, 0, 1);
+}
+
+.section-blue h2 {
+    padding-bottom: 10px;
+}
+
+.ptext {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+    color: rgba(255, 210, 0, 1);
+    font-size: 27px;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    text-shadow: 2px 2px #333;
+}
+
+/* About Page Specific CSS */
+
+#sources {
+    list-style: none;
+}
+
+table {
+    display: inline-block;
+    text-align: center;
+    justify-content: space-between;
+}
+
+th {
+    padding-left: 10px;
+}
+
+#about_fieldset {
+    margin-bottom: 20px;
+}
