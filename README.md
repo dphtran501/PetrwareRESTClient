@@ -20,4 +20,4 @@ Link to website: **_(NEED TO ADD)_**
 - [ ] Print the name and the StudentID of group members on the webpage.
 
 ## Authors
-Jevford Barro (72114221), Peter Tang **_(NEED STUDENT ID)_**, Derek Tran (18491795)
+Jevford Barro (72114221), Peter Tang (45193375), Derek Tran (18491795)
