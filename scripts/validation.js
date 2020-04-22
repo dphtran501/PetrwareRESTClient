@@ -109,7 +109,6 @@ const validate = function(ev){
     return failures;
 }
 
-//Derek Use sessionstorage list of items selected and input them into the email string
 const sendmail = function() {
     //inputs for text, email, tel, color, number...
     let first = document.getElementById('input-first').value;
@@ -125,6 +124,26 @@ const sendmail = function() {
     let cardNumber = document.getElementById('input-cardNumber').value;
     let shipping = document.getElementById('input-shipping').value;
 
+    // items purchase info
+    let itemsSummary = "";
+    let cartData = sessionStorage.getItem('cartData');
+    let cartList = JSON.parse(cartData);
+    for (let i = 0; i < cartList.length; i++) {
+        let itemName;
+        if (cartList[i].category == "cpu"){
+            itemName = cartList[i].brand + " " + cartList[i].name;
+        }
+        else if (cartList[i].category == "ram") {
+            itemName = cartList[i].brand + " " + cartList[i].series;
+        }
+        else if(cartList[i].category == "videoCard") {
+            itemName = cartList[i].brand + " " + (cartList[i].series == "" ? "" : cartList[i].series + " ") + cartList[i].gpu;
+        }
+
+        itemsSummary += "          - " + cartList[i].quantity + " x " + itemName;
+        if (i < cartList.length - 1) itemsSummary += "\n";
+    }
+
     let bodyMessage = `Name: ${first} ${last}\n` +
                         `Phone: ${phone}\n` +
                         `Country: ${country}\n` +
@@ -132,8 +151,8 @@ const sendmail = function() {
                         `City: ${city}\n` + 
                         `Zipcode: ${zipcode}\n` +
                         `Card Number: ${cardNumber}\n` +
-                        `Shipping Method: ${shipping}\n`//+
-                        //`Items Purchased: ...\n`   <----- Input them here
+                        `Shipping Method: ${shipping}\n` +
+                        `Items Purchased:\n ${itemsSummary}\n`
 
     document.location.href = "mailto:"
         + email + "?"
