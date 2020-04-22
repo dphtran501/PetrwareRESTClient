@@ -128,6 +128,7 @@ const sendmail = function() {
     
     // inputs for Credit Card Info
     let cardNumber = document.getElementById('input-cardNumber').value;
+    let shipping = document.getElementById('input-shipping').value;
 
     let bodyMessage = `Name: ${first} ${last}\n` +
                         `Phone: ${phone}\n` +
@@ -135,7 +136,8 @@ const sendmail = function() {
                         `Street Address: ${streetAddress}\n` +
                         `City: ${city}\n` + 
                         `Zipcode: ${zipcode}\n` +
-                        `Card Number: ${cardNumber}\n` //+
+                        `Card Number: ${cardNumber}\n` +
+                        `Shipping Method: ${shipping}\n`//+
                         //`Items Purchased: ...\n`   <----- Input them here
 
     document.location.href = "mailto:"
