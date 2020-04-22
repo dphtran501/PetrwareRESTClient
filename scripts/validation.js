@@ -128,6 +128,7 @@ const sendmail = function() {
     let itemsSummary = "";
     let cartData = sessionStorage.getItem('cartData');
     let cartList = JSON.parse(cartData);
+    let total = document.getElementById('totalCost').textContent;
     for (let i = 0; i < cartList.length; i++) {
         let itemName;
         if (cartList[i].category == "cpu"){
@@ -152,7 +153,8 @@ const sendmail = function() {
                         `Zipcode: ${zipcode}\n` +
                         `Card Number: ${cardNumber}\n` +
                         `Shipping Method: ${shipping}\n` +
-                        `Items Purchased:\n ${itemsSummary}\n`
+                        `Items Purchased:\n ${itemsSummary}\n` +
+                        `Total: ${total}\n`
 
     document.location.href = "mailto:"
         + email + "?"

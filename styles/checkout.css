@@ -144,6 +144,63 @@ button {
 }
 
 @media(max-width: 768px) {
+
+    /* Cart Items CSS */
+
+    .cartItems {
+        float: none;
+        position: relative;
+        left: 10%;
+        width: 100%;
+    }
+
+    .cartItems > h1{
+        text-align: center;
+        padding-right: 130px;
+    }
+    
+    .li__container {
+        display: inline-block;
+        margin-bottom: 20px;
+    }
+    
+    .li__container img {
+        width: 75%;
+        height: 50%;
+    }
+    
+    .li__container p {
+        float: left;
+        text-align: left;
+        padding-right: 0px;
+    }
+    
+    .li-qty-price__container {
+        float: right;
+        display: flex;
+        justify-content: right;
+    }
+
+    .li-qty-price__container > p{
+        padding-left: 25px;
+    }
+    
+    .total-cost__div {
+        display: flex;
+        padding: 10px 90px 20px 0;
+    }
+    
+    .total-cost__div > p {
+        font-weight: 700;
+        font-size: 24px;
+    }
+    
+    #totalCost {
+        margin-left: 50px;
+    }
+
+
+    /* Customer Info CSS */
     .cartItems {
         float: none;
         position: relative;
