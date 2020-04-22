@@ -1,11 +1,11 @@
-const productImage = document.querySelector('#productimage');
-const productPriceText = document.querySelector('#productprice');
-const productNameText = document.querySelector('#productname');
-const productModelText = document.querySelector('#productmodel');
-const productDescriptionText = document.querySelector('#productdetails');
-const productDescriptionTable = document.querySelector('#producttable');
-const quantityInput = document.querySelector('#quantityinput');
-const addButton = document.querySelector('#addbutton');
+const productImage = document.querySelector('#product-image');
+const productPriceText = document.querySelector('#product-price');
+const productNameText = document.querySelector('#product-name');
+const productModelText = document.querySelector('#product-model');
+const productDescriptionText = document.querySelector('#product-details');
+const productDescriptionTable = document.querySelector('#product-table');
+const quantityInput = document.querySelector('#quantity-input');
+const addButton = document.querySelector('#add-button');
 
 window.addEventListener('load', onLoad);
 addButton.addEventListener('click', onAddClick);

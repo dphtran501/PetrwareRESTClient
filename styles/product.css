@@ -7,18 +7,18 @@
     background-color: #f4f4f4;
 }
 
-body {
-    margin: 0px;
-}
-
-li, a, h1, div, button, p{
+li, a, h1, div, button, p, input{
     font-family: "Ubuntu", sans-serif;
     font-weight: 400;
     text-decoration: none;
     color: #0064a4;
 }
 
-#productimage {
+.product-details__container {
+    margin: 0 30px 30px 30px;
+}
+
+#product-image {
     width: auto;
     height: 400px;
     display: block;
@@ -27,17 +27,56 @@ li, a, h1, div, button, p{
     padding: 10px;
 }
 
-#productprice {
-    font-weight: 700;
-    font-size: 45px;
+#price__container {
+    display: flex;
+    align-items: center;
 }
 
-#productname {
+#product-price {
+    font-weight: 700;
+    font-size: 45px;
+    margin-bottom: 10px;
+}
+
+#add-container {
+    margin-left: 50px;
+}
+
+#quantity-input {
+    font-size: 20px;
+    padding: 7px;
+    width: 100px;
+}
+
+#add-button {
+    margin-left: 25px;
+}
+
+#product-name {
     font-weight: 500;
     font-size: 40px;
 }
 
-#productmodel {
+#product-model {
     font-weight: 500;
     font-size: 25px;
+    margin-bottom: 30px;
+}
+
+#product-details {
+    margin-bottom: 30px;
+}
+
+#product-table {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#product-table td {
+    padding: 5px 20px 5px 5px;
+    border-bottom: 1px solid rgba(0, 62, 120, 0.1);
+}
+
+#product-table td:nth-child(odd) {
+    font-weight: 700;
 }

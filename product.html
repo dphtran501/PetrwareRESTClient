@@ -21,15 +21,19 @@
         <a href="checkout.html" class="cart"><button><img id="cart" src="icons/cart.png" alt="Cart Icon"> My Cart</button></a>
     </header>
 
-    <img id="productimage" src="images/default-product.png">
-    <p id="productprice">Product Price</p>
-    <p id="productname">Product Name</p>
-    <p id="productmodel">Product Model</p>
-    <p id="productdetails">Product Details</p>
-    <table id="producttable"></table>
-    <div class="add-container">
-        <input type="number" id="quantityinput" min="0" value="0" required>
-        <button id="addbutton">Add to Cart</button>
+    <div class=product-details__container>
+        <img id="product-image" src="images/default-product.png">
+        <div id="price__container">
+            <p id="product-price">Product Price</p>
+            <div id="add-container">
+                <input type="number" id="quantity-input" min="0" value="0" required>
+                <button id="add-button">Add to Cart</button>
+            </div>
+        </div>
+        <p id="product-name">Product Name</p>
+        <p id="product-model">Product Model</p>
+        <p id="product-details">Product Details</p>
+        <table id="product-table"></table>
     </div>
 
     <script src="scripts/product.js"></script>
