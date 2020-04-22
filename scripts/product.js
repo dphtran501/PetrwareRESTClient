@@ -49,6 +49,7 @@ function onAddClick() {
         }
 
         sessionStorage.setItem('cartData', JSON.stringify(cartList));
+        window.open('checkout.html', '_self');
     }
 }
 
