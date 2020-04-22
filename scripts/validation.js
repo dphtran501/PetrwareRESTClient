@@ -104,11 +104,6 @@ const validate = function(ev){
     if( selectCountry.selectedIndex === 5 ){
         failures.push({input:'input-slctCountry', msg:"China Shipping Unavailable"});
     }
-    let shipping = document.getElementById('input-shipping');
-    // .selectedIndex  .options  .length   .selectedValue  .value
-    if( shipping.selectedIndex === 0 ){
-        failures.push({input:'input-shipping', msg:"Robots Out For Lunch"});
-    }
 
     //return a boolean || an object with details about the failures
     return failures;
