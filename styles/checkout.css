@@ -117,3 +117,18 @@ button {
     right: 1%;
     content: attr(data-errormsg);
 }
+
+@media(max-width: 768px) {
+    .cartItems {
+        float: none;
+        position: relative;
+        left: 10%;
+    }
+
+    .checkoutPage {
+        float: none;
+        left: 0%;
+        padding: 20px 0 0 0;
+        border: none;
+    }
+}
