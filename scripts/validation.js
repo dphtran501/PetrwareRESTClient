@@ -22,7 +22,7 @@ const submit = function(ev){
     //IF we wanted to do some async things then use a Promise with .then and .catch
     if(fails.length === 0){
         //good to go
-        console.log("GTG");
+        sendmail();
         document.getElementById('form-user').submit();
         // MAILTO from HTML
     }else{
@@ -32,7 +32,6 @@ const submit = function(ev){
         //let input = err.querySelector('input');
         //err.setAttribute('data-errormsg', ` ... Missing ${input.placeholder}`);
         fails.forEach(function(obj){
-            console.log("oof");
             let field = document.getElementById(obj.input);
             field.parentElement.classList.add('error');
             field.parentElement.setAttribute('data-errormsg', obj.msg);
@@ -82,7 +81,12 @@ const validate = function(ev){
         failures.push({input:'input-zipcode', msg:'Required Field'});
     } 
     if( email.value === ""){
-        failures.push({input:'input-email', msg:'Required Field'});
+        let errormsg = email.title;
+        failures.push({input:'input-email', msg:"Required Field"});
+    }
+    if( email.validity.valid === false){
+        let errormsg = email.title;
+        failures.push({input:'input-email', msg:"Don't Forget '@emaildomain'"});
     }
     if( cardNumber.value === ""){
         failures.push({input:'input-cardNumber', msg:'Required Field'});
@@ -108,6 +112,36 @@ const validate = function(ev){
 
     //return a boolean || an object with details about the failures
     return failures;
+}
+
+//Derek Use sessionstorage list of items selected and input them into the email string
+const sendmail = function() {
+    //inputs for text, email, tel, color, number...
+    let first = document.getElementById('input-first').value;
+    let last = document.getElementById('input-last').value;
+    let phone = document.getElementById('input-phone').value;
+    let country = document.getElementById('input-country').value;
+    let streetAddress = document.getElementById('input-streetAddress').value;
+    let city = document.getElementById('input-city').value;
+    let zipcode = document.getElementById('input-zipcode').value;
+    let email = document.getElementById('input-email').value;
+    
+    // inputs for Credit Card Info
+    let cardNumber = document.getElementById('input-cardNumber').value;
+
+    let bodyMessage = `Name: ${first} ${last}\n` +
+                        `Phone: ${phone}\n` +
+                        `Country: ${country}\n` +
+                        `Street Address: ${streetAddress}\n` +
+                        `City: ${city}\n` + 
+                        `Zipcode: ${zipcode}\n` +
+                        `Card Number: ${cardNumber}\n` //+
+                        //`Items Purchased: ...\n`   <----- Input them here
+
+    document.location.href = "mailto:"
+        + email + "?"
+        + "&subject=Petrware%20Receipt"
+        + "&body=" + encodeURIComponent(bodyMessage);
 }
 
 
