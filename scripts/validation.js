@@ -83,7 +83,7 @@ const validate = function(ev){
     }
     if( email.validity.valid === false){
         let errormsg = email.title;
-        failures.push({input:'input-email', msg:"Don't Forget '@emaildomain'"});
+        failures.push({input:'input-email', msg:"Don't Forget Format 'username@emaildomain'"});
     }
     if( cardNumber.value === ""){
         failures.push({input:'input-cardNumber', msg:'Required Field'});
@@ -111,7 +111,10 @@ const sendmail = function() {
     let first = document.getElementById('input-first').value;
     let last = document.getElementById('input-last').value;
     let phone = document.getElementById('input-phone').value;
-    let country = document.getElementById('input-slctCountry').value;
+
+    let country = document.getElementById('input-slctCountry');
+    country = country.options[country.selectedIndex].text;
+
     let streetAddress = document.getElementById('input-streetAddress').value;
     let city = document.getElementById('input-city').value;
     let zipcode = document.getElementById('input-zipcode').value;
@@ -119,7 +122,9 @@ const sendmail = function() {
     
     // inputs for Credit Card Info
     let cardNumber = document.getElementById('input-cardNumber').value;
-    let shipping = document.getElementById('input-shipping').value;
+
+    let shipping = document.getElementById('input-shipping');
+    shipping = shipping.options[shipping.selectedIndex].text;
 
     // items purchase info
     let itemsSummary = "";
