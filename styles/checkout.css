@@ -99,6 +99,11 @@ select {
     border-color: #0064a4;
 }
 
+#input-slctCountry {
+    padding-right: 20px;
+    right: 55px;
+}
+
 #input-shipping {
     right: 55px;
 }

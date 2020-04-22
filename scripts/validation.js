@@ -68,9 +68,6 @@ const validate = function(ev){
     if( phone.value === ""){
         failures.push({input:'input-phone', msg:'Required Field'});
     } 
-    if( country.value === ""){
-        failures.push({input:'input-country', msg:'Required Field'});
-    } 
     if( streetAddress.value === ""){
         failures.push({input:'input-streetAddress', msg:'Required Field'});
     } 
@@ -114,7 +111,7 @@ const sendmail = function() {
     let first = document.getElementById('input-first').value;
     let last = document.getElementById('input-last').value;
     let phone = document.getElementById('input-phone').value;
-    let country = document.getElementById('input-country').value;
+    let country = document.getElementById('input-slctCountry').value;
     let streetAddress = document.getElementById('input-streetAddress').value;
     let city = document.getElementById('input-city').value;
     let zipcode = document.getElementById('input-zipcode').value;
