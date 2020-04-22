@@ -6,15 +6,40 @@ header {
     float: left;
     position: relative;
     left: 10%;
+    width: 50%;
 }
 
 .li__container {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
 .li__container img {
     width: auto;
-    height: 200px;
+    height: 100px;
+}
+
+.li-qty-price__container {
+    width: 200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.total-cost__div {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.total-cost__div > p {
+    font-weight: 700;
+    font-size: 24px;
+}
+
+#totalCost {
+    margin-left: 50px;
 }
 
 /* Checkout Section CSS */

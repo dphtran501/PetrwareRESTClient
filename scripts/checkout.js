@@ -1,4 +1,4 @@
-const itemUL = document.querySelector('#itemList');
+const itemListContainer = document.querySelector('#itemList');
 const totalCost = document.querySelector('#totalCost')
 
 loadCartList();
@@ -30,17 +30,22 @@ function addCartListItem(listItem) {
     }
     listItemContainer.appendChild(listItemName);
 
+    let liQtyPriceContainer = document.createElement('div');
+    liQtyPriceContainer.classList.add('li-qty-price__container');
+
     let listItemQuantity = document.createElement('p');
     listItemQuantity.textContent = listItem.quantity;
-    listItemContainer.appendChild(listItemQuantity);
+    liQtyPriceContainer.appendChild(listItemQuantity);
 
     let listItemPrice = document.createElement('p');
     listItemPrice.textContent = listItem.price;
-    listItemContainer.appendChild(listItemPrice);
+    liQtyPriceContainer.appendChild(listItemPrice);
 
+    listItemContainer.appendChild(liQtyPriceContainer);
+    
     listItemContainer.classList.add('li__container');
 
-    itemUL.appendChild(listItemContainer);
+    itemListContainer.appendChild(listItemContainer);
 
     addToTotalCost(listItem.price, listItem.quantity);
 }
