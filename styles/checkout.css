@@ -9,6 +9,10 @@ header {
     width: 50%;
 }
 
+.cartItems h1{
+    text-align: center;
+}
+
 .li__container {
     display: flex;
     justify-content: space-between;

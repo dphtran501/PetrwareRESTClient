@@ -72,10 +72,10 @@ header {
     width: 100%;
     text-align: center;
     color: rgba(255, 210, 0, 1);
-    font-size: 27px;
+    font-size:80px;
     letter-spacing: 8px;
     text-transform: uppercase;
-    text-shadow: 2px 2px #333;
+    text-shadow: 5px 5px #333;
 }
 
 /* About Page Specific CSS */
