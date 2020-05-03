@@ -10,16 +10,8 @@
 </head>
 
 <body>
-    <header>
-        <h1 class="siteName"><a href="index.html">Petrware</a></h1>
-        <nav>
-            <ul class="nav__links">
-                <li><a href="index.html">Home</a></li>
-                <li><a class="current" href="about.html">About</a></li>
-            </ul>
-        </nav>
-        <a href="checkout.html" class="cart"><button><img id="cart" src="icons/cart.png" alt="Cart Icon"> My Cart</button></a>
-    </header>
+    <?php $filename = $_SERVER['SCRIPT_NAME']; ?>
+    <?php include './header.php'; ?>
 
     <div class="pimg1">
         <div class="ptext">
