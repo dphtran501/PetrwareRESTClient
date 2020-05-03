@@ -11,22 +11,46 @@ window.addEventListener('load', onLoad);
 addButton.addEventListener('click', onAddClick);
 
 function onLoad() {
-    let product = JSON.parse(sessionStorage.getItem('product'));
-    productImage.src = "images/" + product.imgSrc;
-    productPriceText.textContent = product.price;
-    if (product.category == "cpu"){
-        productNameText.textContent = product.brand + " " + product.name;
-    }
-    else if (product.category == "ram") {
-        productNameText.textContent = product.brand + " " + product.series;
-    }
-    else if(product.category == "videoCard") {
-        productNameText.textContent = product.brand + " " + (product.series == "" ? "" : (product.series + " ")) + product.gpu;
-    }
-    productModelText.textContent = "Model: " + product.model;
-    productDescriptionText.textContent = product.description;
+    let productQueryId = JSON.parse(sessionStorage.getItem('productQueryId'));
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        // 4 means finished, and 200 means okay.
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            let response = JSON.parse(xhr.responseText);
+            let product = response[0];
+            productImage.src = "images/" + product.imgSrc;
+            productPriceText.textContent = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(product.price);
+            if (product.category == "cpu"){
+                productNameText.textContent = createProductName([product.brand, product.name]);
+            }
+            else if (product.category == "ram") {
+                productNameText.textContent = createProductName([product.brand, product.series]);
+            }
+            else if(product.category == "videoCard") {
+                productNameText.textContent = createProductName([product.brand, product.series, product.gpu]);
+            }
+            productModelText.textContent = "Model: " + product.model;
+            productDescriptionText.textContent = product.description;
 
-    loadTable(product);
+            loadTable(product);
+
+        }
+    }
+    xhr.open("GET", `db_query.php?id=${productQueryId.id}&category=${productQueryId.category}`, true);
+    xhr.send();
+
+}
+
+function createProductName(attributeList) {
+    let name = "";
+    for (let i = 0; i < attributeList.length; i++) {
+        name += ((attributeList[i] === null) ? "" : attributeList[i]);
+        if (i < attributeList.length - 1){
+            name += " ";
+        }
+    }
+
+    return name;
 }
 
 function onAddClick() {
@@ -38,11 +62,15 @@ function onAddClick() {
             cartList = JSON.parse(cartData);
         }
         // Update cart item quantity if already in cart list, else add to list
-        let product = JSON.parse(sessionStorage.getItem('product'));
-        let itemIndex = cartList.findIndex(item => (item.model == product.model));
+        //let product = JSON.parse(sessionStorage.getItem('product'));
+        let productQueryId = JSON.parse(sessionStorage.getItem('productQueryId'));
+        //let itemIndex = cartList.findIndex(item => (item.model == product.model));
+        let itemIndex = cartList.findIndex(item => (item.id === productQueryId.id));
         if (itemIndex < 0){
-            product.quantity = Number(quantityInput.value);
-            cartList.push(product);
+            // product.quantity = Number(quantityInput.value);
+            // cartList.push(product);
+            productQueryId.quantity = Number(quantityInput.value);
+            cartList.push(productQueryId);
         }
         else {
             cartList[itemIndex].quantity = Number(cartList[itemIndex].quantity) + Number(quantityInput.value);
@@ -66,8 +94,8 @@ function loadTable(product) {
         if (product.coreName) addTableRow("Core Name", product.coreName);
         if (product.numOfCores) addTableRow("# of Cores", product.numOfCores);
         if (product.numOfThreads) addTableRow("# of Threads", product.numOfThreads);
-        if (product.operatingFrequency) addTableRow("Operating Frequency", product.operatingFrequency);
-        if (product.maxTurboFrequency) addTableRow("Max Turbo Frequency", product.maxTurboFrequency);
+        if (product.operatingFrequency) addTableRow("Operating Frequency", product.operatingFrequency + " GHz");
+        if (product.maxTurboFrequency) addTableRow("Max Turbo Frequency", product.maxTurboFrequency + " GHz");
     }
     else if (product.category == "ram") {
         if (product.capacity) addTableRow("Capacity", product.capacity);
@@ -81,11 +109,11 @@ function loadTable(product) {
         if (product.interface) addTableRow("Interface", product.interface);
         if (product.chipset) addTableRow("Chipset", product.chipset);
         if (product.gpu) addTableRow("GPU", product.gpu);
-        if (product.memorySize) addTableRow("Memory Size", product.memorySize);
+        if (product.memorySize) addTableRow("Memory Size", product.memorySize + " GB");
         if (product.memoryType) addTableRow("Memory Type", product.memoryType);
         if (product.maxResolution) addTableRow("Max Resolution", product.maxResolution);
         if (product.cooler) addTableRow("Cooler", product.cooler);
-        if (product.maxGPULength) addTableRow("Max GPU Length", product.maxGPULength);
+        if (product.maxGPULength) addTableRow("Max GPU Length", product.maxGPULength + " mm");
         if (product.cardDimensions) addTableRow("Card Dimensions", product.cardDimensions);
     }
 }

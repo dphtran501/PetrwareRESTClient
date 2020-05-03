@@ -1,63 +1,92 @@
 const productGrid = document.querySelector('.productgrid-container');
 
-const jsonObj = load();
-
 init();
 
 function init(){
-    populateProductGrid(createProductList(jsonObj));
-    removeGridBorderTop();
-    removeGridBorderBottom();
+    populateProductGrid();
     window.addEventListener('resize', onResize);
 }
 
-function Product(id, name, description, price, imgSrc){
+function Product(id, category, name, description, price, imgSrc){
     this.id = id;
+    this.category = category;
     this.name = name;
     this.description = description;
     this.price = price;
     this.imgSrc = imgSrc;
 }
 
+function populateProductGrid() {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        // 4 means finished, and 200 means okay.
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            let response = JSON.parse(xhr.responseText);
+            let productList = createProductList(response);
+            productList.forEach(product => {
+                let productCell = createProductCell(product);
+                productGrid.appendChild(productCell);
+            });
+
+            removeGridBorderTop();
+            removeGridBorderBottom();
+        }
+    }
+    xhr.open("GET", "db_query.php", true);
+    xhr.send();
+}
+
 function createProductList(jsonObject) {
-    var productList = [];
-    jsonObject.forEach(item => {
+    let productList = [];
+    jsonObject.forEach(product => {
         let name, description;
-        if (item.category == "cpu"){
-            name = item.brand + " " + item.name;
-            description = ["Model: " + item.model, 
-                "# of Cores: " + item.numOfCores, 
-                "Frequency: " + item.operatingFrequency,
-                "Socket Type: " + item.socketType];
+        if (product.category == "cpu"){
+            name = createProductName([product.brand, product.name]);
+            description = {
+                "Model": [product.model],
+                "# of Cores": [product.numOfCores],
+                "Frequency": [product.operatingFrequency, "GHz"],
+                "Socket Type": [product.socketType]
+            };
         }
-        else if (item.category == "ram") {
-            name = item.brand + " " + item.series;
-            description = ["Model: " + item.model, 
-                "Capacity: " + item.capacity,
-                "Speed: " + item.speed,
-                "Color: " + item.color];
+        else if (product.category == "ram") {
+            name = createProductName([product.brand, product.series]);
+            description = {
+                "Model": [product.model],
+                "Capacity": [product.capacity],
+                "Speed": [product.speed],
+                "Timing": [product.timing],
+                "Latency": [product.latency]
+            };
         }
-        else if(item.category == "videoCard") {
-            name = item.brand + " " + (item.series == "" ? "" : (item.series + " ")) + item.gpu;
-            description = ["Model: " + item.model, 
-                "Memory Size: " + item.memorySize, 
-                "Memory Type: " + item.memoryType,
-                "Max GPU Length: " + item.maxGPULength,
-                "Dimensions: " + item.cardDimensions];
+        else if(product.category == "videoCard") {
+            name = createProductName([product.brand, product.series, product.gpu]);
+            description = {
+                "Model": [product.model],
+                "Memory Size": [product.memorySize, "GB"],
+                "Memory Type": [product.memoryType],
+                "Max GPU Length": [product.maxGPULength, "mm"],
+                "Dimensions": [product.cardDimensions]
+            }
         }
 
-        let imageSrc = "images/" + item.imgSrc;
-        productList.push(new Product(item.model, name, description, item.price, imageSrc));
+        let imageSrc = "images/" + product.imgSrc;
+        productList.push(new Product(product.id, product.category, name, description, product.price, imageSrc))
     })
 
     return productList;
 }
 
-function populateProductGrid(productList) {
-    productList.forEach(product => {
-        let productCell = createProductCell(product);
-        productGrid.appendChild(productCell);
-    });
+function createProductName(attributeList) {
+    let name = "";
+    for (let i = 0; i < attributeList.length; i++) {
+        name += ((attributeList[i] === null) ? "" : attributeList[i]);
+        if (i < attributeList.length - 1){
+            name += " ";
+        }
+    }
+
+    return name;
 }
 
 function createProductCell(product) {
@@ -71,7 +100,7 @@ function createProductCell(product) {
     productCell.appendChild(productImg);
 
     let priceText = document.createElement('p');
-    priceText.textContent = product.price;
+    priceText.textContent = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(product.price);
     priceText.classList.add('productcell__price');
     productCell.appendChild(priceText);
 
@@ -81,25 +110,37 @@ function createProductCell(product) {
     productCell.appendChild(nameText);
 
     let descriptionList = document.createElement('ul');
-    product.description.forEach(attribute => {
-        let listItem = document.createElement('li');
-        listItem.textContent = attribute;
-        descriptionList.appendChild(listItem);
-    });
+    // key-value pair modeled as "LABEL": ["ATTRIBUTE", "UNITS"] (e.g. "Color": ["Black"], "Memory Size": ["11", "GB"])
+    Object.keys(product.description).forEach(key => {
+        if (!product.description[key].includes(null)) {
+            let listItem = document.createElement('li');
+            listItem.textContent = key + ": ";
+            for (let i = 0; i < product.description[key].length; i++) {
+                listItem.textContent += product.description[key][i];
+                if (i < product.description[key].length - 1) {
+                    listItem.textContent += " ";
+                }
+            }
+            descriptionList.appendChild(listItem);
+        }
+    })
     descriptionList.classList.add('productcell__description');
     productCell.appendChild(descriptionList);
 
     productCell.classList.add('productcell');
 
     productCell.id = product.id;
+    productCell.category = product.category;
 
     return productCell;
 }
 
 function onProductClick(e) {
     let productCell = e.target.parentElement;
-    let product = jsonObj.filter(item => item.model == productCell.id);
-    sessionStorage.setItem('product', JSON.stringify(product[0]));
+    //let product = jsonObj.filter(item => item.model == productCell.id);
+    let productQueryId = {id: productCell.id, category: productCell.category};
+    //sessionStorage.setItem('product', JSON.stringify(product[0]));
+    sessionStorage.setItem('productQueryId', JSON.stringify(productQueryId));
     window.open('product.html', '_self');
 }
 

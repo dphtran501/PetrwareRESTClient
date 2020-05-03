@@ -128,23 +128,37 @@ const sendmail = function() {
 
     // items purchase info
     let itemsSummary = "";
-    let cartData = sessionStorage.getItem('cartData');
-    let cartList = JSON.parse(cartData);
     let total = document.getElementById('totalCost').textContent;
-    for (let i = 0; i < cartList.length; i++) {
-        let itemName;
-        if (cartList[i].category == "cpu"){
-            itemName = cartList[i].brand + " " + cartList[i].name;
-        }
-        else if (cartList[i].category == "ram") {
-            itemName = cartList[i].brand + " " + cartList[i].series;
-        }
-        else if(cartList[i].category == "videoCard") {
-            itemName = cartList[i].brand + " " + (cartList[i].series == "" ? "" : cartList[i].series + " ") + cartList[i].gpu;
-        }
 
-        itemsSummary += "          - " + cartList[i].quantity + " x " + itemName;
-        if (i < cartList.length - 1) itemsSummary += "\n";
+    let cartData = sessionStorage.getItem('cartData');
+    if (cartData != null) {
+        let cartList = JSON.parse(cartData);
+        for (let i = 0; i < cartList.length; i++) {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                // 4 means finished, and 200 means okay.
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    let response = JSON.parse(xhr.responseText);
+                    let item = response[0];
+                    
+                    let itemName;
+                    if (item.category == "cpu"){
+                        itemName = createProductName([item.brand, item.name]);
+                    }
+                    else if (cartList[i].category == "ram") {
+                        itemName = createProductName([item.brand, item.series]);
+                    }
+                    else if(cartList[i].category == "videoCard") {
+                        itemName = createProductName([item.brand, item.series, item.gpu]);
+                    }
+
+                    itemsSummary += "          - " + cartList[i].quantity + " x " + itemName;
+                    if (i < cartList.length - 1) itemsSummary += "\n";
+                }
+            }
+            xhr.open("GET", `db_query.php?id=${cartList[i].id}&category=${cartList[i].category}`, false);
+            xhr.send();
+        }
     }
 
     let bodyMessage = `Name: ${first} ${last}\n` +
@@ -164,5 +178,16 @@ const sendmail = function() {
         + "&body=" + encodeURIComponent(bodyMessage);
 }
 
+function createProductName(attributeList) {
+    let name = "";
+    for (let i = 0; i < attributeList.length; i++) {
+        name += ((attributeList[i] === null) ? "" : attributeList[i]);
+        if (i < attributeList.length - 1){
+            name += " ";
+        }
+    }
+
+    return name;
+}
 
 document.addEventListener('DOMContentLoaded', init);

@@ -1,5 +1,6 @@
 const itemListContainer = document.querySelector('#itemList');
-const totalCost = document.querySelector('#totalCost')
+const totalCostText = document.querySelector('#totalCost')
+let currentTotalCost = 0;
 
 loadCartList();
 
@@ -7,7 +8,20 @@ function loadCartList() {
     let cartData = sessionStorage.getItem('cartData');
     if (cartData != null) {
         let cartList = JSON.parse(cartData);
-        cartList.forEach(item => addCartListItem(item));
+        cartList.forEach(itemQueryId => {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                // 4 means finished, and 200 means okay.
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    let response = JSON.parse(xhr.responseText);
+                    let item = response[0];
+                    item.quantity = itemQueryId.quantity;
+                    addCartListItem(item);
+                }
+            }
+            xhr.open("GET", `db_query.php?id=${itemQueryId.id}&category=${itemQueryId.category}`, true);
+            xhr.send();
+        });
     }
 }
 
@@ -20,13 +34,13 @@ function addCartListItem(listItem) {
 
     let listItemName = document.createElement('p');
     if (listItem.category == "cpu"){
-        listItemName.textContent = listItem.brand + " " + listItem.name;
+        listItemName.textContent = createProductName([listItem.brand, listItem.name]);
     }
     else if (listItem.category == "ram") {
-        listItemName.textContent = listItem.brand + " " + listItem.series;
+        listItemName.textContent = createProductName([listItem.brand, listItem.series]);
     }
     else if(listItem.category == "videoCard") {
-        listItemName.textContent = listItem.brand + " " + (listItem.series == "" ? "" : (listItem.series + " ")) + listItem.gpu;
+        listItemName.textContent = createProductName([listItem.brand, listItem.series, listItem.gpu]);
     }
     listItemContainer.appendChild(listItemName);
 
@@ -38,7 +52,7 @@ function addCartListItem(listItem) {
     liQtyPriceContainer.appendChild(listItemQuantity);
 
     let listItemPrice = document.createElement('p');
-    listItemPrice.textContent = listItem.price;
+    listItemPrice.textContent = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(listItem.price);
     liQtyPriceContainer.appendChild(listItemPrice);
 
     listItemContainer.appendChild(liQtyPriceContainer);
@@ -50,9 +64,19 @@ function addCartListItem(listItem) {
     addToTotalCost(listItem.price, listItem.quantity);
 }
 
+function createProductName(attributeList) {
+    let name = "";
+    for (let i = 0; i < attributeList.length; i++) {
+        name += ((attributeList[i] === null) ? "" : attributeList[i]);
+        if (i < attributeList.length - 1){
+            name += " ";
+        }
+    }
+
+    return name;
+}
+
 function addToTotalCost(itemPrice, quantity) {
-    let currentTotalCost = (totalCost.textContent != "") ?  parseFloat(totalCost.textContent.substring(1).replace(/,/g, '')) : 0.00;
-    currentTotalCost += parseFloat(quantity) * parseFloat(itemPrice.substring(1).replace(/,/g, ''));
-    //totalCost.textContent = "$" + currentTotalCost.toFixed(2);
-    totalCost.textContent = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(currentTotalCost);
+    currentTotalCost += quantity * itemPrice;
+    totalCostText.textContent = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(currentTotalCost);
 }

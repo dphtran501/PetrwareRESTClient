@@ -75,6 +75,7 @@ li, a, h1, div, button, p, input{
 #product-table td {
     padding: 5px 20px 5px 5px;
     border-bottom: 1px solid rgba(0, 62, 120, 0.1);
+    white-space: pre;
 }
 
 #product-table td:nth-child(odd) {
