@@ -82,6 +82,34 @@ button:hover {
     background-color: rgba(247, 235, 95, 1);
 }
 
+.search-div {
+    margin-bottom: 75px;
+}
+
+#search-form {
+    display: flex;
+    justify-content: center;
+}
+
+#search-input {
+    width: 80%;
+    height: 50px;
+    font-size: 20px;
+}
+
+#search-submit {
+    padding: 0 10px;
+    background-color: rgba(255, 210, 0, 1);
+    color: #0064a4;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease 0s;
+}
+
+#search-submit:hover {
+    background-color: rgba(247, 235, 95, 1);
+}
+
 .productgrid-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

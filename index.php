@@ -11,6 +11,13 @@
     <?php $filename = $_SERVER['SCRIPT_NAME']; ?>
     <?php include './header.php'; ?>
 
+    <div class="search-div">
+        <form id="search-form">
+            <input type="search" id="search-input" name="searchQuery" placeholder="What do you want to search?">
+            <input type="submit" id="search-submit" name="searchSubmit" value = "Search">
+        </form>
+    </div>
+
     <div class="productlist-container">
         <div class="productgrid-container"></div>
     </div>

@@ -16,6 +16,7 @@ function onLoad() {
     xhr.onreadystatechange = function() {
         // 4 means finished, and 200 means okay.
         if (xhr.readyState == 4 && xhr.status == 200) {
+            //console.log(xhr.responseText);
             let response = JSON.parse(xhr.responseText);
             let product = response[0];
             productImage.src = "images/" + product.imgSrc;
@@ -62,13 +63,9 @@ function onAddClick() {
             cartList = JSON.parse(cartData);
         }
         // Update cart item quantity if already in cart list, else add to list
-        //let product = JSON.parse(sessionStorage.getItem('product'));
         let productQueryId = JSON.parse(sessionStorage.getItem('productQueryId'));
-        //let itemIndex = cartList.findIndex(item => (item.model == product.model));
         let itemIndex = cartList.findIndex(item => (item.id === productQueryId.id));
         if (itemIndex < 0){
-            // product.quantity = Number(quantityInput.value);
-            // cartList.push(product);
             productQueryId.quantity = Number(quantityInput.value);
             cartList.push(productQueryId);
         }
@@ -77,7 +74,7 @@ function onAddClick() {
         }
 
         sessionStorage.setItem('cartData', JSON.stringify(cartList));
-        window.open('checkout.html', '_self');
+        window.open('checkout.php', '_self');
     }
 }
 

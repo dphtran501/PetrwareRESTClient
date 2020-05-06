@@ -1,9 +1,12 @@
 const productGrid = document.querySelector('.productgrid-container');
+const searchForm = document.querySelector('#search-form');
+const searchInput = document.querySelector('#search-input');
 
 init();
 
 function init(){
     populateProductGrid();
+    searchForm.addEventListener('submit', onSubmit);
     window.addEventListener('resize', onResize);
 }
 
@@ -16,11 +19,18 @@ function Product(id, category, name, description, price, imgSrc){
     this.imgSrc = imgSrc;
 }
 
-function populateProductGrid() {
+function onSubmit(e) {
+    e.preventDefault();
+    clearProductGrid();
+    populateProductGrid(searchInput.value);
+}
+
+function populateProductGrid(searchQuery) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         // 4 means finished, and 200 means okay.
         if (xhr.readyState == 4 && xhr.status == 200) {
+            //console.log(xhr.responseText);
             let response = JSON.parse(xhr.responseText);
             let productList = createProductList(response);
             productList.forEach(product => {
@@ -32,7 +42,12 @@ function populateProductGrid() {
             removeGridBorderBottom();
         }
     }
-    xhr.open("GET", "db_query.php", true);
+    if (searchQuery) {
+        xhr.open("GET", `db_query.php?search=${searchQuery}`, true);
+    }
+    else {
+        xhr.open("GET", "db_query.php", true);
+    }
     xhr.send();
 }
 
@@ -137,11 +152,9 @@ function createProductCell(product) {
 
 function onProductClick(e) {
     let productCell = e.target.parentElement;
-    //let product = jsonObj.filter(item => item.model == productCell.id);
     let productQueryId = {id: productCell.id, category: productCell.category};
-    //sessionStorage.setItem('product', JSON.stringify(product[0]));
     sessionStorage.setItem('productQueryId', JSON.stringify(productQueryId));
-    window.open('product.html', '_self');
+    window.open('product.php', '_self');
 }
 
 function onResize(e) {
@@ -153,15 +166,18 @@ function removeGridBorderTop() {
     let productGridComputedStyle = window.getComputedStyle(productGrid);
     // grid-template-columns computed value is as specified but converted to absolute lengths (e.g. "300px 300px 300px")
     let numberOfColumns = productGridComputedStyle.getPropertyValue("grid-template-columns").split(" ").length;
+    let numberOfRows = productGridComputedStyle.getPropertyValue("grid-template-rows").split(" ").length;
     let firstRow = productGrid.querySelectorAll('.productcell:nth-child(-n+' + numberOfColumns + ')');
     firstRow.forEach(productCell => {
         productCell.style.borderTop = "medium none transparent";
     });
     // Cells moving from first to second row get their border tops again
-    let secondRow = productGrid.querySelectorAll('.productcell:nth-child(n+' + (numberOfColumns + 1) + '):nth-child(-n+' + (2 * numberOfColumns) + ')');
-    secondRow.forEach(productCell => {
-        productCell.style.borderTop = "1px solid rgba(0, 62, 120, 0.1)";
-    })
+    if (numberOfRows > 1) {
+        let secondRow = productGrid.querySelectorAll('.productcell:nth-child(n+' + (numberOfColumns + 1) + '):nth-child(-n+' + (2 * numberOfColumns) + ')');
+        secondRow.forEach(productCell => {
+            productCell.style.borderTop = "1px solid rgba(0, 62, 120, 0.1)";
+        })
+    }
 }
 
 function removeGridBorderBottom() {
@@ -173,9 +189,17 @@ function removeGridBorderBottom() {
     lastRow.forEach(productCell => {
         productCell.style.borderBottom = "medium none transparent";
     });
-    let secondLastRow = productGrid.querySelectorAll('.productcell:nth-child(n+' + ((numberOfRows - 2) * numberOfColumns + 1) + '):nth-child(-n+' + ((numberOfRows - 1) * numberOfColumns) + ')');
-    secondLastRow.forEach(productCell => {
-        productCell.style.borderBottom = "1px solid rgba(0, 62, 120, 0.1)";
-    })
+    if (numberOfRows > 1) {
+        let secondLastRow = productGrid.querySelectorAll('.productcell:nth-child(n+' + ((numberOfRows - 2) * numberOfColumns + 1) + '):nth-child(-n+' + ((numberOfRows - 1) * numberOfColumns) + ')');
+        secondLastRow.forEach(productCell => {
+            productCell.style.borderBottom = "1px solid rgba(0, 62, 120, 0.1)";
+        })
+    }
+}
+
+function clearProductGrid() {
+    while (productGrid.hasChildNodes()) {
+        productGrid.removeChild(productGrid.firstChild);
+    }
 }
 
