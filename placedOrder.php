@@ -15,6 +15,8 @@
     <div class="placed">
         <h1 class="placedOrder">Thank You For Purchasing From Petrware</h1>
         <h1 class="emailReceipt">Your Receipt Should Be Sent To Your Email</h1>
+
+        <!-- Update Page using AJAX to show User's Cart and Info -->
     </div>
 
     <script src="scripts/data.js"></script>
