@@ -47,24 +47,11 @@
             OR product.model LIKE :modelQuery
             OR product_video_card.gpu LIKE :gpuQuery");
 
-        $sqlCPUStmt->bindValue(':brandQuery', $wildcardSearchQuery);
-        $sqlCPUStmt->bindValue(':nameQuery', $wildcardSearchQuery);
-        $sqlCPUStmt->bindValue(':seriesQuery', $wildcardSearchQuery);
-        $sqlCPUStmt->bindValue(':modelQuery', $wildcardSearchQuery);
-        $sqlCPUStmt->execute();
+        $sqlCPUStmt->execute(array(':brandQuery', $wildcardSearchQuery, ':nameQuery', $wildcardSearchQuery, ':seriesQuery', $wildcardSearchQuery, ':modelQuery', $wildcardSearchQuery));
 
-        $sqlRAMStmt->bindValue(':brandQuery', $wildcardSearchQuery);
-        $sqlRAMStmt->bindValue(':nameQuery', $wildcardSearchQuery);
-        $sqlRAMStmt->bindValue(':seriesQuery', $wildcardSearchQuery);
-        $sqlRAMStmt->bindValue(':modelQuery', $wildcardSearchQuery);
-        $sqlRAMStmt->execute();
+        $sqlRAMStmt->execute(array(':brandQuery', $wildcardSearchQuery, ':nameQuery', $wildcardSearchQuery, ':seriesQuery', $wildcardSearchQuery, ':modelQuery', $wildcardSearchQuery));
 
-        $sqlVideoCardStmt->bindValue(':brandQuery', $wildcardSearchQuery);
-        $sqlVideoCardStmt->bindValue(':nameQuery', $wildcardSearchQuery);
-        $sqlVideoCardStmt->bindValue(':seriesQuery', $wildcardSearchQuery);
-        $sqlVideoCardStmt->bindValue(':modelQuery', $wildcardSearchQuery);
-        $sqlVideoCardStmt->bindValue(':gpuQuery', $wildcardSearchQuery);
-        $sqlVideoCardStmt->execute();
+        $sqlVideoCardStmt->execute(array(':brandQuery', $wildcardSearchQuery, ':nameQuery', $wildcardSearchQuery, ':seriesQuery', $wildcardSearchQuery, ':modelQuery', $wildcardSearchQuery, ':gpuQuery', $wildcardSearchQuery));
 
         $results = array();
         while ($record = $sqlCPUStmt->fetch(PDO::FETCH_ASSOC)){
