@@ -36,6 +36,24 @@
             ':securityCode' => $_POST['securityCode']));
     }
 
+    // Update User-Cart Relational Table
+
+    /* 
+        BIG CHANGE NEEDED FOR DB, must have a primary key to join relational data customer_id, product_id, creditcard_it, purchase_id
+        CREATE TABLE customer_cart (
+            'customer_id' INT NOT NULL,
+            'product_id' INT NOT NULL,
+            'quantity' INT NOT NULL,
+            PRIMARY_KEY('customer_id, product_id') 
+        );
+        SELECT c.*, p.*
+        FROM customer c
+        INNER JOIN customer_cart customCart
+        ON customCart.customer_id = c.id
+        INNER JOIN products p
+        ON p.id = customCart.product_id
+    */
+
     require('db_close.php');
 ?>
 
@@ -56,6 +74,8 @@
     <div class="placed">
         <h1 class="placedOrder">Thank You For Purchasing From Petrware</h1>
         <h1 class="emailReceipt">Your Receipt Should Be Sent To Your Email</h1>
+
+        <!-- Update Page using AJAX to show User's Cart and Info -->
     </div>
 
     <script src="scripts/data.js"></script>
