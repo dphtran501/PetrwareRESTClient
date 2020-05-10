@@ -50,6 +50,7 @@ const validate = function(ev){
     let country = document.getElementById('input-country');
     let streetAddress = document.getElementById('input-streetAddress');
     let city = document.getElementById('input-city');
+    let state = document.getElementById('input-state');
     let zipcode = document.getElementById('input-zipcode');
     let email = document.getElementById('input-email');
     
@@ -73,6 +74,9 @@ const validate = function(ev){
     } 
     if( city.value === ""){
         failures.push({input:'input-city', msg:'Required Field'});
+    } 
+    if( state.value === ""){
+        failures.push({input:'input-state', msg:'Required Field'});
     } 
     if( zipcode.value === ""){ //Might be an error due to int and str comparison
         failures.push({input:'input-zipcode', msg:'Required Field'});
@@ -117,6 +121,7 @@ const sendmail = function() {
 
     let streetAddress = document.getElementById('input-streetAddress').value;
     let city = document.getElementById('input-city').value;
+    let state = document.getElementById('input-state').value;
     let zipcode = document.getElementById('input-zipcode').value;
     let email = document.getElementById('input-email').value;
     
@@ -166,6 +171,7 @@ const sendmail = function() {
                         `Country: ${country}\n` +
                         `Street Address: ${streetAddress}\n` +
                         `City: ${city}\n` + 
+                        `State: ${state}\n` +
                         `Zipcode: ${zipcode}\n` +
                         `Card Number: ${cardNumber}\n` +
                         `Shipping Method: ${shipping}\n` +

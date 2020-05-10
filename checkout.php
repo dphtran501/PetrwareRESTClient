@@ -56,6 +56,10 @@
                 <input type="text" id="input-city" name="city" autofocus required placeholder="Example: Irvine" tabindex="1"/>
             </div>
             <div class="form-box error" data-errormsg="">
+                <label for="input-state">State</label>
+                <input type="text" id="input-state" name="state" autofocus required placeholder="Example: CA" tabindex="1"/>
+            </div>
+            <div class="form-box error" data-errormsg="">
                 <label for="input-zipcode">Zipcode</label>
                 <input type="number" id="input-zipcode" name="zipcode" autofocus required placeholder="Example: 12345" tabindex="1"/>
             </div>

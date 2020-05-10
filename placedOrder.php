@@ -4,10 +4,10 @@
     //CUSTOMER INFO
     if( isset($_POST['firstName']) && isset($_POST['lastName']) && isset($_POST['phone']) &&
         isset($_POST['country']) && isset($_POST['streetAddress']) && isset($_POST['city']) &&
-        isset($_POST['zipcode']) && isset($_POST['shipping']) && isset($_POST['email'])) {
+        isset($_POST['state']) && isset($_POST['zipcode']) && isset($_POST['shipping']) && isset($_POST['email'])) {
 
-        $sql = "INSERT INTO customers (firstName, lastName, phone, country, streetAddress, city, zipcode,
-                shipping, email) VALUES(:firstName, :lastName, :phone, :country, :streetAddress, :city, :zipcode,
+        $sql = "INSERT INTO customers (firstName, lastName, phone, country, streetAddress, city, state, zipcode,
+                shipping, email) VALUES(:firstName, :lastName, :phone, :country, :streetAddress, :city, :state, :zipcode,
                                         :shipping, :email)";
 
         $stmt = $conn->prepare($sql);
@@ -18,6 +18,7 @@
             ':country' => $_POST['country'],
             ':streetAddress' => $_POST['streetAddress'],
             ':city' => $_POST['city'],
+            ':state' => $_POST['state'],
             ':zipcode' => $_POST['zipcode'],
             ':shipping' => $_POST['shipping'],
             ':email' => $_POST['email'],));

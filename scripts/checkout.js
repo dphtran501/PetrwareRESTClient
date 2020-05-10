@@ -1,8 +1,8 @@
 const itemListContainer = document.querySelector('#itemList');
 const totalCostText = document.querySelector('#totalCost');
 
-const addressInput = document.querySelector('#input-streetAddress');
 const cityInput = document.querySelector('#input-city');
+const stateInput = document.querySelector('#input-state');
 const zipcodeInput = document.querySelector('#input-zipcode');
 
 zipcodeInput.addEventListener('blur', onBlur);
@@ -98,6 +98,7 @@ function onBlur(e) {
             let data = (response.length > 0) ? response[0] : null;
             if (data){
                 cityInput.value = data.city;
+                stateInput.value = data.state;
             }
         }
     }
