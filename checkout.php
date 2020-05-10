@@ -1,46 +1,3 @@
-<?php
-    require('db_conn.php');
-
-    //CUSTOMER INFO
-    if( isset($_POST['firstName']) && isset($_POST['lastName']) && isset($_POST['phone']) &&
-        isset($_POST['country']) && isset($_POST['streetAddress']) && isset($_POST['city']) &&
-        isset($_POST['zipcode']) && isset($_POST['shipping']) && isset($_POST['email'])) {
-
-        $sql = "INSERT INTO customers (firstName, lastName, phone, country, streetAddress, city, zipcode,
-                shipping, email) VALUES(:firstName, :lastName, :phone, :country, :streetAddress, :city, :zipcode,
-                                        :shipping, :email)";
-
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute(array(
-            ':firstName' ==> $_POST['firstName'],
-            ':lastName' ==> $_POST['lastName'],
-            ':phone' ==> $_POST['phone'],
-            ':country' ==> $_POST['country'],
-            ':streetAddress' ==> $_POST['streetAddress'],
-            ':city' ==> $_POST['city'],
-            ':zipcode' ==> $_POST['zipcode'],
-            ':shipping' ==> $_POST['shipping'],
-            ':email' ==> $_POST['email'],));
-
-    }
-
-    //CREDIT CARD INFO
-    if( isset($_POST['cardNumber']) && isset($_POST['expiration']) && isset($_POST['securityCode'])) {
-
-        $sql = "INSERT INTO creditcards VALUES(LAST_INSERT_ID(), :cardNumber, :expiration, :securityCode)";
-
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute(array(
-            ':cardNumber' ==> $_POST['cardNumber'],
-            ':expiration' ==> $_POST['expiration'],
-            ':securityCode' ==> $_POST['securityCode']
-    }
-
-    require('db_close.php');
-?>
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -70,8 +27,7 @@
 
     <div class="checkoutPage">
         <h1>Checkout</h1>
-        
-        <form id="form-user" action="placedOrder.html">
+        <form id="form-user" method="POST" action="placedOrder.php">
             <div class="form-box error" data-errormsg="">
                 <label for="input-first">First Name</label>
                 <input type="text" id="input-first"  name="firstName" autofocus required placeholder="First Name" tabindex="1"/>
