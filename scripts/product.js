@@ -37,7 +37,7 @@ function onLoad() {
 
         }
     }
-    xhr.open("GET", `db_query.php?id=${productQueryId.id}&category=${productQueryId.category}`, true);
+    xhr.open("GET", `db_product_query.php?id=${productQueryId.id}&category=${productQueryId.category}`, true);
     xhr.send();
 
 }

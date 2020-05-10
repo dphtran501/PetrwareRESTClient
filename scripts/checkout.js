@@ -1,5 +1,12 @@
 const itemListContainer = document.querySelector('#itemList');
-const totalCostText = document.querySelector('#totalCost')
+const totalCostText = document.querySelector('#totalCost');
+
+const addressInput = document.querySelector('#input-streetAddress');
+const cityInput = document.querySelector('#input-city');
+const zipcodeInput = document.querySelector('#input-zipcode');
+
+zipcodeInput.addEventListener('blur', onBlur);
+
 let currentTotalCost = 0;
 
 loadCartList();
@@ -19,7 +26,7 @@ function loadCartList() {
                     addCartListItem(item);
                 }
             }
-            xhr.open("GET", `db_query.php?id=${itemQueryId.id}&category=${itemQueryId.category}`, true);
+            xhr.open("GET", `db_product_query.php?id=${itemQueryId.id}&category=${itemQueryId.category}`, true);
             xhr.send();
         });
     }
@@ -79,4 +86,21 @@ function createProductName(attributeList) {
 function addToTotalCost(itemPrice, quantity) {
     currentTotalCost += quantity * itemPrice;
     totalCostText.textContent = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(currentTotalCost);
+}
+
+function onBlur(e) {
+    let zipcode = zipcodeInput.value;
+
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            let response = JSON.parse(xhr.responseText);
+            let data = (response.length > 0) ? response[0] : null;
+            if (data){
+                cityInput.value = data.city;
+            }
+        }
+    }
+    xhr.open("GET", `db_form_query.php?zipcode=${zipcode}`, true);
+    xhr.send();
 }

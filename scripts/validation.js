@@ -156,7 +156,7 @@ const sendmail = function() {
                     if (i < cartList.length - 1) itemsSummary += "\n";
                 }
             }
-            xhr.open("GET", `db_query.php?id=${cartList[i].id}&category=${cartList[i].category}`, false);
+            xhr.open("GET", `db_product_query.php?id=${cartList[i].id}&category=${cartList[i].category}`, false);
             xhr.send();
         }
     }

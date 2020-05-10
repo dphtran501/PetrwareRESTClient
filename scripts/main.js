@@ -43,10 +43,10 @@ function populateProductGrid(searchQuery) {
         }
     }
     if (searchQuery) {
-        xhr.open("GET", `db_query.php?search=${searchQuery}`, true);
+        xhr.open("GET", `db_product_query.php?search=${searchQuery}`, true);
     }
     else {
-        xhr.open("GET", "db_query.php", true);
+        xhr.open("GET", "db_product_query.php", true);
     }
     xhr.send();
 }
