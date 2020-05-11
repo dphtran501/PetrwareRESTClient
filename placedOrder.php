@@ -10,8 +10,7 @@
                 city=:city, state=:state, zipcode=:zipcode, shipping=:shipping, email=:email
                 WHERE id=:cID";
 
-        $stmt = $conn->prepare($sql);
-        $stmt->execute(array(
+        $filteredArray = array(
             ':firstName' => $_POST['firstName'],
             ':lastName' => $_POST['lastName'],
             ':phone' => $_POST['phone'],
@@ -22,8 +21,65 @@
             ':zipcode' => $_POST['zipcode'],
             ':shipping' => $_POST['shipping'],
             ':email' => $_POST['email'],
-            ':cID' => $_POST['cID']));
+            ':cID' => $_POST['cID']
+        );
 
+        $sanitizers = array(
+            ':firstName' => FILTER_SANITIZE_STRING,
+            ':lastName' => FILTER_SANITIZE_STRING,
+            ':phone' => FILTER_SANITIZE_NUMBER_INT,
+            ':country' => FILTER_SANITIZE_STRING,
+            ':streetAddress' => FILTER_SANITIZE_STRING,
+            ':city' => FILTER_SANITIZE_STRING,
+            ':state' => FILTER_SANITIZE_STRING,
+            ':zipcode' => FILTER_SANITIZE_NUMBER_INT,
+            ':shipping' => FILTER_SANITIZE_STRING,
+            ':email' => FILTER_SANITIZE_EMAIL,
+            ':cID' => FILTER_VALIDATE_NUMBER_INT
+        );
+
+        $filters = array(
+            ':firstName' => array(
+                'filter' => FILTER_CALLBACK,
+                'options' => 'ucwords'
+            ),
+            ':lastName' => array(
+                'filter' => FILTER_CALLBACK,
+                'options' => 'ucwords'
+            ),
+            ':phone' => FILTER_VALIDATE_INT,
+            ':country' => array(
+                'filter' => FILTER_CALLBACK,
+                'options' => 'ucwords'
+            ),
+            ':streetAddress' => array(
+                'filter' => FILTER_CALLBACK,
+                'options' => 'ucwords'
+            ),
+            ':city' => array(
+                'filter' => FILTER_CALLBACK,
+                'options' => 'ucwords'
+            ),
+            ':state' => array(
+                'filter' => FILTER_CALLBACK,
+                'options' => 'ucwords'
+            ),
+            ':zipcode' => FILTER_VALIDATE_INT,
+            ':shipping' => array(
+                'filter' => FILTER_CALLBACK,
+                'options' => 'ucwords'
+            ),
+            ':email' => FILTER_VALIDATE_EMAIL,
+            ':cID' => FILTER_VALIDATE_INT
+        );
+
+        $stmt = $conn->prepare($sql);
+
+        // Sanitize and Filter _POST Values
+        filter_var_array($filteredArray, $sanitizers);
+        filter_var_array($filteredArray, $filters);
+
+        $stmt->execute($filteredArray);
     }
 
     //CREDIT CARD INFO
@@ -31,12 +87,33 @@
 
         $sql = "INSERT INTO creditcards VALUES(:cID, :cardNumber, :expiration, :securityCode)";
 
-        $stmt = $conn->prepare($sql);
-        $stmt->execute(array(
+        $filteredArray = array(
             ':cID' => $_POST['cID'],
             ':cardNumber' => $_POST['cardNumber'],
             ':expiration' => $_POST['expiration'],
-            ':securityCode' => $_POST['securityCode']));
+            ':securityCode' => $_POST['securityCode']
+        );
+
+        $sanitizers = array(
+            ':cID' => FILTER_SANITIZE_NUMBER_INT,
+            ':cardNumber' => FILTER_SANITIZE_NUMBER_INT,
+            ':expiration' => FILTER_SANITIZE_STRING,
+            ':securityCode' => FILTER_SANITIZE_NUMBER_INT
+        );
+
+        $filters = array(
+            ':cID' => FILTER_VALIDATE_INT,
+            ':cardNumber' => FILTER_VALIDATE_INT,
+            ':securityCode' => FILTER_VALIDATE_INT
+        );
+
+        $stmt = $conn->prepare($sql);
+
+        // Sanitize and Filter _POST Values
+        filter_var_array($filteredArray, $sanitizers);
+        filter_var_array($filteredArray, $filters);
+
+        $stmt->execute($filteredArray);
     }
 
     // Update User-Cart Relational Table
