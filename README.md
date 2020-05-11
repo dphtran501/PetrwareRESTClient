@@ -15,13 +15,19 @@ The "About" page contains information pertaining to Petrware, their business, th
 
 ## Requirements Checklist
 
-- [ ] **You want to use PHP and MySQL database to generate the product information dynamically. The information about available products should be read from one or more tables in your database and the corresponding HTML pages describing the details of your products should be generated dynamically. You will use PHP to query your MySQL database to obtain the details of a product and generate the proper content in HTML format.** 
+- [x] **You want to use PHP and MySQL database to generate the product information dynamically. The information about available products should be read from one or more tables in your database and the corresponding HTML pages describing the details of your products should be generated dynamically. You will use PHP to query your MySQL database to obtain the details of a product and generate the proper content in HTML format.** 
+
+    When the home page is loaded, [main.js](scripts/main.js) uses [db_product_query.php](db_product_query.php) to retrieve product data from the database top populate the product table. Similarly, [product.js](scripts/product.js) uses the same PHP file to fill a specific product's page with that product's information. 
 
 - [ ] **When the user submits a form to order a product, instead of sending an email from the client-side, as you did in first assignment, the request should be sent to a server-side PHP script that stores that information in a database table. The form should be validated to prevent insertion of bad data in your database.** 
 
 - [ ] **After successfully storing the order information in a database table, a dynamically generated confirmation page should to be displayed to the user with the details of the order.**
 
-- [ ] **Use Ajax to make your website dynamic and interactive. Among others, you could use Ajax to assist the user with filling the order forms, e.g., when the user chooses a particular state for delivery, obtain the corresponding tax rate from the backend database to update the total price for the product dynamically, or as another example, provide auto complete capability, such as suggesting states as the user types the name of a state. You can use these files to help with this task: zip codes and tax rates. You have freedom in identifying other opportunities for using Ajax in making your website dynamic and interactive. At the very least, your website should make use of Ajax for two non-trivial features that the grader can verify.** 
+- [x] **Use Ajax to make your website dynamic and interactive. Among others, you could use Ajax to assist the user with filling the order forms, e.g., when the user chooses a particular state for delivery, obtain the corresponding tax rate from the backend database to update the total price for the product dynamically, or as another example, provide auto complete capability, such as suggesting states as the user types the name of a state. You can use these files to help with this task: zip codes and tax rates. You have freedom in identifying other opportunities for using Ajax in making your website dynamic and interactive. At the very least, your website should make use of Ajax for two non-trivial features that the grader can verify.** 
+
+    Ajax is used for the following dynamic features:
+    * Automatically fill in city and state input fields in checkout form when valid zipcode is entered.
+    * Automatically calculate tax based on zipcode entered in checkout form.
 
 ## Authors
 Group 21: Jevford Barro (72114221), Peter Tang (45193375), Derek Tran (18491795)
