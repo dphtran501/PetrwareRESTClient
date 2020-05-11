@@ -135,36 +135,33 @@ const sendmail = function() {
     let itemsSummary = "";
     let total = document.getElementById('totalCost').textContent;
 
-    let cartData = sessionStorage.getItem('cartData');
-    if (cartData != null) {
-        let cartList = JSON.parse(cartData);
-        for (let i = 0; i < cartList.length; i++) {
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                // 4 means finished, and 200 means okay.
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    let response = JSON.parse(xhr.responseText);
-                    let item = response[0];
-                    
+    let cID = sessionStorage.getItem('cID');
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            console.log(JSON.parse(xhr.responseText));
+            let response = JSON.parse(xhr.responseText);
+            if (response.length > 0) {
+                response.forEach(cartItem => {
                     let itemName;
-                    if (item.category == "cpu"){
-                        itemName = createProductName([item.brand, item.name]);
+                    if (cartItem.category == "cpu"){
+                        itemName = createProductName([cartItem.brand, cartItem.name]);
                     }
-                    else if (cartList[i].category == "ram") {
-                        itemName = createProductName([item.brand, item.series]);
+                    else if (cartItem.category == "ram") {
+                        itemName = createProductName([cartItem.brand, cartItem.series]);
                     }
-                    else if(cartList[i].category == "videoCard") {
-                        itemName = createProductName([item.brand, item.series, item.gpu]);
+                    else if(cartItem.category == "videoCard") {
+                        itemName = createProductName([cartItem.brand, cartItem.series, cartItem.gpu]);
                     }
 
-                    itemsSummary += "          - " + cartList[i].quantity + " x " + itemName;
-                    if (i < cartList.length - 1) itemsSummary += "\n";
-                }
+                    itemsSummary += "          - " + cartItem.quantity + " x " + itemName;
+                    if (response.findIndex(cartItem) <  response.length - 1) itemsSummary += "\n";
+                })
             }
-            xhr.open("GET", `db_product_query.php?id=${cartList[i].id}&category=${cartList[i].category}`, false);
-            xhr.send();
         }
     }
+    xhr.open("GET", `db_cart_query.php?cID=${cID}`, false);
+    xhr.send();
 
     let bodyMessage = `Name: ${first} ${last}\n` +
                         `Phone: ${phone}\n` +

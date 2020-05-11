@@ -24,24 +24,21 @@ function init() {
 }
 
 function loadCartList() {
-    let cartData = sessionStorage.getItem('cartData');
-    if (cartData != null) {
-        let cartList = JSON.parse(cartData);
-        cartList.forEach(itemQueryId => {
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                // 4 means finished, and 200 means okay.
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    let response = JSON.parse(xhr.responseText);
-                    let item = response[0];
-                    item.quantity = itemQueryId.quantity;
-                    addCartListItem(item);
-                }
+    let cID = sessionStorage.getItem('cID');
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            //console.log(JSON.parse(xhr.responseText));
+            let response = JSON.parse(xhr.responseText);
+            if (response.length > 0) {
+                response.forEach(cartItem => {
+                    addCartListItem(cartItem);
+                })
             }
-            xhr.open("GET", `db_product_query.php?id=${itemQueryId.id}&category=${itemQueryId.category}`, true);
-            xhr.send();
-        });
+        }
     }
+    xhr.open("GET", `db_cart_query.php?cID=${cID}`, true);
+    xhr.send();
 }
 
 function addCartListItem(listItem) {

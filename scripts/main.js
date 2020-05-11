@@ -5,6 +5,7 @@ const searchInput = document.querySelector('#search-input');
 init();
 
 function init(){
+    setCustomerSession();
     populateProductGrid();
     searchForm.addEventListener('submit', onSubmit);
     window.addEventListener('resize', onResize);
@@ -23,6 +24,21 @@ function onSubmit(e) {
     e.preventDefault();
     clearProductGrid();
     populateProductGrid(searchInput.value);
+}
+
+function setCustomerSession() {
+    if (sessionStorage.getItem('cID') == null) {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                //console.log(xhr.responseText);
+                let response = JSON.parse(xhr.responseText);
+                sessionStorage.setItem('cID', response[0].id);
+            }
+        }
+        xhr.open("GET", "db_customer_query.php?cID=-1", true);
+        xhr.send();
+    }
 }
 
 function populateProductGrid(searchQuery) {

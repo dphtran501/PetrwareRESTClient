@@ -56,25 +56,18 @@ function createProductName(attributeList) {
 
 function onAddClick() {
     if (Number(quantityInput.value) > 0) {
-        // Get cart list
-        let cartList = [];
-        let cartData = sessionStorage.getItem('cartData');
-        if (cartData != null) {
-            cartList = JSON.parse(cartData);
+        let cID = sessionStorage.getItem('cID');
+        let pID = JSON.parse(sessionStorage.getItem('productQueryId'));
+        let quantity = quantityInput.value;
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                window.open('checkout.php', '_self');
+            }
         }
-        // Update cart item quantity if already in cart list, else add to list
-        let productQueryId = JSON.parse(sessionStorage.getItem('productQueryId'));
-        let itemIndex = cartList.findIndex(item => (item.id === productQueryId.id));
-        if (itemIndex < 0){
-            productQueryId.quantity = Number(quantityInput.value);
-            cartList.push(productQueryId);
-        }
-        else {
-            cartList[itemIndex].quantity = Number(cartList[itemIndex].quantity) + Number(quantityInput.value);
-        }
-
-        sessionStorage.setItem('cartData', JSON.stringify(cartList));
-        window.open('checkout.php', '_self');
+        xhr.open("POST", "db_cart_query.php", true);
+        xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
+        xhr.send(`cID=${cID}&pID=${pID.id}&quantity=${quantity}`);
     }
 }
 
