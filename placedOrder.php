@@ -35,7 +35,7 @@
             ':zipcode' => FILTER_SANITIZE_NUMBER_INT,
             ':shipping' => FILTER_SANITIZE_STRING,
             ':email' => FILTER_SANITIZE_EMAIL,
-            ':cID' => FILTER_VALIDATE_NUMBER_INT
+            ':cID' => FILTER_SANITIZE_NUMBER_INT
         );
 
         $filters = array(
