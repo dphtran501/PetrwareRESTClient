@@ -19,10 +19,12 @@
                 $categoryTable = 'product_video_card';
         }
 
-        $sql = "SELECT * FROM product JOIN $categoryTable ON product.id=$categoryTable.product_id WHERE product.id=$id";     
-        foreach($conn->query($sql, PDO::FETCH_ASSOC) as $record) {
+        $sql = "SELECT * FROM product JOIN $categoryTable ON product.id=$categoryTable.product_id WHERE product.id=:id";
+        $stmt = $conn->prepare($sql); 
+        $stmt->execute(array(':id'=> $id));
+        while ($record = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $results[] = $record;
-        }
+        }  
 
     } else if (isset($_GET['search'])) {
         $searchQuery = $_GET['search'];
@@ -47,13 +49,12 @@
             OR product.model LIKE :modelQuery
             OR product_video_card.gpu LIKE :gpuQuery");
 
-        $sqlCPUStmt->execute(array(':brandQuery', $wildcardSearchQuery, ':nameQuery', $wildcardSearchQuery, ':seriesQuery', $wildcardSearchQuery, ':modelQuery', $wildcardSearchQuery));
+        $sqlCPUStmt->execute(array(':brandQuery'=> $wildcardSearchQuery, ':nameQuery'=> $wildcardSearchQuery, ':seriesQuery'=> $wildcardSearchQuery, ':modelQuery'=> $wildcardSearchQuery));
 
-        $sqlRAMStmt->execute(array(':brandQuery', $wildcardSearchQuery, ':nameQuery', $wildcardSearchQuery, ':seriesQuery', $wildcardSearchQuery, ':modelQuery', $wildcardSearchQuery));
+        $sqlRAMStmt->execute(array(':brandQuery'=> $wildcardSearchQuery, ':nameQuery'=> $wildcardSearchQuery, ':seriesQuery'=> $wildcardSearchQuery, ':modelQuery'=> $wildcardSearchQuery));
 
-        $sqlVideoCardStmt->execute(array(':brandQuery', $wildcardSearchQuery, ':nameQuery', $wildcardSearchQuery, ':seriesQuery', $wildcardSearchQuery, ':modelQuery', $wildcardSearchQuery, ':gpuQuery', $wildcardSearchQuery));
+        $sqlVideoCardStmt->execute(array(':brandQuery'=> $wildcardSearchQuery, ':nameQuery'=> $wildcardSearchQuery, ':seriesQuery'=> $wildcardSearchQuery, ':modelQuery'=> $wildcardSearchQuery, ':gpuQuery'=> $wildcardSearchQuery));
 
-        $results = array();
         while ($record = $sqlCPUStmt->fetch(PDO::FETCH_ASSOC)){
             $results[] = $record;
         }
