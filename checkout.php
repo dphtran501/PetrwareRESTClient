@@ -19,9 +19,22 @@
     <div class="cartItems">
         <h1>My Items</h1>
         <div id="itemList"></div>
-        <div class="total-cost__div">
-            <p>Total Cost:</p>
-            <p id="totalCost"></p>
+        <hr>
+        <div class="cost__div">
+            <table id="cost__div--table">
+                <tr>
+                    <td>Subtotal:</td>
+                    <td id="subtotal-value">$0.00</td>
+                </tr>
+                <tr>
+                    <td>Tax:</td>
+                    <td id="tax-value">$0.00</td>
+                </tr>
+                <tr id="total-cost__tr">
+                    <td>Total Cost:</td>
+                    <td id="total-value">$0.00</td>
+                </tr>
+            </table>
         </div>
     </div>
 

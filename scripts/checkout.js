@@ -1,15 +1,27 @@
 const itemListContainer = document.querySelector('#itemList');
-const totalCostText = document.querySelector('#totalCost');
+const subtotalText = document.querySelector('#subtotal-value');
+const taxText = document.querySelector('#tax-value');
+const totalCostText = document.querySelector('#total-value');
 
 const cityInput = document.querySelector('#input-city');
 const stateInput = document.querySelector('#input-state');
 const zipcodeInput = document.querySelector('#input-zipcode');
 
-zipcodeInput.addEventListener('blur', onBlur);
 
-let currentTotalCost = 0;
+zipcodeInput.addEventListener('blur', getZipcodeData);
 
-loadCartList();
+let currentSubtotal = 0;
+let currentTaxRate = 0;
+let currentTotal = 0;
+
+init();
+
+function init() {
+    loadCartList();
+    if (zipcodeInput.value) {
+        getZipcodeData();
+    }
+}
 
 function loadCartList() {
     let cartData = sessionStorage.getItem('cartData');
@@ -68,7 +80,7 @@ function addCartListItem(listItem) {
 
     itemListContainer.appendChild(listItemContainer);
 
-    addToTotalCost(listItem.price, listItem.quantity);
+    addToSubtotal(listItem.price, listItem.quantity);
 }
 
 function createProductName(attributeList) {
@@ -83,25 +95,37 @@ function createProductName(attributeList) {
     return name;
 }
 
-function addToTotalCost(itemPrice, quantity) {
-    currentTotalCost += quantity * itemPrice;
-    totalCostText.textContent = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(currentTotalCost);
+function addToSubtotal(itemPrice, quantity) {
+    currentSubtotal += quantity * itemPrice;
+    calculateTotal();
 }
 
-function onBlur(e) {
+function getZipcodeData() {
     let zipcode = zipcodeInput.value;
 
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         if (xhr.readyState == 4 && xhr.status == 200) {
+            //console.log(xhr.responseText);
             let response = JSON.parse(xhr.responseText);
             let data = (response.length > 0) ? response[0] : null;
             if (data){
                 cityInput.value = data.city;
                 stateInput.value = data.state;
+                currentTaxRate = data.combinedRate;
+                calculateTotal();
             }
         }
     }
     xhr.open("GET", `db_form_query.php?zipcode=${zipcode}`, true);
     xhr.send();
+}
+
+function calculateTotal() {
+    let tax = currentSubtotal * currentTaxRate;
+    currentTotal = currentSubtotal + tax;
+
+    subtotalText.textContent = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(currentSubtotal);
+    taxText.textContent = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(tax);
+    totalCostText.textContent = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(currentTotal);
 }

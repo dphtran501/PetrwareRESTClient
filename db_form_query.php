@@ -4,7 +4,7 @@
     $results = array();
 
     if (isset($_GET['zipcode'])) {
-        $stmt = $conn->prepare("SELECT state, city FROM zip_codes WHERE zip=:zip");
+        $stmt = $conn->prepare("SELECT zip_codes.state, city, combinedRate FROM zip_codes JOIN tax_rates ON zip=zipcode WHERE zip=:zip");
         $stmt->execute(array(':zip' => $_GET['zipcode']));
         
         while($record = $stmt->fetch(PDO::FETCH_ASSOC)){

@@ -32,18 +32,23 @@ header {
     align-items: center;
 }
 
-.total-cost__div {
+hr {
+    border: 1px solid rgba(0, 62, 120, 0.25)
+}
+
+.cost__div {
     display: flex;
     justify-content: flex-end;
 }
 
-.total-cost__div > p {
-    font-weight: 700;
-    font-size: 24px;
+#cost__div--table td {
+    text-align: end;
+    padding: 10px 0 10px 50px;
 }
 
-#totalCost {
-    margin-left: 50px;
+#total-cost__tr td {
+    font-weight: 700;
+    font-size: 24px;
 }
 
 /* Checkout Section CSS */
