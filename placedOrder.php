@@ -6,9 +6,9 @@
         isset($_POST['country']) && isset($_POST['streetAddress']) && isset($_POST['city']) &&
         isset($_POST['state']) && isset($_POST['zipcode']) && isset($_POST['shipping']) && isset($_POST['email'])) {
 
-        $sql = "INSERT INTO customers (firstName, lastName, phone, country, streetAddress, city, state, zipcode,
-                shipping, email) VALUES(:firstName, :lastName, :phone, :country, :streetAddress, :city, :state, :zipcode,
-                                        :shipping, :email)";
+        $sql = "UPDATE customers SET firstName=:firstName, lastName=:lastName, phone=:phone, country=:country, streetAddress=:streetAddress, 
+                city=:city, state=:state, zipcode=:zipcode, shipping=:shipping, email=:email
+                WHERE id=:cID";
 
         $stmt = $conn->prepare($sql);
         $stmt->execute(array(
@@ -21,17 +21,19 @@
             ':state' => $_POST['state'],
             ':zipcode' => $_POST['zipcode'],
             ':shipping' => $_POST['shipping'],
-            ':email' => $_POST['email'],));
+            ':email' => $_POST['email'],
+            ':cID' => $_POST['cID']));
 
     }
 
     //CREDIT CARD INFO
     if( isset($_POST['cardNumber']) && isset($_POST['expiration']) && isset($_POST['securityCode'])) {
 
-        $sql = "INSERT INTO creditcards VALUES(LAST_INSERT_ID(), :cardNumber, :expiration, :securityCode)";
+        $sql = "INSERT INTO creditcards VALUES(:cID, :cardNumber, :expiration, :securityCode)";
 
         $stmt = $conn->prepare($sql);
         $stmt->execute(array(
+            ':cID' => $_POST['cID'],
             ':cardNumber' => $_POST['cardNumber'],
             ':expiration' => $_POST['expiration'],
             ':securityCode' => $_POST['securityCode']));

@@ -17,6 +17,8 @@ let currentTotal = 0;
 init();
 
 function init() {
+    const cIDInput = document.querySelector('#cID');
+    cIDInput.value = sessionStorage.getItem('cID');
     loadCartList();
     if (zipcodeInput.value) {
         getZipcodeData();

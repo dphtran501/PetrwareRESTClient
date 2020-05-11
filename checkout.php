@@ -41,6 +41,7 @@
     <div class="checkoutPage">
         <h1>Checkout</h1>
         <form id="form-user" method="POST" action="placedOrder.php">
+            <input type="hidden" id="cID" name="cID"> <!--For updating correct customer-->
             <div class="form-box error" data-errormsg="">
                 <label for="input-first">First Name</label>
                 <input type="text" id="input-first"  name="firstName" autofocus required placeholder="First Name" tabindex="1"/>
