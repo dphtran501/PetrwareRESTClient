@@ -15,8 +15,8 @@ const reset = function(ev){
 }
 
 const submit = function(ev){
-    ev.preventDefault(); 
-    ev.stopPropagation();
+    // ev.preventDefault(); 
+    // ev.stopPropagation();
     //or the click will travel to the form and the form will submit
     let fails = validate();
     //IF we wanted to do some async things then use a Promise with .then and .catch
@@ -134,6 +134,7 @@ const sendmail = function() {
     // items purchase info
     let itemsSummary = "";
     let total = document.getElementById('totalCost').textContent;
+    sessionStorage.setItem('cartTotal', total);
 
     let cID = sessionStorage.getItem('cID');
     var xhr = new XMLHttpRequest();

@@ -1,6 +1,28 @@
 <?php
     require('db_conn.php');
 
+    $customerDetails = array(
+        ':firstName' => $_POST['firstName'],
+        ':lastName' => $_POST['lastName'],
+        ':phone' => $_POST['phone'],
+        ':country' => $_POST['country'],
+        ':streetAddress' => $_POST['streetAddress'],
+        ':city' => $_POST['city'],
+        ':state' => $_POST['state'],
+        ':zipcode' => $_POST['zipcode'],
+        ':shipping' => $_POST['shipping'],
+        ':email' => $_POST['email'],
+        ':cID' => $_POST['cID']
+    );
+
+    $ccDetails = array(
+        ':cID' => $_POST['cID'],
+        ':cardNumber' => $_POST['cardNumber'],
+        ':expiration' => $_POST['expiration'],
+        ':securityCode' => $_POST['securityCode']
+    );
+
+
     //CUSTOMER INFO
     if( isset($_POST['firstName']) && isset($_POST['lastName']) && isset($_POST['phone']) &&
         isset($_POST['country']) && isset($_POST['streetAddress']) && isset($_POST['city']) &&
@@ -9,20 +31,6 @@
         $sql = "UPDATE customers SET firstName=:firstName, lastName=:lastName, phone=:phone, country=:country, streetAddress=:streetAddress, 
                 city=:city, state=:state, zipcode=:zipcode, shipping=:shipping, email=:email
                 WHERE id=:cID";
-
-        $filteredArray = array(
-            ':firstName' => $_POST['firstName'],
-            ':lastName' => $_POST['lastName'],
-            ':phone' => $_POST['phone'],
-            ':country' => $_POST['country'],
-            ':streetAddress' => $_POST['streetAddress'],
-            ':city' => $_POST['city'],
-            ':state' => $_POST['state'],
-            ':zipcode' => $_POST['zipcode'],
-            ':shipping' => $_POST['shipping'],
-            ':email' => $_POST['email'],
-            ':cID' => $_POST['cID']
-        );
 
         $sanitizers = array(
             ':firstName' => FILTER_SANITIZE_STRING,
@@ -76,10 +84,10 @@
         $stmt = $conn->prepare($sql);
 
         // Sanitize and Filter _POST Values
-        filter_var_array($filteredArray, $sanitizers);
-        filter_var_array($filteredArray, $filters);
+        filter_var_array($customerDetails, $sanitizers);
+        filter_var_array($customerDetails, $filters);
 
-        $stmt->execute($filteredArray);
+        // $stmt->execute($customerDetails);
     }
 
     //CREDIT CARD INFO
@@ -87,33 +95,25 @@
 
         $sql = "INSERT INTO creditcards VALUES(:cID, :cardNumber, :expiration, :securityCode)";
 
-        $filteredArray = array(
-            ':cID' => $_POST['cID'],
-            ':cardNumber' => $_POST['cardNumber'],
-            ':expiration' => $_POST['expiration'],
-            ':securityCode' => $_POST['securityCode']
-        );
-
         $sanitizers = array(
             ':cID' => FILTER_SANITIZE_NUMBER_INT,
-            ':cardNumber' => FILTER_SANITIZE_NUMBER_INT,
+            ':cardNumber' => FILTER_SANITIZE_STRING,
             ':expiration' => FILTER_SANITIZE_STRING,
             ':securityCode' => FILTER_SANITIZE_NUMBER_INT
         );
 
         $filters = array(
             ':cID' => FILTER_VALIDATE_INT,
-            ':cardNumber' => FILTER_VALIDATE_INT,
             ':securityCode' => FILTER_VALIDATE_INT
         );
 
         $stmt = $conn->prepare($sql);
 
         // Sanitize and Filter _POST Values
-        filter_var_array($filteredArray, $sanitizers);
-        filter_var_array($filteredArray, $filters);
+        filter_var_array($ccDetails, $sanitizers);
+        filter_var_array($ccDetails, $filters);
 
-        $stmt->execute($filteredArray);
+        // $stmt->execute($ccDetails);
     }
 
     // Update User-Cart Relational Table
@@ -134,6 +134,9 @@
         ON p.id = customCart.product_id
     */
 
+    $ccNumber = str_replace(' ', '', $ccDetails[':cardNumber']);
+    $ccNumber = str_pad(substr($ccNumber, -4), strlen($ccNumber), '*', STR_PAD_LEFT);
+
     require('db_close.php');
 ?>
 
@@ -152,13 +155,25 @@
     <?php include './header.php'; ?>
 
     <div class="placed">
+        <h1 class="placedOrder">Your Checkout Summary</h1>
+        <div class = "summary">
+            <h1 class="fullname">Name: <?php echo $customerDetails[':firstName'].' '.$customerDetails[':lastName']; ?></h1>
+            <h1 class="phone">Phone: <?php echo $customerDetails[':phone']; ?></h1>
+            <h1 class="emai">Email: <?php echo $customerDetails[':email']; ?></h1>
+            <h1 class="country">Country: <?php echo $customerDetails[':country']; ?></h1>
+            <h1 class="fullAddress">Address: <?php echo $customerDetails[':streetAddress'].' '.$customerDetails[':city'].', '.$customerDetails[':state'].' '.$customerDetails[':zipcode']; ?> </h1>
+            <h1 class="ccInfo">Card Number: <?php echo $ccNumber; ?><h1>
+            <h1 class="shipping">Shipping Method: <?php echo $customerDetails[':shipping']; ?></h1>
+            <div id="itemSummary">Item Summary</div>
+            <h1 id="cartTotal">Total: </h1>
+        </div>
         <h1 class="placedOrder">Thank You For Purchasing From Petrware</h1>
         <h1 class="emailReceipt">Your Receipt Should Be Sent To Your Email</h1>
 
         <!-- Update Page using AJAX to show User's Cart and Info -->
     </div>
 
-    <script src="scripts/data.js"></script>
+    <script src="scripts/itemSummary.js"></script>
     <script src="scripts/main.js"></script>
 </body>
 </html>
