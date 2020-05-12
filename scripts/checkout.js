@@ -123,6 +123,7 @@ function getZipcodeData() {
 function calculateTotal() {
     let tax = currentSubtotal * currentTaxRate;
     currentTotal = currentSubtotal + tax;
+    sessionStorage.setItem('cartTotal', currentTotal); 
 
     subtotalText.textContent = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(currentSubtotal);
     taxText.textContent = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(tax);

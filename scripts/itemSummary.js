@@ -2,7 +2,7 @@ const getItemSummary = function() {
     // items purchase info
     let itemSummaryDiv = document.getElementById('itemSummary');
     let cartTotal = document.getElementById('cartTotal');
-    cartTotal.textContent += sessionStorage.getItem('cartTotal');
+    cartTotal.textContent += new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(sessionStorage.getItem('cartTotal'));
 
     let cID = sessionStorage.getItem('cID');
     var xhr = new XMLHttpRequest();
