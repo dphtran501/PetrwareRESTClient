@@ -10,6 +10,20 @@ The "Checkout" page will show the products the user added to their online shoppi
 
 The "About" page contains information pertaining to Petrware, their business, their members, and other information.
 
+## Usage
+To connect to the MySQL database, the source code must include a "db_credentials.php" file containing the user's database credentials. The file is structured as so:
+
+```php
+<?php 
+    $hostname = <YOUR_HOST_NAME>;
+    $portNumber = <YOUR_PORT_NUMBER>;
+    $username = <YOUR_USERNAME>;
+    $password = <YOUR_PASSWORD>;
+    $dbname = "petrware_db";
+?>
+```
+`$portNumber` is the port number used for MySQL.
+
 ## Requirements Checklist
 
 - [x] **You want to use PHP and MySQL database to generate the product information dynamically. The information about available products should be read from one or more tables in your database and the corresponding HTML pages describing the details of your products should be generated dynamically. You will use PHP to query your MySQL database to obtain the details of a product and generate the proper content in HTML format.** 
