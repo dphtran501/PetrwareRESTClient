@@ -40,7 +40,7 @@
 
     <div class="checkoutPage">
         <h1>Checkout</h1>
-        <form id="form-user" method="POST" action="placedOrder.php">
+        <form id="form-user" method="POST" action="placedOrder.php" onsubmit="return submit(event)">
             <input type="hidden" id="cID" name="cID"> <!--For updating correct customer-->
             <div class="form-box error" data-errormsg="">
                 <label for="input-first">First Name</label>

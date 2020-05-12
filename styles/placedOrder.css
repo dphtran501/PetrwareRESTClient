@@ -1,7 +1,31 @@
-.placed h1 {
+.center {
     text-align: center;
 }
 
 .emailReceipt {
     padding-top: 50px;
+}
+
+.summary{
+    margin-left: 35%;
+    padding: 30px 0 30px 0;
+}
+
+.start{
+    text-align: left;
+}
+
+.total {
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.title{
+    font-size: 50px;
+}
+
+@media(max-width: 768px) {
+    .summary{
+        margin-left: 0;
+    }
 }

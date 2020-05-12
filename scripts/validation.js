@@ -1,4 +1,4 @@
-const init = function(){
+const initial = function(){
     document.getElementById('button-cancel').addEventListener('click', reset);
     document.getElementById('button-submit').addEventListener('click', submit);
 }
@@ -15,27 +15,23 @@ const reset = function(ev){
 }
 
 const submit = function(ev){
-    // ev.preventDefault(); 
-    // ev.stopPropagation();
+    ev.preventDefault(); 
+    ev.stopPropagation();
     //or the click will travel to the form and the form will submit
     let fails = validate();
     //IF we wanted to do some async things then use a Promise with .then and .catch
     if(fails.length === 0){
         //good to go
-        sendmail();
+        // sendmail();
         document.getElementById('form-user').submit();
-        // MAILTO from HTML
-    }else{
-        //there are some errors to display
-        //bad user
-        //let err = document.querySelector('.error');
-        //let input = err.querySelector('input');
-        //err.setAttribute('data-errormsg', ` ... Missing ${input.placeholder}`);
+        return true;
+    } else {
         fails.forEach(function(obj){
             let field = document.getElementById(obj.input);
             field.parentElement.classList.add('error');
             field.parentElement.setAttribute('data-errormsg', obj.msg);
         })
+        return false;
     }
 }
 
@@ -164,22 +160,22 @@ const sendmail = function() {
     xhr.open("GET", `db_cart_query.php?cID=${cID}`, false);
     xhr.send();
 
-    let bodyMessage = `Name: ${first} ${last}\n` +
-                        `Phone: ${phone}\n` +
-                        `Country: ${country}\n` +
-                        `Street Address: ${streetAddress}\n` +
-                        `City: ${city}\n` + 
-                        `State: ${state}\n` +
-                        `Zipcode: ${zipcode}\n` +
-                        `Card Number: ${cardNumber}\n` +
-                        `Shipping Method: ${shipping}\n` +
-                        `Items Purchased:\n ${itemsSummary}\n` +
-                        `Total: ${total}\n`
+    // let bodyMessage = `Name: ${first} ${last}\n` +
+    //                     `Phone: ${phone}\n` +
+    //                     `Country: ${country}\n` +
+    //                     `Street Address: ${streetAddress}\n` +
+    //                     `City: ${city}\n` + 
+    //                     `State: ${state}\n` +
+    //                     `Zipcode: ${zipcode}\n` +
+    //                     `Card Number: ${cardNumber}\n` +
+    //                     `Shipping Method: ${shipping}\n` +
+    //                     `Items Purchased:\n ${itemsSummary}\n` +
+    //                     `Total: ${total}\n`
 
-    document.location.href = "mailto:"
-        + email + "?"
-        + "&subject=Petrware%20Receipt"
-        + "&body=" + encodeURIComponent(bodyMessage);
+    // document.location.href = "mailto:"
+    //     + email + "?"
+    //     + "&subject=Petrware%20Receipt"
+    //     + "&body=" + encodeURIComponent(bodyMessage);
 }
 
 function createProductName(attributeList) {
@@ -194,4 +190,4 @@ function createProductName(attributeList) {
     return name;
 }
 
-document.addEventListener('DOMContentLoaded', init);
+document.addEventListener('DOMContentLoaded', initial);

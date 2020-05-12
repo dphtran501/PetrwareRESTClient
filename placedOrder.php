@@ -116,24 +116,6 @@
         // $stmt->execute($ccDetails);
     }
 
-    // Update User-Cart Relational Table
-
-    /* 
-        BIG CHANGE NEEDED FOR DB, must have a primary key to join relational data customer_id, product_id, creditcard_it, purchase_id
-        CREATE TABLE customer_cart (
-            'customer_id' INT NOT NULL,
-            'product_id' INT NOT NULL,
-            'quantity' INT NOT NULL,
-            PRIMARY_KEY('customer_id, product_id') 
-        );
-        SELECT c.*, p.*
-        FROM customer c
-        INNER JOIN customer_cart customCart
-        ON customCart.customer_id = c.id
-        INNER JOIN products p
-        ON p.id = customCart.product_id
-    */
-
     $ccNumber = str_replace(' ', '', $ccDetails[':cardNumber']);
     $ccNumber = str_pad(substr($ccNumber, -4), strlen($ccNumber), '*', STR_PAD_LEFT);
 
@@ -155,20 +137,21 @@
     <?php include './header.php'; ?>
 
     <div class="placed">
-        <h1 class="placedOrder">Your Checkout Summary</h1>
-        <div class = "summary">
-            <h1 class="fullname">Name: <?php echo $customerDetails[':firstName'].' '.$customerDetails[':lastName']; ?></h1>
-            <h1 class="phone">Phone: <?php echo $customerDetails[':phone']; ?></h1>
-            <h1 class="emai">Email: <?php echo $customerDetails[':email']; ?></h1>
-            <h1 class="country">Country: <?php echo $customerDetails[':country']; ?></h1>
-            <h1 class="fullAddress">Address: <?php echo $customerDetails[':streetAddress'].' '.$customerDetails[':city'].', '.$customerDetails[':state'].' '.$customerDetails[':zipcode']; ?> </h1>
-            <h1 class="ccInfo">Card Number: <?php echo $ccNumber; ?><h1>
-            <h1 class="shipping">Shipping Method: <?php echo $customerDetails[':shipping']; ?></h1>
-            <div id="itemSummary">Item Summary</div>
-            <h1 id="cartTotal">Total: </h1>
+        <h1 class="center title">Your Checkout Summary</h1>
+        <div class="summary">
+            <h1 class="start">Name: <?php echo $customerDetails[':firstName'].' '.$customerDetails[':lastName']; ?></h1>
+            <h1 class="start">Phone: <?php echo $customerDetails[':phone']; ?></h1>
+            <h1 class="start">Email: <?php echo $customerDetails[':email']; ?></h1>
+            <h1 class="start">Country: <?php echo $customerDetails[':country']; ?></h1>
+            <h1 class="start">Address: <?php echo $customerDetails[':streetAddress'].' '.$customerDetails[':city'].', '.$customerDetails[':state'].' '.$customerDetails[':zipcode']; ?> </h1>
+            <h1 class="start">Card Number: <?php echo $ccNumber; ?><h1>
+            <h1 class="start">Shipping Method: <?php echo $customerDetails[':shipping']; ?></h1>
         </div>
-        <h1 class="placedOrder">Thank You For Purchasing From Petrware</h1>
-        <h1 class="emailReceipt">Your Receipt Should Be Sent To Your Email</h1>
+        <h1 class="center title">Item Summary</h1>
+        <div class="center" id="itemSummary"></div>
+        <h1 class="total" id="cartTotal">Total: </h1>
+        <h1 class="center title">Thank You For Purchasing From Petrware</h1>
+        <!-- <h1 class="emailReceipt">Your Receipt Should Be Sent To Your Email</h1> -->
 
         <!-- Update Page using AJAX to show User's Cart and Info -->
     </div>
