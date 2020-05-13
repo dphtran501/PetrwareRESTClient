@@ -113,7 +113,7 @@
         filter_var_array($ccDetails, $sanitizers);
         filter_var_array($ccDetails, $filters);
 
-        // $stmt->execute($ccDetails);
+        $stmt->execute($ccDetails);
     }
 
     $ccNumber = str_replace(' ', '', $ccDetails[':cardNumber']);
