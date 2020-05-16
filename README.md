@@ -1,4 +1,4 @@
-# INF124 - PA 2: Building a web application using PHP, Ajax, and MySQL 
+# INF124 - PA 3: Building a web application using Java Servlets
 
 Petrware opens up on the home page which shows the list of products available for purchase. 
 
@@ -11,6 +11,9 @@ The "Checkout" page will show the products the user added to their online shoppi
 The "About" page contains information pertaining to Petrware, their business, their members, and other information.
 
 ## Usage
+
+**_NEED TO CHANGE???_**
+
 To connect to the MySQL database, the source code must include a "db_credentials.php" file containing the user's database credentials. The file is structured as so:
 
 ```php
@@ -26,30 +29,27 @@ To connect to the MySQL database, the source code must include a "db_credentials
 
 ## Requirements Checklist
 
-- [x] **You want to use PHP and MySQL database to generate the product information dynamically. The information about available products should be read from one or more tables in your database and the corresponding HTML pages describing the details of your products should be generated dynamically. You will use PHP to query your MySQL database to obtain the details of a product and generate the proper content in HTML format.** 
+- [ ] **Include the output of two servlets to create the homepage for your e-commerce site: the first servlet should handle the displaying of the list of products obtained from a backend database, and the second servlet should use session tracking to display the last 5 products that the user has visited (viewed the product details page). In case this number is less than 5, show whatever amount of information you have stored in the session. You are required to use servlet "include" feature to implement this requirement.** 
 
-    When the home page is loaded, [main.js](scripts/main.js) uses [db_product_query.php](db_product_query.php) to retrieve product data from the database top populate the product table. Similarly, [product.js](scripts/product.js) uses the same PHP file to fill a specific product's page with that product's information. 
 
-- [x] **When the user submits a form to order a product, instead of sending an email from the client-side, as you did in first assignment, the request should be sent to a server-side PHP script that stores that information in a database table. The form should be validated to prevent insertion of bad data in your database.** 
 
-    Created php scripts for sanitization/validation of user input in case of sql injections and other attacks on the database.  Form information is sent to the database via PHP files that utilize PDO.
+- [ ] **Using servlets create a "product details" page. This page should take a product identifier as a parameter and show the product details after getting the relevant information from the database. This page should NOT have an order form, only a button to "Add to Cart". Use servlet "session" to store the products in a shopping cart.** 
 
-- [x] **After successfully storing the order information in a database table, a dynamically generated confirmation page should to be displayed to the user with the details of the order.**
+    
 
-    A summary page of the user's form information as well as the items purchased is dynamically generated after validation and submission of data to the database. The summary conveys the user's personal info, credit card number, items purchased, and the total amount charged to the customer's card.
+- [ ] **Using servlets create a "check out" page, which allows the user to place an order. The page should show all the products in the shopping cart and the total price. This page should have a form which will allow the user to do the following:** 
 
-- [x] **Use Ajax to make your website dynamic and interactive. Among others, you could use Ajax to assist the user with filling the order forms, e.g., when the user chooses a particular state for delivery, obtain the corresponding tax rate from the backend database to update the total price for the product dynamically, or as another example, provide auto complete capability, such as suggesting states as the user types the name of a state. You can use these files to help with this task: zip codes and tax rates. You have freedom in identifying other opportunities for using Ajax in making your website dynamic and interactive. At the very least, your website should make use of Ajax for two non-trivial features that the grader can verify.** 
+    - [ ] **Enter shipping information: name, shipping address, phone number, credit card number, etc.**
 
-    Ajax is used for the following dynamic features:
-    * Automatically fill in city and state input fields in checkout form when valid zipcode is entered.
-    * Automatically calculate tax based on zipcode entered in checkout form.
-    * Automatically generates the user's cart on the summary page.
+    - [ ] **Submit the order for storage in the backend database**
+    
+    - [ ] **On successful submission, forward to the order details page. You are required to use servlet "forward" feature to implement this requirement.**
 
 ## Authors
 Group 21: Jevford Barro (72114221), Peter Tang (45193375), Derek Tran (18491795)
 
 ## Project Status
 - [x] [PA 1: Building a dynamic website using HTML, JavaScript, and CSS](docs/pa1.md)
-- [x] PA 2: Building a web application using PHP, Ajax, and MySQL 
+- [x] [PA 2: Building a web application using PHP, Ajax, and MySQL](docs/pa2.md) 
 - [ ] PA 3: Building a web application using Java Servlets 
 - [ ] PA 4: Building a web application using JSP and RESTful web services 

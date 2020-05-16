@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+
+    <!--?php $filename = $_SERVER['SCRIPT_NAME']; ?-->
+    <!--?php include './header.php'; ?-->
+    <header>
+        <h1 class="siteName"><a href="index.html">Petrware</a></h1>
+        <nav>
+            <ul class="nav__links">
+                <li><a class="current" href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </nav>
+        <a href="checkout.html" class="cart"><button><img id="cart" src="icons/cart.png" alt="Cart Icon"> My Cart</button></a>
+    </header>
+
+    <div class="search-div">
+        <form id="search-form">
+            <input type="search" id="search-input" name="searchQuery" placeholder="What do you want to search?">
+            <input type="submit" id="search-submit" name="searchSubmit" value = "Search">
+        </form>
+    </div>
+
+    <div class="productlist-container">
+        <div class="productgrid-container"></div>
+    </div>
+
+    <script src="scripts/data.js"></script>
+    <script src="scripts/main.js"></script>
+</body>
+</html>
