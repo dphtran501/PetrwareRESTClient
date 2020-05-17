@@ -159,3 +159,4 @@ buildNumber.properties
 
 ### database credentials ###
 db_credentials.php
+/src/main/java/Credentials.java

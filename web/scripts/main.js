@@ -5,7 +5,7 @@ const searchInput = document.querySelector('#search-input');
 init();
 
 function init(){
-    setCustomerSession();
+    //setCustomerSession();
     populateProductGrid();
     searchForm.addEventListener('submit', onSubmit);
     window.addEventListener('resize', onResize);
@@ -26,20 +26,21 @@ function onSubmit(e) {
     populateProductGrid(searchInput.value);
 }
 
-function setCustomerSession() {
-    if (sessionStorage.getItem('cID') == null) {
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                //console.log(xhr.responseText);
-                let response = JSON.parse(xhr.responseText);
-                sessionStorage.setItem('cID', response[0].id);
-            }
-        }
-        xhr.open("GET", "db_customer_query.php?cID=-1", true);
-        xhr.send();
-    }
-}
+// TODO: Refactor to use servlets
+// function setCustomerSession() {
+//     if (sessionStorage.getItem('cID') == null) {
+//         var xhr = new XMLHttpRequest();
+//         xhr.onreadystatechange = function() {
+//             if (xhr.readyState == 4 && xhr.status == 200) {
+//                 //console.log(xhr.responseText);
+//                 let response = JSON.parse(xhr.responseText);
+//                 sessionStorage.setItem('cID', response[0].id);
+//             }
+//         }
+//         xhr.open("GET", "db_customer_query.php?cID=-1", true);
+//         xhr.send();
+//     }
+// }
 
 function populateProductGrid(searchQuery) {
     var xhr = new XMLHttpRequest();
@@ -48,7 +49,16 @@ function populateProductGrid(searchQuery) {
         if (xhr.readyState == 4 && xhr.status == 200) {
             //console.log(xhr.responseText);
             let response = JSON.parse(xhr.responseText);
-            let productList = createProductList(response);
+            let productList = [];
+            if (response.productCPUList && response.productCPUList.length > 0) {
+                productList = productList.concat(createProductList(response.productCPUList));
+            }
+            if (response.productRAMList && response.productRAMList.length > 0) {
+                productList = productList.concat(createProductList(response.productRAMList));
+            }
+            if (response.productVCList && response.productVCList.length > 0) {
+                productList = productList.concat(createProductList(response.productVCList));
+            }
             productList.forEach(product => {
                 let productCell = createProductCell(product);
                 productGrid.appendChild(productCell);
@@ -58,12 +68,13 @@ function populateProductGrid(searchQuery) {
             removeGridBorderBottom();
         }
     }
-    if (searchQuery) {
-        xhr.open("GET", `db_product_query.php?search=${searchQuery}`, true);
-    }
-    else {
-        xhr.open("GET", "db_product_query.php", true);
-    }
+    // if (searchQuery) {
+    //     xhr.open("GET", `db_product_query.php?search=${searchQuery}`, true);
+    // }
+    // else {
+    //     xhr.open("GET", "db_product_query.php", true);
+    // }
+    xhr.open("GET", "ProductListServlet", true);
     xhr.send();
 }
 
@@ -71,7 +82,7 @@ function createProductList(jsonObject) {
     let productList = [];
     jsonObject.forEach(product => {
         let name, description;
-        if (product.category == "cpu"){
+        if (product.category === "cpu"){
             name = createProductName([product.brand, product.name]);
             description = {
                 "Model": [product.model],
@@ -80,7 +91,7 @@ function createProductList(jsonObject) {
                 "Socket Type": [product.socketType]
             };
         }
-        else if (product.category == "ram") {
+        else if (product.category === "ram") {
             name = createProductName([product.brand, product.series]);
             description = {
                 "Model": [product.model],
@@ -90,7 +101,7 @@ function createProductList(jsonObject) {
                 "Latency": [product.latency]
             };
         }
-        else if(product.category == "videoCard") {
+        else if(product.category === "videoCard") {
             name = createProductName([product.brand, product.series, product.gpu]);
             description = {
                 "Model": [product.model],
@@ -111,7 +122,7 @@ function createProductList(jsonObject) {
 function createProductName(attributeList) {
     let name = "";
     for (let i = 0; i < attributeList.length; i++) {
-        name += ((attributeList[i] === null) ? "" : attributeList[i]);
+        name += ((attributeList[i] == null) ? "" : attributeList[i]);
         if (i < attributeList.length - 1){
             name += " ";
         }
@@ -166,6 +177,7 @@ function createProductCell(product) {
     return productCell;
 }
 
+// TODO: Refactor to use servlets
 function onProductClick(e) {
     let productCell = e.target.parentElement;
     let productQueryId = {id: productCell.id, category: productCell.category};
