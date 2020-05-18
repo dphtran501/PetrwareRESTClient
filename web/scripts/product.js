@@ -15,19 +15,27 @@ function onLoad() {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         // 4 means finished, and 200 means okay.
-        if (xhr.readyState == 4 && xhr.status == 200) {
+        if (xhr.readyState === 4 && xhr.status === 200) {
             //console.log(xhr.responseText);
             let response = JSON.parse(xhr.responseText);
-            let product = response[0];
+            let product;
+            if (response.productCPU) {
+                product = response.productCPU;
+            } else if (response.productRAM) {
+                product = response.productRAM;
+            } else if (response.productVC) {
+                product = response.productVC;
+            }
+
             productImage.src = "images/" + product.imgSrc;
             productPriceText.textContent = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(product.price);
-            if (product.category == "cpu"){
+            if (product.category === "cpu"){
                 productNameText.textContent = createProductName([product.brand, product.name]);
             }
-            else if (product.category == "ram") {
+            else if (product.category === "ram") {
                 productNameText.textContent = createProductName([product.brand, product.series]);
             }
-            else if(product.category == "videoCard") {
+            else if(product.category === "videoCard") {
                 productNameText.textContent = createProductName([product.brand, product.series, product.gpu]);
             }
             productModelText.textContent = "Model: " + product.model;
@@ -37,7 +45,7 @@ function onLoad() {
 
         }
     }
-    xhr.open("GET", `db_product_query.php?id=${productQueryId.id}&category=${productQueryId.category}`, true);
+    xhr.open("GET", `ProductServlet?id=${productQueryId.id}&category=${productQueryId.category}`, true);
     xhr.send();
 
 }
@@ -45,7 +53,7 @@ function onLoad() {
 function createProductName(attributeList) {
     let name = "";
     for (let i = 0; i < attributeList.length; i++) {
-        name += ((attributeList[i] === null) ? "" : attributeList[i]);
+        name += ((attributeList[i] == null) ? "" : attributeList[i]);
         if (i < attributeList.length - 1){
             name += " ";
         }
@@ -54,6 +62,7 @@ function createProductName(attributeList) {
     return name;
 }
 
+// TODO: Need to change this to use servlets
 function onAddClick() {
     if (Number(quantityInput.value) > 0) {
         let cID = sessionStorage.getItem('cID');
@@ -61,7 +70,7 @@ function onAddClick() {
         let quantity = quantityInput.value;
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4 && xhr.status == 200) {
+            if (xhr.readyState === 4 && xhr.status === 200) {
                 window.open('checkout.php', '_self');
             }
         }
@@ -78,7 +87,7 @@ function loadTable(product) {
     if (product.series) addTableRow("Series", product.series);
     if (product.model) addTableRow("Model", product.model);
 
-    if (product.category == "cpu") {
+    if (product.category === "cpu") {
         if (product.processorsType) addTableRow("Processors Type", product.processorsType);
         if (product.socketType) addTableRow("Socket Type", product.socketType);
         if (product.coreName) addTableRow("Core Name", product.coreName);
@@ -87,7 +96,7 @@ function loadTable(product) {
         if (product.operatingFrequency) addTableRow("Operating Frequency", product.operatingFrequency + " GHz");
         if (product.maxTurboFrequency) addTableRow("Max Turbo Frequency", product.maxTurboFrequency + " GHz");
     }
-    else if (product.category == "ram") {
+    else if (product.category === "ram") {
         if (product.capacity) addTableRow("Capacity", product.capacity);
         if (product.speed) addTableRow("Speed", product.speed);
         if (product.latency) addTableRow("Latency", product.latency);
@@ -95,7 +104,7 @@ function loadTable(product) {
         if (product.color) addTableRow("Color", product.color);
         if (product.colorLED) addTableRow("LED Color", product.colorLED);
     }
-    else if (product.category == "videoCard") {
+    else if (product.category === "videoCard") {
         if (product.interface) addTableRow("Interface", product.interface);
         if (product.chipset) addTableRow("Chipset", product.chipset);
         if (product.gpu) addTableRow("GPU", product.gpu);

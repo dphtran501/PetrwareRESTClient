@@ -68,6 +68,7 @@ function populateProductGrid(searchQuery) {
             removeGridBorderBottom();
         }
     }
+    // TODO: Fix search bar
     // if (searchQuery) {
     //     xhr.open("GET", `db_product_query.php?search=${searchQuery}`, true);
     // }
@@ -182,7 +183,7 @@ function onProductClick(e) {
     let productCell = e.target.parentElement;
     let productQueryId = {id: productCell.id, category: productCell.category};
     sessionStorage.setItem('productQueryId', JSON.stringify(productQueryId));
-    window.open('product.php', '_self');
+    window.open('product.html', '_self');
 }
 
 function onResize(e) {
