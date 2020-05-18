@@ -5,7 +5,7 @@ const searchInput = document.querySelector('#search-input');
 init();
 
 function init(){
-    //setCustomerSession();
+    setCustomerSession();
     populateProductGrid();
     searchForm.addEventListener('submit', onSubmit);
     window.addEventListener('resize', onResize);
@@ -26,21 +26,22 @@ function onSubmit(e) {
     populateProductGrid(searchInput.value);
 }
 
-// TODO: Refactor to use servlets
-// function setCustomerSession() {
-//     if (sessionStorage.getItem('cID') == null) {
-//         var xhr = new XMLHttpRequest();
-//         xhr.onreadystatechange = function() {
-//             if (xhr.readyState == 4 && xhr.status == 200) {
-//                 //console.log(xhr.responseText);
-//                 let response = JSON.parse(xhr.responseText);
-//                 sessionStorage.setItem('cID', response[0].id);
-//             }
-//         }
-//         xhr.open("GET", "db_customer_query.php?cID=-1", true);
-//         xhr.send();
-//     }
-// }
+function setCustomerSession() {
+    if (sessionStorage.getItem('cID') == null) {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                //console.log(xhr.responseText);
+                let response = JSON.parse(xhr.responseText);
+                if (response && response.customer) {
+                    sessionStorage.setItem('cID', response.customer.id);
+                }
+            }
+        }
+        xhr.open("GET", "CustomerServlet/new", true);
+        xhr.send();
+    }
+}
 
 function populateProductGrid(searchQuery) {
     var xhr = new XMLHttpRequest();

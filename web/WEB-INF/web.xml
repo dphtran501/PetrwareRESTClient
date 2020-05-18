@@ -19,4 +19,12 @@
         <servlet-name>ProductServlet</servlet-name>
         <url-pattern>/ProductServlet</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>CustomerServlet</servlet-name>
+        <servlet-class>CustomerServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CustomerServlet</servlet-name>
+        <url-pattern>/CustomerServlet/*</url-pattern>
+    </servlet-mapping>
 </web-app>
