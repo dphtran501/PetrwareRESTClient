@@ -62,7 +62,6 @@ function createProductName(attributeList) {
     return name;
 }
 
-// TODO: Need to change this to use servlets
 function onAddClick() {
     if (Number(quantityInput.value) > 0) {
         let cID = sessionStorage.getItem('cID');
@@ -71,10 +70,10 @@ function onAddClick() {
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {
             if (xhr.readyState === 4 && xhr.status === 200) {
-                window.open('checkout.php', '_self');
+                window.open('checkout.html', '_self');
             }
         }
-        xhr.open("POST", "db_cart_query.php", true);
+        xhr.open("POST", "CartServlet", true);
         xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
         xhr.send(`cID=${cID}&pID=${pID.id}&quantity=${quantity}`);
     }
