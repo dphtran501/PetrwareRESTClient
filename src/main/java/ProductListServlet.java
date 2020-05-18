@@ -1,14 +1,11 @@
 import com.google.gson.Gson;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletException;
+import java.io.IOException;
+import java.sql.*;
 
 public class ProductListServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -22,9 +19,7 @@ public class ProductListServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ProductListResponse listResponse = new ProductListResponse();
         try {
-            Class.forName("org.mariadb.jdbc.Driver");
-            String dbURL = "jdbc:mariadb://" + Credentials.HOSTNAME + ":" + Credentials.PORT_NUMBER + "/" + Credentials.DATABASE;
-            Connection conn = DriverManager.getConnection(dbURL, Credentials.DB_USERNAME, Credentials.DB_PASSWORD);
+            Connection conn = Database.dbConnect();
             Statement stmt = conn.createStatement();
             ResultSet rsProductCPU = stmt.executeQuery("SELECT * FROM product JOIN product_cpu ON product.id=product_cpu.product_id");
             ResultSet rsProductRAM = stmt.executeQuery("SELECT * FROM product JOIN product_ram ON product.id=product_ram.product_id");
