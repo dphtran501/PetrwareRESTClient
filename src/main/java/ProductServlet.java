@@ -70,19 +70,15 @@ public class ProductServlet extends HttpServlet {
                 productResponse.setMessage(e.getMessage());
                 e.printStackTrace();
             } finally {
-                if (stmt != null) {
-                    try {
+                try {
+                    if (stmt != null) {
                         stmt.close();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
                     }
-                }
-                if (conn != null) {
-                    try {
+                    if (conn != null) {
                         conn.close();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
                     }
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
             }
         }

@@ -18,9 +18,11 @@ public class ProductListServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ProductListResponse listResponse = new ProductListResponse();
+        Connection conn = null;
+        Statement stmt = null;
         try {
-            Connection conn = Database.dbConnect();
-            Statement stmt = conn.createStatement();
+            conn = Database.dbConnect();
+            stmt = conn.createStatement();
             ResultSet rsProductCPU = stmt.executeQuery("SELECT * FROM product JOIN product_cpu ON product.id=product_cpu.product_id");
             ResultSet rsProductRAM = stmt.executeQuery("SELECT * FROM product JOIN product_ram ON product.id=product_ram.product_id");
             ResultSet rsProductVC = stmt.executeQuery("SELECT * FROM product JOIN product_video_card ON product.id=product_video_card.product_id");
@@ -37,11 +39,20 @@ public class ProductListServlet extends HttpServlet {
 
             listResponse.setMessage("OK");
 
-            stmt.close();
-            conn.close();
         } catch (SQLException | ClassNotFoundException e) {
             listResponse.setMessage(e.getMessage());
             e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
 
         Gson gson = new Gson();
