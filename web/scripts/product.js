@@ -62,6 +62,7 @@ function createProductName(attributeList) {
     return name;
 }
 
+// TODO: refactor to use servlets
 function onAddClick() {
     if (Number(quantityInput.value) > 0) {
         let cID = sessionStorage.getItem('cID');
@@ -73,7 +74,7 @@ function onAddClick() {
                 window.open('checkout.html', '_self');
             }
         }
-        xhr.open("POST", "CartServlet", true);
+        xhr.open("POST", "CartServlet/add", true);
         xhr.setRequestHeader("content-type", "application/x-www-form-urlencoded");
         xhr.send(`cID=${cID}&pID=${pID.id}&quantity=${quantity}`);
     }

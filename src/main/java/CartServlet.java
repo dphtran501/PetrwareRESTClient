@@ -17,12 +17,29 @@ public class CartServlet extends HttpServlet {
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String pathInfo = request.getPathInfo(), methodIdentifier = null;
+        if (pathInfo != null) {
+            String [] pathParts = pathInfo.split("/");
+            methodIdentifier = pathParts[1];
+        }
+
+        if (methodIdentifier == null) {
+            // Future method involving no request parameters can be used here
+        } else if (methodIdentifier.equals("add")) {
+            processAddItemRequest(request, response);
+        } else if (methodIdentifier.equals("get")) {
+            if (!request.getParameter("cID").isEmpty()) {
+                processGetAllItemsRequest(request, response);
+            }
+            // If cID and pID received, reserve for getting specific item from cart
+        }
+    }
+
+    private void processAddItemRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         CartResponse cartResponse = new CartResponse();
         String customerID = request.getParameter("cID");
         String productID = request.getParameter("pID");
         String quantity = request.getParameter("quantity");
-
-        // TODO: going to need to map for different requests (add, remove, getAll, etc.); similar to Customer servlet
 
         if (customerID.isEmpty() || productID.isEmpty() || quantity.isEmpty()) {
             cartResponse.setMessage("cID, pID, and/or quantity are not specified.");
@@ -41,7 +58,7 @@ public class CartServlet extends HttpServlet {
                 if (rs.next()) {
                     // Product is already in cart, so update quantity in database
                     int currentQuantity = rs.getInt("quantity");
-                    int newQuantity = currentQuantity + Integer.parseInt(quantity); // TODO: assumes ADDING to cart; may need removing in future
+                    int newQuantity = currentQuantity + Integer.parseInt(quantity);
                     String sqlUpdate = "UPDATE customer_cart SET quantity=? WHERE customer_id=? AND product_id=?";
                     stmt = conn.prepareStatement(sqlUpdate);
                     stmt.setInt(1, newQuantity);
@@ -94,6 +111,109 @@ public class CartServlet extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(json);
+    }
 
+    private void processGetAllItemsRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        CartResponse cartResponse = new CartResponse();
+        String customerID = request.getParameter("cID");
+
+        if (customerID.isEmpty()) {
+            cartResponse.setMessage("cID is not specified.");
+        } else {
+            Connection conn = null;
+            PreparedStatement stmt = null;
+            PreparedStatement stmtVC = null;
+
+            try {
+                conn = Database.dbConnect();
+                String sql = "SELECT * FROM customer_cart JOIN product ON product_id=id WHERE customer_id=?";
+                stmt = conn.prepareStatement(sql);
+                stmt.setInt(1, Integer.parseInt(customerID));
+                ResultSet rs = stmt.executeQuery();
+
+                Cart cart = new Cart(Integer.parseInt(customerID));
+                while (rs.next()) {
+                    // Has to be a better way of including gpu field
+                    if (rs.getString("category") != null && rs.getString("category").equals("videoCard")) {
+                        String sqlVC = "SELECT customer_cart.*, product.*, product_video_card.gpu FROM customer_cart "
+                                        + "JOIN product ON customer_cart.product_id=product.id "
+                                        + "JOIN product_video_card ON product.id=product_video_card.product_id "
+                                        + "WHERE customer_id=? AND product.id=?";
+                        stmtVC = conn.prepareStatement(sqlVC);
+                        stmtVC.setInt(1, Integer.parseInt(customerID));
+                        stmtVC.setInt(2, rs.getInt("product_id"));
+                        ResultSet rsVC = stmtVC.executeQuery();
+                        while (rsVC.next()) {
+                            cart.addCartItem(createCartItemVC(rsVC));
+                        }
+                    } else {
+                        cart.addCartItem(createCartItem(rs));
+                    }
+                }
+
+                cartResponse.setCart(cart);
+                cartResponse.setMessage("OK");
+
+            } catch (ClassNotFoundException | SQLException e) {
+                cartResponse.setMessage(e.getMessage());
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (stmt != null) {
+                        stmt.close();
+                    }
+                    if (stmtVC != null) {
+                        stmtVC.close();
+                    }
+                    if (conn != null) {
+                        conn.close();
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        Gson gson = new Gson();
+        String json = gson.toJson(cartResponse);
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(json);
+    }
+
+    private CartItem createCartItem(ResultSet rs) throws SQLException {
+        CartItem cartItem = new CartItem();
+        cartItem.setProductID(rs.getInt("product_id"));
+        cartItem.setQuantity(rs.getInt("quantity"));
+        cartItem.setProduct(createProduct(rs));
+
+        return cartItem;
+    }
+
+    // Has to be a better way of including gpu field
+    private CartItem createCartItemVC(ResultSet rs) throws SQLException {
+        CartItem cartItem = new CartItem();
+        cartItem.setProductID(rs.getInt("product_id"));
+        cartItem.setQuantity(rs.getInt("quantity"));
+
+        ProductVC videoCard = new ProductVC(createProduct(rs));
+        videoCard.setGpu(rs.getString("gpu"));
+        cartItem.setVideoCard(videoCard);
+
+        return cartItem;
+    }
+
+    private Product createProduct(ResultSet rs) throws SQLException {
+        Product product = new Product(rs.getInt("id"));
+        product.setModel(rs.getString("model"));
+        product.setBrand(rs.getString("brand"));
+        product.setName(rs.getString("name"));
+        product.setSeries(rs.getString("series"));
+        product.setCategory(rs.getString("category"));
+        product.setPrice(rs.getDouble("price"));
+        product.setDescription(rs.getString("description"));
+        product.setImgSrc(rs.getString("imgSrc"));
+        return product;
     }
 }

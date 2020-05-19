@@ -33,6 +33,6 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>CartServlet</servlet-name>
-        <url-pattern>/CartServlet</url-pattern>
+        <url-pattern>/CartServlet/*</url-pattern>
     </servlet-mapping>
 </web-app>

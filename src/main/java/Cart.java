@@ -5,6 +5,10 @@ public class Cart {
     private int customerID;
     private List<CartItem> cartItems = new ArrayList<>();
 
+    public Cart(int customerID) {
+        this.customerID = customerID;
+    }
+
     public int getCustomerID() {
         return customerID;
     }

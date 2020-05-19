@@ -29,21 +29,25 @@ function loadCartList() {
     let cID = sessionStorage.getItem('cID');
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4 && xhr.status == 200) {
+        if (xhr.readyState === 4 && xhr.status === 200) {
             //console.log(JSON.parse(xhr.responseText));
             let response = JSON.parse(xhr.responseText);
-            if (response.length > 0) {
-                response.forEach(cartItem => {
-                    addCartListItem(cartItem);
+            if (response.cart && response.cart.cartItems && response.cart.cartItems.length > 0) {
+                response.cart.cartItems.forEach(cartItem => {
+                    if (cartItem.product) {
+                        addCartListItem(cartItem.product, cartItem.quantity)
+                    } else if (cartItem.videoCard){
+                        addCartListItem(cartItem.videoCard, cartItem.quantity);
+                    }
                 })
             }
         }
     }
-    xhr.open("GET", `db_cart_query.php?cID=${cID}`, true);
+    xhr.open("GET", `CartServlet/get?cID=${cID}`, true);
     xhr.send();
 }
 
-function addCartListItem(listItem) {
+function addCartListItem(listItem, quantity) {
     let listItemContainer = document.createElement('div');
 
     let listItemImg = document.createElement('img');
@@ -66,7 +70,7 @@ function addCartListItem(listItem) {
     liQtyPriceContainer.classList.add('li-qty-price__container');
 
     let listItemQuantity = document.createElement('p');
-    listItemQuantity.textContent = listItem.quantity;
+    listItemQuantity.textContent = quantity;
     liQtyPriceContainer.appendChild(listItemQuantity);
 
     let listItemPrice = document.createElement('p');
@@ -79,7 +83,7 @@ function addCartListItem(listItem) {
 
     itemListContainer.appendChild(listItemContainer);
 
-    addToSubtotal(listItem.price, listItem.quantity);
+    addToSubtotal(listItem.price, quantity);
 }
 
 function createProductName(attributeList) {
@@ -99,6 +103,7 @@ function addToSubtotal(itemPrice, quantity) {
     calculateTotal();
 }
 
+// TODO: refactor to use Java servlets
 function getZipcodeData() {
     let zipcode = zipcodeInput.value;
 
