@@ -39,19 +39,22 @@ public class CartServlet extends HttpServlet {
         CartResponse cartResponse = new CartResponse();
         HttpSession session = request.getSession(true);
 
+        // Create customer record if no customerID found
         if (session.getAttribute("customerID") == null) {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/CustomerServlet/new");
             dispatcher.include(request, response);
         }
-        int customerID = (int) session.getAttribute("customerID");
         String productID = request.getParameter("pID");
         String quantity = request.getParameter("quantity");
 
-        if (productID.isEmpty() || quantity.isEmpty()) {
+        if (session.getAttribute("customerID") == null) {
+            cartResponse.setMessage("Error retrieving customer ID");
+        } else if (productID.isEmpty() || quantity.isEmpty()) {
             cartResponse.setMessage("pID, and/or quantity are not specified.");
         } else {
             Connection conn = null;
             PreparedStatement stmt = null;
+            int customerID = (int) session.getAttribute("customerID");
 
             try {
                 conn = Database.dbConnect();
@@ -123,8 +126,9 @@ public class CartServlet extends HttpServlet {
         CartResponse cartResponse = new CartResponse();
         HttpSession session = request.getSession(true);
 
+        // Create customer record if no customerID found
         if (session.getAttribute("customerID") == null) {
-            RequestDispatcher dispatcher = request.getRequestDispatcher("CustomerServlet/new");
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/CustomerServlet/new");
             dispatcher.include(request, response);
         }
 
