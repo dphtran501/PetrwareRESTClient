@@ -1,9 +1,11 @@
 import com.google.gson.Gson;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.*;
 
@@ -28,21 +30,25 @@ public class CartServlet extends HttpServlet {
         } else if (methodIdentifier.equals("add")) {
             processAddItemRequest(request, response);
         } else if (methodIdentifier.equals("get")) {
-            if (!request.getParameter("cID").isEmpty()) {
-                processGetAllItemsRequest(request, response);
-            }
-            // If cID and pID received, reserve for getting specific item from cart
+            processGetAllItemsRequest(request, response);
+            // If pID received, reserve for getting specific item from cart
         }
     }
 
     private void processAddItemRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
         CartResponse cartResponse = new CartResponse();
-        String customerID = request.getParameter("cID");
+        HttpSession session = request.getSession(true);
+
+        if (session.getAttribute("customerID") == null) {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/CustomerServlet/new");
+            dispatcher.include(request, response);
+        }
+        int customerID = (int) session.getAttribute("customerID");
         String productID = request.getParameter("pID");
         String quantity = request.getParameter("quantity");
 
-        if (customerID.isEmpty() || productID.isEmpty() || quantity.isEmpty()) {
-            cartResponse.setMessage("cID, pID, and/or quantity are not specified.");
+        if (productID.isEmpty() || quantity.isEmpty()) {
+            cartResponse.setMessage("pID, and/or quantity are not specified.");
         } else {
             Connection conn = null;
             PreparedStatement stmt = null;
@@ -51,7 +57,7 @@ public class CartServlet extends HttpServlet {
                 conn = Database.dbConnect();
                 String sqlSelect = "SELECT quantity FROM customer_cart WHERE customer_id=? AND product_id=?";
                 stmt = conn.prepareStatement(sqlSelect);
-                stmt.setInt(1, Integer.parseInt(customerID));
+                stmt.setInt(1, customerID);
                 stmt.setInt(2, Integer.parseInt(productID));
                 ResultSet rs = stmt.executeQuery();
 
@@ -62,7 +68,7 @@ public class CartServlet extends HttpServlet {
                     String sqlUpdate = "UPDATE customer_cart SET quantity=? WHERE customer_id=? AND product_id=?";
                     stmt = conn.prepareStatement(sqlUpdate);
                     stmt.setInt(1, newQuantity);
-                    stmt.setInt(2, Integer.parseInt(customerID));
+                    stmt.setInt(2, customerID);
                     stmt.setInt(3, Integer.parseInt(productID));
                     int rowsAffected = stmt.executeUpdate();
 
@@ -70,13 +76,13 @@ public class CartServlet extends HttpServlet {
                         cartResponse.setMessage("OK");
                     } else {
                         cartResponse.setMessage(String.format("Error updating record in customer_cart where customer_id=%d, product_id=%d",
-                                Integer.parseInt(customerID), Integer.parseInt(productID)));
+                                customerID, Integer.parseInt(productID)));
                     }
                 } else {
                     // Product not in cart, so add to customer_cart in database
                     String sqlInsert = "INSERT INTO customer_cart (customer_id, product_id, quantity) VALUES (?, ?, ?)";
                     stmt = conn.prepareStatement(sqlInsert);
-                    stmt.setInt(1, Integer.parseInt(customerID));
+                    stmt.setInt(1, customerID);
                     stmt.setInt(2, Integer.parseInt(productID));
                     stmt.setInt(3, Integer.parseInt(quantity));
                     int rowsAffected = stmt.executeUpdate();
@@ -85,7 +91,7 @@ public class CartServlet extends HttpServlet {
                         cartResponse.setMessage("OK");
                     } else {
                         cartResponse.setMessage(String.format("Error inserting record in customer_cart where customer_id=%d, product_id=%d",
-                                Integer.parseInt(customerID), Integer.parseInt(productID)));
+                                customerID, Integer.parseInt(productID)));
                     }
                 }
             } catch (ClassNotFoundException | SQLException e) {
@@ -115,23 +121,29 @@ public class CartServlet extends HttpServlet {
 
     private void processGetAllItemsRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         CartResponse cartResponse = new CartResponse();
-        String customerID = request.getParameter("cID");
+        HttpSession session = request.getSession(true);
 
-        if (customerID.isEmpty()) {
-            cartResponse.setMessage("cID is not specified.");
+        if (session.getAttribute("customerID") == null) {
+            RequestDispatcher dispatcher = request.getRequestDispatcher("CustomerServlet/new");
+            dispatcher.include(request, response);
+        }
+
+        if (session.getAttribute("customerID") == null) {
+            cartResponse.setMessage("Error retrieving customer ID");
         } else {
             Connection conn = null;
             PreparedStatement stmt = null;
             PreparedStatement stmtVC = null;
+            int customerID = (int) session.getAttribute("customerID");
 
             try {
                 conn = Database.dbConnect();
                 String sql = "SELECT * FROM customer_cart JOIN product ON product_id=id WHERE customer_id=?";
                 stmt = conn.prepareStatement(sql);
-                stmt.setInt(1, Integer.parseInt(customerID));
+                stmt.setInt(1, customerID);
                 ResultSet rs = stmt.executeQuery();
 
-                Cart cart = new Cart(Integer.parseInt(customerID));
+                Cart cart = new Cart(customerID);
                 while (rs.next()) {
                     // Has to be a better way of including gpu field
                     if (rs.getString("category") != null && rs.getString("category").equals("videoCard")) {
@@ -140,7 +152,7 @@ public class CartServlet extends HttpServlet {
                                         + "JOIN product_video_card ON product.id=product_video_card.product_id "
                                         + "WHERE customer_id=? AND product.id=?";
                         stmtVC = conn.prepareStatement(sqlVC);
-                        stmtVC.setInt(1, Integer.parseInt(customerID));
+                        stmtVC.setInt(1, customerID);
                         stmtVC.setInt(2, rs.getInt("product_id"));
                         ResultSet rsVC = stmtVC.executeQuery();
                         while (rsVC.next()) {

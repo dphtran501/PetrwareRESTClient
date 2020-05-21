@@ -5,7 +5,6 @@ const searchInput = document.querySelector('#search-input');
 init();
 
 function init(){
-    setCustomerSession();
     populateProductGrid();
     searchForm.addEventListener('submit', onSubmit);
     window.addEventListener('resize', onResize);
@@ -26,28 +25,11 @@ function onSubmit(e) {
     populateProductGrid(searchInput.value);
 }
 
-function setCustomerSession() {
-    if (sessionStorage.getItem('cID') == null) {
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState == 4 && xhr.status == 200) {
-                //console.log(xhr.responseText);
-                let response = JSON.parse(xhr.responseText);
-                if (response && response.customer) {
-                    sessionStorage.setItem('cID', response.customer.id);
-                }
-            }
-        }
-        xhr.open("GET", "CustomerServlet/new", true);
-        xhr.send();
-    }
-}
-
 function populateProductGrid(searchQuery) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         // 4 means finished, and 200 means okay.
-        if (xhr.readyState == 4 && xhr.status == 200) {
+        if (xhr.readyState === 4 && xhr.status === 200) {
             //console.log(xhr.responseText);
             let response = JSON.parse(xhr.responseText);
             let productList = [];

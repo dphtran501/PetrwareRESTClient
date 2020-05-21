@@ -17,8 +17,9 @@ let currentTotal = 0;
 init();
 
 function init() {
+    // TODO: need to refactor since cID is stored server-side
     const cIDInput = document.querySelector('#cID');
-    cIDInput.value = sessionStorage.getItem('cID');
+    //cIDInput.value = sessionStorage.getItem('cID');
     loadCartList();
     if (zipcodeInput.value) {
         getZipcodeData();
@@ -26,7 +27,6 @@ function init() {
 }
 
 function loadCartList() {
-    let cID = sessionStorage.getItem('cID');
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
@@ -43,7 +43,7 @@ function loadCartList() {
             }
         }
     }
-    xhr.open("GET", `CartServlet/get?cID=${cID}`, true);
+    xhr.open("GET", "CartServlet/get", true);
     xhr.send();
 }
 
@@ -55,13 +55,13 @@ function addCartListItem(listItem, quantity) {
     listItemContainer.appendChild(listItemImg);
 
     let listItemName = document.createElement('p');
-    if (listItem.category == "cpu"){
+    if (listItem.category === "cpu"){
         listItemName.textContent = createProductName([listItem.brand, listItem.name]);
     }
-    else if (listItem.category == "ram") {
+    else if (listItem.category === "ram") {
         listItemName.textContent = createProductName([listItem.brand, listItem.series]);
     }
-    else if(listItem.category == "videoCard") {
+    else if(listItem.category === "videoCard") {
         listItemName.textContent = createProductName([listItem.brand, listItem.series, listItem.gpu]);
     }
     listItemContainer.appendChild(listItemName);
@@ -109,7 +109,7 @@ function getZipcodeData() {
 
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4 && xhr.status == 200) {
+        if (xhr.readyState === 4 && xhr.status === 200) {
             //console.log(xhr.responseText);
             let response = JSON.parse(xhr.responseText);
             let data = (response.length > 0) ? response[0] : null;

@@ -1,9 +1,11 @@
 import com.google.gson.Gson;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -21,22 +23,33 @@ public class CustomerServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         CustomerResponse customerResponse = new CustomerResponse();
-        String pathInfo = request.getPathInfo(), methodIdentifier = null;
-        if (pathInfo != null) {
+        HttpSession session = request.getSession(true);
+
+        String methodIdentifier = null;
+        if (request.getAttribute(RequestDispatcher.INCLUDE_PATH_INFO) != null) {
+            String pathInfo = (String) request.getAttribute(RequestDispatcher.INCLUDE_PATH_INFO);
             String[] pathParts = pathInfo.split("/");
+            methodIdentifier = pathParts[1];
+        }
+        else if (request.getPathInfo() != null) {
+            String[] pathParts = request.getPathInfo().split("/");
             methodIdentifier = pathParts[1];
         }
 
         switch (methodIdentifier) {
             case "new":
-                int customerID = createCustomer();
-                if (customerID == -1) {
-                    customerResponse.setMessage("Error creating new customer");
-                } else {
-                    Customer customer = new Customer(customerID);
-                    customerResponse.setCustomer(customer);
-                    customerResponse.setMessage("OK");
+                if (session.getAttribute("customerID") == null) {
+                    int customerID = createCustomer();
+                    if (customerID == -1) {
+                        customerResponse.setMessage("Error creating new customer");
+                    } else {
+                        session.setAttribute("customerID", customerID);
+                        Customer customer = new Customer(customerID);
+                        customerResponse.setCustomer(customer);
+                        customerResponse.setMessage("OK");
+                    }
                 }
+                if (request.getAttribute(RequestDispatcher.INCLUDE_PATH_INFO) != null) return; // Don't need to return response for this
                 break;
         }
 
