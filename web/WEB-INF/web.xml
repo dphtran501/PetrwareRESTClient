@@ -35,4 +35,12 @@
         <servlet-name>CartServlet</servlet-name>
         <url-pattern>/CartServlet/*</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>LastViewedServlet</servlet-name>
+        <servlet-class>LastViewedServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LastViewedServlet</servlet-name>
+        <url-pattern>/LastViewedServlet/*</url-pattern>
+    </servlet-mapping>
 </web-app>

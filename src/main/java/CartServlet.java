@@ -59,7 +59,7 @@ public class CartServlet extends HttpServlet {
             Connection conn = null;
             PreparedStatement stmt = null;
             int customerID = (int) session.getAttribute("customerID");
-            int productID = lastViewedList.get(lastViewedList.size() - 1);
+            int productID = lastViewedList.get(0);
 
             try {
                 conn = Database.dbConnect();

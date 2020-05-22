@@ -1,18 +1,20 @@
 import com.google.gson.Gson;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
-public class ProductListServlet extends HttpServlet {
+public class LastViewedServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         processRequest(request, response);
     }
@@ -21,7 +23,7 @@ public class ProductListServlet extends HttpServlet {
         processRequest(request, response);
     }
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected  void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String pathInfo = request.getPathInfo(), methodIdentifier = null;
         if (pathInfo != null) {
             String[] pathParts = pathInfo.split("/");
@@ -31,94 +33,99 @@ public class ProductListServlet extends HttpServlet {
         if (methodIdentifier == null) {
             // Future method involving no request parameters can be used here
         } else if (methodIdentifier.equals("get")) {
-            if (request.getParameter("pID") != null) {
-                processGetProductRequest(request, response);
-            } else {
-                processGetAllProductsRequest(request, response);
-            }
+            processGetLastViewedListRequest(request, response);
         }
     }
 
-    private void processGetProductRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void processGetLastViewedListRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        ProductListResponse productListResponse = new ProductListResponse();
         HttpSession session = request.getSession(true);
-        String productID = request.getParameter("pID");
 
         // Create list of recently viewed items if it doesn't exist
         if (session.getAttribute("lastViewedList") == null) {
             session.setAttribute("lastViewedList", new ArrayList<Integer>());
         }
 
-        List<Integer> lastViewedList = (List<Integer>) session.getAttribute("lastViewedList");
-        if (lastViewedList.contains(Integer.valueOf(productID))) {
-            lastViewedList.remove(Integer.valueOf(productID));  // put it back in front if exists
-        }
-        lastViewedList.add(0, Integer.valueOf(productID));
-        session.setAttribute("lastViewedList", lastViewedList);
-        // TODO: Get it to redirect to product.html
-    }
-
-    private void processGetAllProductsRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        ProductListResponse listResponse = new ProductListResponse();
         Connection conn = null;
-        Statement stmt = null;
+        PreparedStatement stmtSelectCat = null;
+
+        List<Integer> lastViewedList = (List<Integer>) session.getAttribute("lastViewedList");
+
         try {
             conn = Database.dbConnect();
-            stmt = conn.createStatement();
-            ResultSet rsProductCPU = stmt.executeQuery("SELECT * FROM product JOIN product_cpu ON product.id=product_cpu.product_id");
-            ResultSet rsProductRAM = stmt.executeQuery("SELECT * FROM product JOIN product_ram ON product.id=product_ram.product_id");
-            ResultSet rsProductVC = stmt.executeQuery("SELECT * FROM product JOIN product_video_card ON product.id=product_video_card.product_id");
 
-            while (rsProductCPU.next()) {
-                listResponse.addProductCPU(createProductCPU(rsProductCPU));
-            }
-            while (rsProductRAM.next()) {
-                listResponse.addProductRAM(createProductRAM(rsProductRAM));
-            }
-            while (rsProductVC.next()) {
-                listResponse.addProductVC(createProductVC(rsProductVC));
-            }
+            String sqlSelectCat = "SELECT category FROM product WHERE id=?";
+            stmtSelectCat = conn.prepareStatement(sqlSelectCat);
 
-            listResponse.setMessage("OK");
+            for (int i = 0; i < lastViewedList.size() && i < 5; i++) {
+                int productID = lastViewedList.get(i);
 
-        } catch (SQLException | ClassNotFoundException e) {
-            listResponse.setMessage(e.getMessage());
+                // Get category of product to use correct category table
+                stmtSelectCat.setInt(1, productID);
+                ResultSet rsCat = stmtSelectCat.executeQuery();
+                String category = "";
+                if (rsCat.next()) {
+                    category = rsCat.getString("category");
+                }
+
+                String categoryTable = "";
+                switch (category) {
+                    case "cpu":
+                        categoryTable = "product_cpu";
+                        break;
+                    case "ram":
+                        categoryTable = "product_ram";
+                        break;
+                    case "videoCard":
+                        categoryTable = "product_video_card";
+                }
+
+                // Get product
+                String sql = String.format("SELECT * FROM product JOIN %s ON product.id=%s.product_id WHERE product.id=?",
+                        categoryTable, categoryTable);
+                try (PreparedStatement stmtSelectProduct = conn.prepareStatement(sql);) {
+                    stmtSelectProduct.setInt(1, productID);
+                    ResultSet rs = stmtSelectProduct.executeQuery();
+                    if (rs.next()) {
+                        String rsCategory = rs.getString("category");
+                        switch (rsCategory) {
+                            case "cpu":
+                                productListResponse.addProductCPU(createProductCPU(rs));
+                                break;
+                            case "ram":
+                                productListResponse.addProductRAM(createProductRAM(rs));
+                                break;
+                            case "videoCard":
+                                productListResponse.addProductVC(createProductVC(rs));
+                        }
+                    }
+                }
+
+                productListResponse.setMessage("OK");
+
+            }
+        } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         } finally {
             try {
-                if (stmt != null) {
-                    stmt.close();
+                if (stmtSelectCat != null) {
+                    stmtSelectCat.close();
                 }
                 if (conn != null) {
                     conn.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                e.printStackTrace();;
             }
         }
 
         Gson gson = new Gson();
-        String json = gson.toJson(listResponse);
+        String json = gson.toJson(productListResponse);
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(json);
 
-        // Include last viewed list if exists
-        HttpSession session = request.getSession(true);
-        if (session.getAttribute("lastViewedList") != null) {
-            List<Integer> lastViewedList = (List<Integer>) session.getAttribute("lastViewedList");
-            if (lastViewedList.size() > 0) {
-                response.getWriter().write("{");
-                response.getWriter().write("\"productListResponse\":" + json + ",");
-                response.getWriter().write("\"lastViewedListResponse\":");
-
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/LastViewedServlet/get");
-                dispatcher.include(request, response);
-
-                response.getWriter().write("}");
-            }
-        } else {
-            response.getWriter().write(json);
-        }
     }
 
     private ProductCPU createProductCPU(ResultSet rs) throws SQLException {
@@ -170,4 +177,5 @@ public class ProductListServlet extends HttpServlet {
         product.setImgSrc(rs.getString("imgSrc"));
         return product;
     }
+
 }

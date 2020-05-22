@@ -29,7 +29,7 @@ public class ProductServlet extends HttpServlet {
             PreparedStatement stmtSelectCat = null;
             PreparedStatement stmtSelectProduct = null;
             List<Integer> lastViewedList = (List<Integer>) session.getAttribute("lastViewedList");
-            int productID = lastViewedList.get(lastViewedList.size() - 1);  // TODO: should check if size is 0
+            int productID = lastViewedList.get(0);  // TODO: should check if size is 0
 
             try {
                 conn = Database.dbConnect();

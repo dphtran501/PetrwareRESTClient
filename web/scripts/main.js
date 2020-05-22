@@ -1,11 +1,12 @@
 const productGrid = document.querySelector('.productgrid-container');
+const lastViewedGrid = document.querySelector('.lastviewedgrid-container');
 const searchForm = document.querySelector('#search-form');
 const searchInput = document.querySelector('#search-input');
 
 init();
 
 function init(){
-    populateProductGrid();
+    populateGrids();
     searchForm.addEventListener('submit', onSubmit);
     window.addEventListener('resize', onResize);
 }
@@ -21,34 +22,24 @@ function Product(id, category, name, description, price, imgSrc){
 
 function onSubmit(e) {
     e.preventDefault();
-    clearProductGrid();
-    populateProductGrid(searchInput.value);
+    clearGrid(productGrid);
+    clearGrid(lastViewedGrid);
+    //populateGrids(searchInput.value); // TODO: fix search query
 }
 
-function populateProductGrid(searchQuery) {
+function populateGrids(searchQuery) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         // 4 means finished, and 200 means okay.
         if (xhr.readyState === 4 && xhr.status === 200) {
-            //console.log(xhr.responseText);
+            console.log(xhr.responseText);
             let response = JSON.parse(xhr.responseText);
-            let productList = [];
-            if (response.productCPUList && response.productCPUList.length > 0) {
-                productList = productList.concat(createProductList(response.productCPUList));
+            if (response.productListResponse) {
+                populateGrid(response.productListResponse, productGrid);
+                populateGrid(response.lastViewedListResponse, lastViewedGrid);
+            } else {
+                populateGrid(response, productGrid);
             }
-            if (response.productRAMList && response.productRAMList.length > 0) {
-                productList = productList.concat(createProductList(response.productRAMList));
-            }
-            if (response.productVCList && response.productVCList.length > 0) {
-                productList = productList.concat(createProductList(response.productVCList));
-            }
-            productList.forEach(product => {
-                let productCell = createProductCell(product);
-                productGrid.appendChild(productCell);
-            });
-
-            removeGridBorderTop();
-            removeGridBorderBottom();
         }
     }
     // TODO: Fix search bar
@@ -60,6 +51,26 @@ function populateProductGrid(searchQuery) {
     // }
     xhr.open("GET", "ProductListServlet/get", true);
     xhr.send();
+}
+
+function populateGrid(response, grid) {
+    let productList = [];
+    if (response.productCPUList && response.productCPUList.length > 0) {
+        productList = productList.concat(createProductList(response.productCPUList));
+    }
+    if (response.productRAMList && response.productRAMList.length > 0) {
+        productList = productList.concat(createProductList(response.productRAMList));
+    }
+    if (response.productVCList && response.productVCList.length > 0) {
+        productList = productList.concat(createProductList(response.productVCList));
+    }
+    productList.forEach(product => {
+        let productCell = createProductCell(product);
+        grid.appendChild(productCell);
+    });
+
+    removeGridBorderTop(grid);
+    removeGridBorderBottom(grid);
 }
 
 function createProductList(jsonObject) {
@@ -175,48 +186,50 @@ function onProductClick(e) {
 }
 
 function onResize(e) {
-    removeGridBorderTop();
-    removeGridBorderBottom();
+    removeGridBorderTop(productGrid);
+    removeGridBorderBottom(productGrid);
+    removeGridBorderTop(lastViewedGrid);
+    removeGridBorderBottom(lastViewedGrid);
 }
 
-function removeGridBorderTop() {
-    let productGridComputedStyle = window.getComputedStyle(productGrid);
+function removeGridBorderTop(grid) {
+    let productGridComputedStyle = window.getComputedStyle(grid);
     // grid-template-columns computed value is as specified but converted to absolute lengths (e.g. "300px 300px 300px")
     let numberOfColumns = productGridComputedStyle.getPropertyValue("grid-template-columns").split(" ").length;
     let numberOfRows = productGridComputedStyle.getPropertyValue("grid-template-rows").split(" ").length;
-    let firstRow = productGrid.querySelectorAll('.productcell:nth-child(-n+' + numberOfColumns + ')');
+    let firstRow = grid.querySelectorAll('.productcell:nth-child(-n+' + numberOfColumns + ')');
     firstRow.forEach(productCell => {
         productCell.style.borderTop = "medium none transparent";
     });
     // Cells moving from first to second row get their border tops again
     if (numberOfRows > 1) {
-        let secondRow = productGrid.querySelectorAll('.productcell:nth-child(n+' + (numberOfColumns + 1) + '):nth-child(-n+' + (2 * numberOfColumns) + ')');
+        let secondRow = grid.querySelectorAll('.productcell:nth-child(n+' + (numberOfColumns + 1) + '):nth-child(-n+' + (2 * numberOfColumns) + ')');
         secondRow.forEach(productCell => {
             productCell.style.borderTop = "1px solid rgba(0, 62, 120, 0.1)";
         })
     }
 }
 
-function removeGridBorderBottom() {
-    let productGridComputedStyle = window.getComputedStyle(productGrid);
+function removeGridBorderBottom(grid) {
+    let productGridComputedStyle = window.getComputedStyle(grid);
     // computed value is as specified but converted to absolute lengths (e.g. "300px 300px 300px")
     let numberOfColumns = productGridComputedStyle.getPropertyValue("grid-template-columns").split(" ").length;
     let numberOfRows = productGridComputedStyle.getPropertyValue("grid-template-rows").split(" ").length;
-    let lastRow = productGrid.querySelectorAll('.productcell:nth-child(n+' + ((numberOfRows - 1) * numberOfColumns + 1) + '):nth-child(-n+' + (numberOfRows * numberOfColumns) + ')');
+    let lastRow = grid.querySelectorAll('.productcell:nth-child(n+' + ((numberOfRows - 1) * numberOfColumns + 1) + '):nth-child(-n+' + (numberOfRows * numberOfColumns) + ')');
     lastRow.forEach(productCell => {
         productCell.style.borderBottom = "medium none transparent";
     });
     if (numberOfRows > 1) {
-        let secondLastRow = productGrid.querySelectorAll('.productcell:nth-child(n+' + ((numberOfRows - 2) * numberOfColumns + 1) + '):nth-child(-n+' + ((numberOfRows - 1) * numberOfColumns) + ')');
+        let secondLastRow = grid.querySelectorAll('.productcell:nth-child(n+' + ((numberOfRows - 2) * numberOfColumns + 1) + '):nth-child(-n+' + ((numberOfRows - 1) * numberOfColumns) + ')');
         secondLastRow.forEach(productCell => {
             productCell.style.borderBottom = "1px solid rgba(0, 62, 120, 0.1)";
         })
     }
 }
 
-function clearProductGrid() {
-    while (productGrid.hasChildNodes()) {
-        productGrid.removeChild(productGrid.firstChild);
+function clearGrid(grid) {
+    while (grid.hasChildNodes()) {
+        grid.removeChild(grid.firstChild);
     }
 }
 

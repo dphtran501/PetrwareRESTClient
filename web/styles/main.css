@@ -110,10 +110,15 @@ button:hover {
     background-color: rgba(247, 235, 95, 1);
 }
 
-.productgrid-container {
+.productgrid-container, .lastviewedgrid-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     margin: 0 30px 30px 30px;
+}
+
+#lastviewedlist-title {
+    margin-left: 30px;
+    margin-bottom: 15px;
 }
 
 .productcell {
