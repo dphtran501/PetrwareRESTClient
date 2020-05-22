@@ -4,8 +4,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.*;
+import java.util.List;
 
 public class ProductServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -18,16 +20,30 @@ public class ProductServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ProductResponse productResponse = new ProductResponse();
-        String productID = request.getParameter("id");
-        String category = request.getParameter("category");
-
-        if (productID.isEmpty() || category.isEmpty()) {
-            productResponse.setMessage("Product ID and/or category are not specified.");
-        } else {
+        HttpSession session = request.getSession(true);
+        if (session.getAttribute("lastViewedList") ==  null) {
+            productResponse.setMessage("Error retrieving last viewed product");
+        }
+        else {
             Connection conn = null;
-            PreparedStatement stmt = null;
+            PreparedStatement stmtSelectCat = null;
+            PreparedStatement stmtSelectProduct = null;
+            List<Integer> lastViewedList = (List<Integer>) session.getAttribute("lastViewedList");
+            int productID = lastViewedList.get(lastViewedList.size() - 1);  // TODO: should check if size is 0
+
             try {
                 conn = Database.dbConnect();
+
+                // Get category of product to use correct category table
+                String sqlSelectCat = "SELECT category FROM product WHERE id=?";
+                stmtSelectCat = conn.prepareStatement(sqlSelectCat);
+                stmtSelectCat.setInt(1, productID);
+                ResultSet rsCat = stmtSelectCat.executeQuery();
+                String category = "";
+                if (rsCat.next()) {
+                    category = rsCat.getString("category");
+                }
+
                 String categoryTable = "";
                 switch (category) {
                     case "cpu":
@@ -40,14 +56,15 @@ public class ProductServlet extends HttpServlet {
                         categoryTable = "product_video_card";
                 }
 
+                // Get product if category exists
                 if (categoryTable.isEmpty()) {
                     productResponse.setMessage(String.format("No category table for category %s", category));
                 } else {
                     String sql = String.format("SELECT * FROM product JOIN %s ON product.id=%s.product_id WHERE product.id=?",
                             categoryTable, categoryTable);
-                    stmt = conn.prepareStatement(sql);
-                    stmt.setInt(1, Integer.parseInt(productID));
-                    ResultSet rs = stmt.executeQuery();
+                    stmtSelectProduct = conn.prepareStatement(sql);
+                    stmtSelectProduct.setInt(1, productID);
+                    ResultSet rs = stmtSelectProduct.executeQuery();
 
                     if (rs.next()) {
                         String rsCategory = rs.getString("category");
@@ -71,8 +88,11 @@ public class ProductServlet extends HttpServlet {
                 e.printStackTrace();
             } finally {
                 try {
-                    if (stmt != null) {
-                        stmt.close();
+                    if (stmtSelectCat != null) {
+                        stmtSelectCat.close();
+                    }
+                    if (stmtSelectProduct != null) {
+                        stmtSelectProduct.close();
                     }
                     if (conn != null) {
                         conn.close();

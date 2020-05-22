@@ -9,7 +9,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>ProductListServlet</servlet-name>
-        <url-pattern>/ProductListServlet</url-pattern>
+        <url-pattern>/ProductListServlet/*</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>ProductServlet</servlet-name>

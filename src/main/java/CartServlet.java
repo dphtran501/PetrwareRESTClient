@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.*;
+import java.util.List;
 
 public class CartServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -44,24 +45,28 @@ public class CartServlet extends HttpServlet {
             RequestDispatcher dispatcher = request.getRequestDispatcher("/CustomerServlet/new");
             dispatcher.include(request, response);
         }
-        String productID = request.getParameter("pID");
+        //String productID = request.getParameter("pID");
+        List<Integer> lastViewedList = (List<Integer>) session.getAttribute("lastViewedList");
         String quantity = request.getParameter("quantity");
 
         if (session.getAttribute("customerID") == null) {
             cartResponse.setMessage("Error retrieving customer ID");
-        } else if (productID.isEmpty() || quantity.isEmpty()) {
-            cartResponse.setMessage("pID, and/or quantity are not specified.");
+        } else if (session.getAttribute("lastViewedList") == null) {
+            cartResponse.setMessage("Error getting product ID");
+        } else if (quantity.isEmpty()) {
+            cartResponse.setMessage("Quantity is not specified.");
         } else {
             Connection conn = null;
             PreparedStatement stmt = null;
             int customerID = (int) session.getAttribute("customerID");
+            int productID = lastViewedList.get(lastViewedList.size() - 1);
 
             try {
                 conn = Database.dbConnect();
                 String sqlSelect = "SELECT quantity FROM customer_cart WHERE customer_id=? AND product_id=?";
                 stmt = conn.prepareStatement(sqlSelect);
                 stmt.setInt(1, customerID);
-                stmt.setInt(2, Integer.parseInt(productID));
+                stmt.setInt(2, productID);
                 ResultSet rs = stmt.executeQuery();
 
                 if (rs.next()) {
@@ -72,21 +77,21 @@ public class CartServlet extends HttpServlet {
                     stmt = conn.prepareStatement(sqlUpdate);
                     stmt.setInt(1, newQuantity);
                     stmt.setInt(2, customerID);
-                    stmt.setInt(3, Integer.parseInt(productID));
+                    stmt.setInt(3, productID);
                     int rowsAffected = stmt.executeUpdate();
 
                     if (rowsAffected > 0) {
                         cartResponse.setMessage("OK");
                     } else {
                         cartResponse.setMessage(String.format("Error updating record in customer_cart where customer_id=%d, product_id=%d",
-                                customerID, Integer.parseInt(productID)));
+                                customerID, productID));
                     }
                 } else {
                     // Product not in cart, so add to customer_cart in database
                     String sqlInsert = "INSERT INTO customer_cart (customer_id, product_id, quantity) VALUES (?, ?, ?)";
                     stmt = conn.prepareStatement(sqlInsert);
                     stmt.setInt(1, customerID);
-                    stmt.setInt(2, Integer.parseInt(productID));
+                    stmt.setInt(2, productID);
                     stmt.setInt(3, Integer.parseInt(quantity));
                     int rowsAffected = stmt.executeUpdate();
 
@@ -94,7 +99,7 @@ public class CartServlet extends HttpServlet {
                         cartResponse.setMessage("OK");
                     } else {
                         cartResponse.setMessage(String.format("Error inserting record in customer_cart where customer_id=%d, product_id=%d",
-                                customerID, Integer.parseInt(productID)));
+                                customerID, productID));
                     }
                 }
             } catch (ClassNotFoundException | SQLException e) {

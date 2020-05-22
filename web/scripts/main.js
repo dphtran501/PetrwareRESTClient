@@ -58,7 +58,7 @@ function populateProductGrid(searchQuery) {
     // else {
     //     xhr.open("GET", "db_product_query.php", true);
     // }
-    xhr.open("GET", "ProductListServlet", true);
+    xhr.open("GET", "ProductListServlet/get", true);
     xhr.send();
 }
 
@@ -161,12 +161,17 @@ function createProductCell(product) {
     return productCell;
 }
 
-// TODO: Refactor to use servlets
 function onProductClick(e) {
     let productCell = e.target.parentElement;
-    let productQueryId = {id: productCell.id, category: productCell.category};
-    sessionStorage.setItem('productQueryId', JSON.stringify(productQueryId));
-    window.open('product.html', '_self');
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            //console.log(xhr.responseText);
+            window.open('product.html', '_self');
+        }
+    };
+    xhr.open("GET", `ProductListServlet/get?pID=${productCell.id}`, true);
+    xhr.send();
 }
 
 function onResize(e) {
