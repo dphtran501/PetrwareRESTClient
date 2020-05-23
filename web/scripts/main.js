@@ -1,4 +1,5 @@
 const productGrid = document.querySelector('.productgrid-container');
+const lastViewedTitle = document.querySelector("#lastviewedlist-title");
 const lastViewedGrid = document.querySelector('.lastviewedgrid-container');
 const searchForm = document.querySelector('#search-form');
 const searchInput = document.querySelector('#search-input');
@@ -35,9 +36,11 @@ function populateGrids(searchQuery) {
             console.log(xhr.responseText);
             let response = JSON.parse(xhr.responseText);
             if (response.productListResponse) {
+                lastViewedTitle.style.display = "block";
                 populateGrid(response.productListResponse, productGrid);
                 populateGrid(response.lastViewedListResponse, lastViewedGrid);
             } else {
+                lastViewedTitle.style.display = "none";
                 populateGrid(response, productGrid);
             }
         }
