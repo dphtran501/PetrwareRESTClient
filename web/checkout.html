@@ -50,7 +50,7 @@
 
     <div class="checkoutPage">
         <h1>Checkout</h1>
-        <form id="form-user" method="POST" action="placedOrder.php" onsubmit="return submit(event)">
+        <form id="form-user" method="POST" action="CheckoutServlet" onsubmit="return submit(event)">
             <input type="hidden" id="cID" name="cID"> <!--For updating correct customer-->
             <div class="form-box error" data-errormsg="">
                 <label for="input-first">First Name</label>
@@ -105,11 +105,11 @@
             <h1 id="cardinfo">Credit Card Information</h1>
             <div class="form-box error" data-errormsg="">
                 <label for="input-cardNumber">Card Number</label>
-                <input type="text" id="input-cardNumber" name="cardNumber" maxlength="19" autofocus required placeholder="Example: 1234 5678 9101 1234" tabindex="1"/>
+                <input type="text" id="input-cardNumber" name="cardNumber" maxlength="16" autofocus required placeholder="Example: 1234567891011234" tabindex="1"/>
             </div>
             <div class="form-box error" data-errormsg="">
                 <label for="input-expiration">Expiration Date</label>
-                <input type="text" id="input-expiration" name="expiration" title="Format - Month/Full Year" autofocus required placeholder="Example: 04/2020" tabindex="1"/>
+                <input type="text" id="input-expiration" name="expiration" title="Format - Month/Full Year" autofocus required placeholder="Example: 5/2020" tabindex="1"/>
             </div>
             <div class="form-box error" data-errormsg="">
                 <label for="input-securityCode">Card Security Code</label>

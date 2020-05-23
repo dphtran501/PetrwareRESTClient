@@ -132,8 +132,6 @@ require('db_close.php');
     <link rel="stylesheet" href="styles/placedOrder.css">
 </head>
 <body>
-    <--?php $filename = $_SERVER['SCRIPT_NAME']; ?-->
-    <--?php include './header.php'; ?-->
     <header>
         <h1 class="siteName"><a href="index.html">Petrware</a></h1>
         <nav>
@@ -148,13 +146,13 @@ require('db_close.php');
     <div class="placed">
         <h1 class="center title">Your Checkout Summary</h1>
         <div class="summary">
-            <h1 class="start">Name: <?php echo $customerDetails[':firstName'].' '.$customerDetails[':lastName']; ?></h1>
-            <h1 class="start">Phone: <?php echo $customerDetails[':phone']; ?></h1>
-            <h1 class="start">Email: <?php echo $customerDetails[':email']; ?></h1>
-            <h1 class="start">Country: <?php echo $customerDetails[':country']; ?></h1>
-            <h1 class="start">Address: <?php echo $customerDetails[':streetAddress'].' '.$customerDetails[':city'].', '.$customerDetails[':state'].' '.$customerDetails[':zipcode']; ?> </h1>
-            <h1 class="start">Card Number: <?php echo $ccNumber; ?><h1>
-                <h1 class="start">Shipping Method: <?php echo $customerDetails[':shipping']; ?></h1>
+            <h1 class="start" id="name">Name: </h1>
+            <h1 class="start" id="phone">Phone: </h1>
+            <h1 class="start" id="email">Email: </h1>
+            <h1 class="start" id="country">Country: </h1>
+            <h1 class="start" id="address">Address: </h1>
+            <h1 class="start" id="cardNumber">Card Number: </h1>
+            <h1 class="start" id="shippingMethod">Shipping Method: </h1>
         </div>
         <h1 class="center title">Item Summary</h1>
         <div class="center" id="itemSummary"></div>
