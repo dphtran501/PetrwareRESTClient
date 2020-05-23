@@ -5,6 +5,13 @@ public class CartItem {
     private Product product;
     private ProductVC videoCard;    // TODO: just need gpu for naming purpose; find better way to do this
 
+    public CartItem() {}
+
+    public CartItem(int productID, int quantity) {
+        this.productID = productID;
+        this.quantity = quantity;
+    }
+
     public int getProductID() {
         return productID;
     }

@@ -61,7 +61,6 @@ function createProductName(attributeList) {
     return name;
 }
 
-// TODO: refactor to use servlets
 function onAddClick() {
     if (Number(quantityInput.value) > 0) {
         let pID = JSON.parse(sessionStorage.getItem('productQueryId'));
