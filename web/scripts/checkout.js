@@ -123,8 +123,7 @@ function getZipcodeData() {
                 stateInput.value = "";
                 currentTaxRate = 0;
             }
-            calculateTotal();
-
+            calculateTotal()
         }
     }
     xhr.open("GET", `api/zipcode?zipcode=${zipcode}`, true);
