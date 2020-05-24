@@ -53,10 +53,10 @@ public class CheckoutServlet extends HttpServlet {
         
         
 //        Redirect Response to placedOrder.html
-        response.sendRedirect(request.getContextPath()+"/placedOrder.html");
+//        response.sendRedirect(request.getContextPath()+"/placedOrder.html");
         // Forward
-//        RequestDispatcher rd = request.getRequestDispatcher("placedOrder.html");
-//        rd.forward(request, response);
+        RequestDispatcher rd = request.getRequestDispatcher("placedOrder.html");
+        rd.forward(request, response);
         
         // Implement SQL Update to Customer
         Connection conn = null;
