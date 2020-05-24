@@ -110,7 +110,7 @@ function getZipcodeData() {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            //console.log(xhr.responseText);
+            console.log(xhr.responseText);
             let response = JSON.parse(xhr.responseText);
             let data = (response.length > 0) ? response[0] : null;
             if (data){
@@ -119,9 +119,14 @@ function getZipcodeData() {
                 currentTaxRate = data.combinedRate;
                 calculateTotal();
             }
+            else {
+                cityInput.value = "";
+                stateInput.value = "";
+                currentTaxRate = 0;
+            }
         }
     }
-    xhr.open("GET", `db_form_query.php?zipcode=${zipcode}`, true);
+    xhr.open("GET", `api/zipcode?zipcode=${zipcode}`, true);
     xhr.send();
 }
 
