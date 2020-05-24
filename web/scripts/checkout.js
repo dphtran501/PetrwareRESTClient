@@ -40,6 +40,7 @@ function loadCartList() {
                         addCartListItem(cartItem.videoCard, cartItem.quantity);
                     }
                 })
+                sessionStorage.setItem('cartItemCount', response.cart.cartItems.length);
             }
         }
     }

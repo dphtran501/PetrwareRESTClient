@@ -20,7 +20,7 @@ const submit = function(ev){
     //or the click will travel to the form and the form will submit
     let fails = validate();
     //IF we wanted to do some async things then use a Promise with .then and .catch
-    if(fails.length === 0){
+    if(fails.length === 0 && sessionStorage.getItem('cartItemCount') > 0){
         //good to go
         // sendmail();
         document.getElementById('form-user').submit();
