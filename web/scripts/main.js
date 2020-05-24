@@ -25,7 +25,7 @@ function onSubmit(e) {
     e.preventDefault();
     clearGrid(productGrid);
     clearGrid(lastViewedGrid);
-    //populateGrids(searchInput.value); // TODO: fix search query
+    populateGrids(searchInput.value); // TODO: fix search query
 }
 
 function populateGrids(searchQuery) {
@@ -45,14 +45,13 @@ function populateGrids(searchQuery) {
             }
         }
     }
-    // TODO: Fix search bar
-    // if (searchQuery) {
-    //     xhr.open("GET", `db_product_query.php?search=${searchQuery}`, true);
-    // }
-    // else {
-    //     xhr.open("GET", "db_product_query.php", true);
-    // }
-    xhr.open("GET", "ProductListServlet/get", true);
+    //TODO: Fix search bar
+    if (searchQuery) {
+        xhr.open("GET", `ProductListServlet/searchBar?search=${searchQuery}`, true);
+    }
+    else {
+        xhr.open("GET", "ProductListServlet/get", true);
+    }
     xhr.send();
 }
 

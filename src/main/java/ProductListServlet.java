@@ -33,9 +33,12 @@ public class ProductListServlet extends HttpServlet {
         } else if (methodIdentifier.equals("get")) {
             if (request.getParameter("pID") != null) {
                 processGetProductRequest(request, response);
-            } else {
+            }
+            else {
                 processGetAllProductsRequest(request, response);
             }
+        } else if (methodIdentifier.equals("searchBar")) {
+            processSearchProductsRequest(request, response);
         }
     }
 
@@ -57,6 +60,98 @@ public class ProductListServlet extends HttpServlet {
         // TODO: Get it to redirect to product.html
     }
 
+    private void processSearchProductsRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+        ProductListResponse listResponse = new ProductListResponse();
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        String key = "%" + request.getParameter("search") + "%";
+        try {
+            conn = Database.dbConnect();
+            stmt = conn.prepareStatement("SELECT * FROM product JOIN product_cpu ON product.id=product_cpu.product_id " +
+                    "WHERE product.brand LIKE ? " +
+                    "OR product.name LIKE ? " +
+                    "OR product.series LIKE ? " +
+                    "OR product.model LIKE ?");
+            stmt.setString(1, key);
+            stmt.setString(2, key);
+            stmt.setString(3, key);
+            stmt.setString(4, key);
+            ResultSet rsProductCPU = stmt.executeQuery();
+
+            stmt = conn.prepareStatement("SELECT * FROM product JOIN product_ram ON product.id=product_ram.product_id " +
+                    "WHERE product.brand LIKE ? " +
+                    "OR product.name LIKE ? " +
+                    "OR product.series LIKE ? " +
+                    "OR product.model LIKE ?");
+            stmt.setString(1, key);
+            stmt.setString(2, key);
+            stmt.setString(3, key);
+            stmt.setString(4, key);
+            ResultSet rsProductRAM = stmt.executeQuery();
+
+            stmt = conn.prepareStatement("SELECT * FROM product JOIN product_video_card ON product.id=product_video_card.product_id " +
+                    "WHERE product.brand LIKE ? " +
+                    "OR product.name LIKE ? " +
+                    "OR product.series LIKE ? " +
+                    "OR product.model LIKE ?");
+            stmt.setString(1, key);
+            stmt.setString(2, key);
+            stmt.setString(3, key);
+            stmt.setString(4, key);
+            ResultSet rsProductVC = stmt.executeQuery();
+
+            while (rsProductCPU.next()) {
+                listResponse.addProductCPU(createProductCPU(rsProductCPU));
+            }
+            while (rsProductRAM.next()) {
+                listResponse.addProductRAM(createProductRAM(rsProductRAM));
+            }
+            while (rsProductVC.next()) {
+                listResponse.addProductVC(createProductVC(rsProductVC));
+            }
+
+            listResponse.setMessage("OK");
+
+        } catch (SQLException | ClassNotFoundException e) {
+            listResponse.setMessage(e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        Gson gson = new Gson();
+        String json = gson.toJson(listResponse);
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        // Include last viewed list if exists
+        HttpSession session = request.getSession(true);
+        if (session.getAttribute("lastViewedList") != null) {
+            List<Integer> lastViewedList = (List<Integer>) session.getAttribute("lastViewedList");
+            if (lastViewedList.size() > 0) {
+                response.getWriter().write("{");
+                response.getWriter().write("\"productListResponse\":" + json + ",");
+                response.getWriter().write("\"lastViewedListResponse\":");
+
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/LastViewedServlet/get");
+                dispatcher.include(request, response);
+
+                response.getWriter().write("}");
+            }
+        } else {
+            response.getWriter().write(json);
+        }
+    }
     private void processGetAllProductsRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         ProductListResponse listResponse = new ProductListResponse();
         Connection conn = null;

@@ -117,13 +117,14 @@ function getZipcodeData() {
                 cityInput.value = data.city;
                 stateInput.value = data.state;
                 currentTaxRate = data.combinedRate;
-                calculateTotal();
             }
             else {
                 cityInput.value = "";
                 stateInput.value = "";
                 currentTaxRate = 0;
             }
+            calculateTotal();
+
         }
     }
     xhr.open("GET", `api/zipcode?zipcode=${zipcode}`, true);
