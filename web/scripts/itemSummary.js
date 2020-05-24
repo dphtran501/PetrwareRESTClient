@@ -43,21 +43,26 @@ const getItemSummary = function() {
     let cID = sessionStorage.getItem('cID');
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4 && xhr.status == 200) {
+        if (xhr.readyState === 4 && xhr.status === 200) {
             console.log(JSON.parse(xhr.responseText));
             let response = JSON.parse(xhr.responseText);
-            if (response.length > 0) {
-                response.forEach(cartItem => {
+            if (response.cart && response.cart.cartItems && response.cart.cartItems.length > 0) {
+                response.cart.cartItems.forEach(cartItem => {
                     let itemName;
                     let item = document.createElement("H1");
-                    if (cartItem.category == "cpu"){
-                        itemName = createProductName([cartItem.brand, cartItem.name]);
+                    if (cartItem.product) {
+                        if (cartItem.product.category === "cpu"){
+                            itemName = createProductName([cartItem.product.brand, cartItem.product.name]);
+                        }
+                        else if (cartItem.product.category === "ram") {
+                            itemName = createProductName([cartItem.product.brand, cartItem.product.series]);
+                        }
                     }
-                    else if (cartItem.category == "ram") {
-                        itemName = createProductName([cartItem.brand, cartItem.series]);
-                    }
-                    else if(cartItem.category == "videoCard") {
-                        itemName = createProductName([cartItem.brand, cartItem.series, cartItem.gpu]);
+                    else if (cartItem.videoCard) {
+                        if(cartItem.videoCard.category === "videoCard") {
+                            itemName = createProductName([cartItem.videoCard.brand, cartItem.videoCard.series,
+                                cartItem.videoCard.gpu]);
+                        }
                     }
 
                     item.textContent = cartItem.quantity + " x " + itemName;
@@ -66,14 +71,14 @@ const getItemSummary = function() {
             }
         }
     }
-    xhr.open("GET", `db_cart_query.php?cID=${cID}`, false);
+    xhr.open("GET", "CartServlet/get", false);
     xhr.send();
 }
 
 function createProductName(attributeList) {
     let name = "";
     for (let i = 0; i < attributeList.length; i++) {
-        name += ((attributeList[i] === null) ? "" : attributeList[i]);
+        name += ((attributeList[i] == null) ? "" : attributeList[i]);
         if (i < attributeList.length - 1){
             name += " ";
         }
