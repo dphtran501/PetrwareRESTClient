@@ -4,6 +4,10 @@
         <servlet-name>ProductListServlet</servlet-name>
         <servlet-class>ProductListServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>PlacedOrderServlet</servlet-name>
+        <servlet-class>PlacedOrderServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ProductListServlet</servlet-name>
         <url-pattern>/ProductListServlet/*</url-pattern>
@@ -49,11 +53,15 @@
         <url-pattern>/CheckoutServlet</url-pattern>
     </servlet-mapping>
     <servlet>
-    <servlet-name>placedOrder</servlet-name>
-    <jsp-file>/placedOrder.html</jsp-file>
+        <servlet-name>placedOrder</servlet-name>
+        <jsp-file>/placedOrder.html</jsp-file>
     </servlet>
     <servlet-mapping>
         <servlet-name>placedOrder</servlet-name>
         <url-pattern>/placedOrder.html</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PlacedOrderServlet</servlet-name>
+        <url-pattern>/PlacedOrderServlet</url-pattern>
     </servlet-mapping>
 </web-app>

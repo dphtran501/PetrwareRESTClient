@@ -33,7 +33,7 @@ function populateGrids(searchQuery) {
     xhr.onreadystatechange = function() {
         // 4 means finished, and 200 means okay.
         if (xhr.readyState === 4 && xhr.status === 200) {
-            console.log(xhr.responseText);
+            // console.log(xhr.responseText);
             let response = JSON.parse(xhr.responseText);
             if (response.productListResponse) {
                 lastViewedTitle.style.display = "block";
