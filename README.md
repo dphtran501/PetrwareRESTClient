@@ -58,13 +58,28 @@ form, only a button to "Add to Cart". Use servlet "session" to store the product
     to add ID of the product viewed on the product details page and the user-specified quantity to the cart list stored 
     in the HttpSession.
 
-- [ ] **Using servlets create a "check out" page, which allows the user to place an order. The page should show all the products in the shopping cart and the total price. This page should have a form which will allow the user to do the following:** 
+- [x] **Using servlets create a "check out" page, which allows the user to place an order. The page should show all the 
+products in the shopping cart and the total price.** 
 
-    - [ ] **Enter shipping information: name, shipping address, phone number, credit card number, etc.**
+    [`checkout.js`](web/scripts/checkout.js) sends a request to [`CartServlet`](src/main/java/CartServlet.java) to retrieve 
+    the cart items stored in the HttpSession. `checkout.js` then uses the data sent by `CartServlet` to calculate the subtotal.
 
-    - [ ] **Submit the order for storage in the backend database**
+    **This page should have a form which will allow the user to do the following:** 
+
+    - [x] **Enter shipping information: name, shipping address, phone number, credit card number, etc.**
     
-    - [ ] **On successful submission, forward to the order details page. You are required to use servlet "forward" feature to implement this requirement.**
+        The checkout page contains the form (in [`checkout.html`](web/checkout.html)) where the user can enter their shipping information and more.
+
+    - [x] **Submit the order for storage in the backend database**
+        
+        When the user clicks "Submit" on the form with valid information, the form sends a POST request to 
+        [`CheckoutServlet`](src/main/java/CheckoutServlet.java) which stores the inputted customer information in the database.
+    
+    - [x] **On successful submission, forward to the order details page. You are required to use servlet "forward" feature to implement this requirement.**
+    
+        After `CheckoutServlet` stores the customer information in the database as stated above, it forwards to the 
+        "Checkout Summary" page ([`placedOrder.html`](web/placedOrder.html)), where it populates the page with the order 
+        details.
 
 ## Authors
 Group 21: Jevford Barro (72114221), Peter Tang (45193375), Derek Tran (18491795)
