@@ -160,3 +160,7 @@ buildNumber.properties
 ### database credentials ###
 db_credentials.php
 /src/main/java/Credentials.java
+
+### Netbeans Specific Trash
+nb-configuration.xml
+web/META-INF/context.xml
