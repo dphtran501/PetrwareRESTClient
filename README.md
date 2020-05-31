@@ -12,6 +12,8 @@ The "About" page contains information pertaining to Petrware, their business, th
 
 ## Installation
 
+**_NEED TO CHANGE?_**
+
 This project requires installation of [MariaDB Connector/J 2.6.0](https://mariadb.com/kb/en/about-mariadb-connector-j/#installing-mariadb-connectorj)
 and [Gson 2.8.6](https://github.com/google/gson). Both were installed using Maven (by updating [`pom.xml`](pom.xml)). 
 
@@ -31,55 +33,48 @@ public class Credentials {
 
 ## Requirements Checklist
 
-- [x] **Include the output of two servlets to create the homepage for your e-commerce site: the first servlet should 
-handle the displaying of the list of products obtained from a backend database, and the second servlet should use session 
-tracking to display the last 5 products that the user has visited (viewed the product details page). In case this number 
-is less than 5, show whatever amount of information you have stored in the session. You are required to use servlet 
-"include" feature to implement this requirement.** 
+- [ ] **Using JSP reimplement the product list page. This is the page that contains the list of your products.** 
 
-    For the home page, [`main.js`](/web/scripts/main.js) makes a request to [`ProductListServlet`](/src/main/java/ProductListServlet.java) 
-    to retrieve the list of products from the database. `ProductListServlet` then "includes" 
-    [`LastViewedServlet`](src/main/java/LastViewedServlet.java) to retrieve the last 5 (or less) products that the user 
-    viewed on the product details page. `LastViewedServlet` is only "included" when the user has viewed at least one product.
-
-- [x] **Using servlets create a "product details" page. This page should take a product identifier as a parameter and 
-show the product details after getting the relevant information from the database. This page should NOT have an order 
-form, only a button to "Add to Cart". Use servlet "session" to store the products in a shopping cart.** 
-
-    When the user clicks a product on the  home page, `main.js` sends a request to `ProductListServlet` to add the ID of 
-    the clicked product to the list of recently viewed products (used by `LastViewedServlet` above) stored in the 
-    HttpSession. When the product details page loads, [`product.js`](web/scripts/product.js) sends a request to 
-    [`ProductServlet`](src/main/java/ProductServlet.java) to retrieve the details of that product from the database. 
-    `ProductServlet` uses the last product ID added to the aforementioned stored list of recently viewed products as a 
-    parameter for retrieving the details from the database. Since the product details page loads right after a product 
-    on the home page is clicked, the last product ID should be the product ID of the clicked product.
+- [ ] **Create REST services to allow for interaction with the order and product resources stored in your application 
+database. You will need to implement services that use the following verbs**
+    - **GET**
+    - **PUT**
+    - **POST**
+    - **DELETE**
     
-    When the user clicks the "Add to Cart" button, `product.js` sends a request to [`CartServlet`](src/main/java/CartServlet.java) 
-    to add ID of the product viewed on the product details page and the user-specified quantity to the cart list stored 
-    in the HttpSession.
-
-- [x] **Using servlets create a "check out" page, which allows the user to place an order. The page should show all the 
-products in the shopping cart and the total price.** 
-
-    [`checkout.js`](web/scripts/checkout.js) sends a request to [`CartServlet`](src/main/java/CartServlet.java) to retrieve 
-    the cart items stored in the HttpSession. `checkout.js` then uses the data sent by `CartServlet` to calculate the subtotal.
-
-    **This page should have a form which will allow the user to do the following:** 
-
-    - [x] **Enter shipping information: name, shipping address, phone number, credit card number, etc.**
+    **You only need to implement the services that your web app needs, e.g.,  if you do not need to delete data, you do 
+    not need to implement the corresponding DELETE web service.**
+  
+    **Ensure that proper REST principles and conventions are followed while creating your REST services. For example: A 
+    GET method should be used only for retrieving an existing resource, A POST method should be used for creating a new 
+    resource, etc. Do not forget to perform validation for certain methods. For instance, when implementing methods like
+     GET, PUT and DELETE to interact with existing resources, you will need to verify if the resource being queried 
+     actually exists. If the resource is not found. You will need to throw a 404 - Not Found response.**
+  
+    **You are required to create your new REST service application in Java. It is mandatory that you use the Jersey REST 
+    framework.  For the scope of this assignment, it is sufficient that your REST services communicate in JSON. (You are 
+    free to implement support for other media types, but you will have to make sure that your e-commerce web application 
+    communicates successfully with the REST service.)**
     
-        The checkout page contains the form (in [`checkout.html`](web/checkout.html)) where the user can enter their shipping information and more.
+- [ ] **You will now need to replace all the database interactions in your web application with REST calls. Your web 
+application will now act as a REST client and retrieve the MySQL data indirectly through the new RESTful web service. 
+That is, you will have two applications: (1) a backend application that provides RESTful APIs that essentially exposes 
+the available operations in your database, and (2) an application that is the client of the RESTful APIs, generates the 
+HTML pages, and handles requests from the user.  While in this assignment you are developing both applications yourself, 
+in practice, each application may be developed by a separate company. For example, companies such as Google, Amazon, and 
+PayPal may develop the RESTful APIs that allow others to leverage their services in building their web applications.** 
 
-    - [x] **Submit the order for storage in the backend database**
-        
-        When the user clicks "Submit" on the form with valid information, the form sends a POST request to 
-        [`CheckoutServlet`](src/main/java/CheckoutServlet.java) which stores the inputted customer information in the database.
-    
-    - [x] **On successful submission, forward to the order details page. You are required to use servlet "forward" feature to implement this requirement.**
-    
-        After `CheckoutServlet` stores the customer information in the database as stated above, it forwards to the 
-        "Checkout Summary" page ([`placedOrder.html`](web/placedOrder.html)), where it populates the page with the order 
-        details.
+    **In the readme file, provide proper documentation highlighting the details for each RESTful service method that you 
+implement. Your documentation should include the following at the very least**
+    - **Method Type**
+    - **Request URL**
+    - **Sample Response**
+    - **Sample Request (if applicable)**
+      
+    **To aid you with implementing this assignment, a Todo service and its client are made available on Canvas. Each zip 
+    file is a NetBeans project that has been exported. You should be able to download the zip file and then use the 
+    Import feature of Netbeans to reconstruct the project. You will then have to update the database connection 
+    parameters and URL patterns to match your environment before deploying and testing the projects.** 
 
 ## Authors
 Group 21: Jevford Barro (72114221), Peter Tang (45193375), Derek Tran (18491795)
@@ -87,5 +82,5 @@ Group 21: Jevford Barro (72114221), Peter Tang (45193375), Derek Tran (18491795)
 ## Project Status
 - [x] [PA 1: Building a dynamic website using HTML, JavaScript, and CSS](docs/pa1.md)
 - [x] [PA 2: Building a web application using PHP, Ajax, and MySQL](docs/pa2.md) 
-- [ ] PA 3: Building a web application using Java Servlets 
+- [X] [PA 3: Building a web application using Java Servlets](docs/pa3.md)
 - [ ] PA 4: Building a web application using JSP and RESTful web services 
