@@ -4,6 +4,7 @@ public class Product {
     private String brand;
     private String name;
     private String series;
+    private String displayName;
     private String category;
     private double price;
     private String description;
@@ -13,13 +14,14 @@ public class Product {
         this.id = id;
     }
 
-    public Product(int id, String model, String brand, String name, String series,
+    public Product(int id, String model, String brand, String name, String series, String displayName,
                    String category, double price, String description, String imgSrc) {
         this.id = id;
         this.model = model;
         this.brand = brand;
         this.name = name;
         this.series = series;
+        this.displayName = displayName;
         this.category = category;
         this.price = price;
         this.description = description;
@@ -62,6 +64,14 @@ public class Product {
         this.series = series;
     }
 
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
     public String getCategory() {
         return category;
     }
@@ -102,6 +112,7 @@ public class Product {
                 ", brand='" + brand + '\'' +
                 ", name='" + name + '\'' +
                 ", series='" + series + '\'' +
+                ", displayName='" + displayName + '\'' +
                 ", category='" + category + '\'' +
                 ", price=" + price +
                 ", description='" + description + '\'' +

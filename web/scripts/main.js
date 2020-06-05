@@ -33,19 +33,18 @@ function populateGrids(searchQuery) {
     xhr.onreadystatechange = function() {
         // 4 means finished, and 200 means okay.
         if (xhr.readyState === 4 && xhr.status === 200) {
-            // console.log(xhr.responseText);
+            console.log(xhr.responseText);
             let response = JSON.parse(xhr.responseText);
-            if (response.productListResponse) {
+            if (response.productList) {
                 lastViewedTitle.style.display = "block";
-                populateGrid(response.productListResponse, productGrid);
-                populateGrid(response.lastViewedListResponse, lastViewedGrid);
+                populateGrid(response.productList, productGrid);
+                populateGrid(response.lastViewedList, lastViewedGrid);
             } else {
                 lastViewedTitle.style.display = "none";
                 populateGrid(response, productGrid);
             }
         }
     }
-    //TODO: Fix search bar
     if (searchQuery) {
         xhr.open("GET", `ProductListServlet/searchBar?search=${searchQuery}`, true);
     }
@@ -78,9 +77,8 @@ function populateGrid(response, grid) {
 function createProductList(jsonObject) {
     let productList = [];
     jsonObject.forEach(product => {
-        let name, description;
+        let name = product.displayName, description;
         if (product.category === "cpu"){
-            name = createProductName([product.brand, product.name]);
             description = {
                 "Model": [product.model],
                 "# of Cores": [product.numOfCores],
@@ -89,7 +87,6 @@ function createProductList(jsonObject) {
             };
         }
         else if (product.category === "ram") {
-            name = createProductName([product.brand, product.series]);
             description = {
                 "Model": [product.model],
                 "Capacity": [product.capacity],
@@ -99,7 +96,6 @@ function createProductList(jsonObject) {
             };
         }
         else if(product.category === "videoCard") {
-            name = createProductName([product.brand, product.series, product.gpu]);
             description = {
                 "Model": [product.model],
                 "Memory Size": [product.memorySize, "GB"],
@@ -114,18 +110,6 @@ function createProductList(jsonObject) {
     })
 
     return productList;
-}
-
-function createProductName(attributeList) {
-    let name = "";
-    for (let i = 0; i < attributeList.length; i++) {
-        name += ((attributeList[i] == null) ? "" : attributeList[i]);
-        if (i < attributeList.length - 1){
-            name += " ";
-        }
-    }
-
-    return name;
 }
 
 function createProductCell(product) {

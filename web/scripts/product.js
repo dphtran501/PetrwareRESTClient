@@ -17,26 +17,20 @@ function onLoad() {
         if (xhr.readyState === 4 && xhr.status === 200) {
             //console.log(xhr.responseText);
             let response = JSON.parse(xhr.responseText);
-            let product;
-            if (response.productCPU) {
-                product = response.productCPU;
-            } else if (response.productRAM) {
-                product = response.productRAM;
-            } else if (response.productVC) {
-                product = response.productVC;
-            }
+            let product = response;
 
             productImage.src = "images/" + product.imgSrc;
             productPriceText.textContent = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(product.price);
-            if (product.category === "cpu"){
-                productNameText.textContent = createProductName([product.brand, product.name]);
-            }
-            else if (product.category === "ram") {
-                productNameText.textContent = createProductName([product.brand, product.series]);
-            }
-            else if(product.category === "videoCard") {
-                productNameText.textContent = createProductName([product.brand, product.series, product.gpu]);
-            }
+            productNameText.textContent = product.displayName;
+            // if (product.category === "cpu"){
+            //     productNameText.textContent = createProductName([product.brand, product.name]);
+            // }
+            // else if (product.category === "ram") {
+            //     productNameText.textContent = createProductName([product.brand, product.series]);
+            // }
+            // else if(product.category === "videoCard") {
+            //     productNameText.textContent = createProductName([product.brand, product.series, product.gpu]);
+            // }
             productModelText.textContent = "Model: " + product.model;
             productDescriptionText.textContent = product.description;
 
@@ -49,17 +43,17 @@ function onLoad() {
 
 }
 
-function createProductName(attributeList) {
-    let name = "";
-    for (let i = 0; i < attributeList.length; i++) {
-        name += ((attributeList[i] == null) ? "" : attributeList[i]);
-        if (i < attributeList.length - 1){
-            name += " ";
-        }
-    }
-
-    return name;
-}
+// function createProductName(attributeList) {
+//     let name = "";
+//     for (let i = 0; i < attributeList.length; i++) {
+//         name += ((attributeList[i] == null) ? "" : attributeList[i]);
+//         if (i < attributeList.length - 1){
+//             name += " ";
+//         }
+//     }
+//
+//     return name;
+// }
 
 function onAddClick() {
     if (Number(quantityInput.value) > 0) {

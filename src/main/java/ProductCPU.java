@@ -14,7 +14,8 @@ public class ProductCPU extends Product {
 
     public ProductCPU(Product product) {
         super(product.getId(), product.getModel(), product.getBrand(), product.getName(), product.getSeries(),
-                product.getCategory(), product.getPrice(), product.getDescription(), product.getImgSrc());
+                product.getDisplayName(), product.getCategory(), product.getPrice(), product.getDescription(),
+                product.getImgSrc());
     }
 
     public String getProcessorsType() {

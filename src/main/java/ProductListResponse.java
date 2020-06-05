@@ -3,19 +3,9 @@ import java.util.List;
 
 public class ProductListResponse {
 
-    private String message;
-
     private List<ProductCPU> productCPUList = new ArrayList<>();
     private List<ProductRAM> productRAMList = new ArrayList<>();
     private List<ProductVC> productVCList = new ArrayList<>();
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
 
     public List<ProductCPU> getProductCPUList() {
         return productCPUList;
@@ -53,3 +43,4 @@ public class ProductListResponse {
         this.productVCList.add(productVC);
     }
 }
+

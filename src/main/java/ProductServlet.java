@@ -1,10 +1,16 @@
 import com.google.gson.Gson;
+import org.glassfish.jersey.client.ClientConfig;
+import org.json.JSONObject;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.sql.*;
 import java.util.List;
@@ -18,97 +24,116 @@ public class ProductServlet extends HttpServlet {
         processRequest(request, response);
     }
 
+//    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//        ProductResponse productResponse = new ProductResponse();
+//        HttpSession session = request.getSession(true);
+//        if (session.getAttribute("lastViewedList") ==  null) {
+//            productResponse.setMessage("Error retrieving last viewed product");
+//        }
+//        else {
+//            Connection conn = null;
+//            PreparedStatement stmtSelectCat = null;
+//            PreparedStatement stmtSelectProduct = null;
+//            List<Integer> lastViewedList = (List<Integer>) session.getAttribute("lastViewedList");
+//            int productID = lastViewedList.get(0);  // TODO: should check if size is 0
+//
+//            try {
+//                conn = Database.dbConnect();
+//
+//                // Get category of product to use correct category table
+//                String sqlSelectCat = "SELECT category FROM product WHERE id=?";
+//                stmtSelectCat = conn.prepareStatement(sqlSelectCat);
+//                stmtSelectCat.setInt(1, productID);
+//                ResultSet rsCat = stmtSelectCat.executeQuery();
+//                String category = "";
+//                if (rsCat.next()) {
+//                    category = rsCat.getString("category");
+//                }
+//
+//                String categoryTable = "";
+//                switch (category) {
+//                    case "cpu":
+//                        categoryTable = "product_cpu";
+//                        break;
+//                    case "ram":
+//                        categoryTable = "product_ram";
+//                        break;
+//                    case "videoCard":
+//                        categoryTable = "product_video_card";
+//                }
+//
+//                // Get product if category exists
+//                if (categoryTable.isEmpty()) {
+//                    productResponse.setMessage(String.format("No category table for category %s", category));
+//                } else {
+//                    String sql = String.format("SELECT * FROM product JOIN %s ON product.id=%s.product_id WHERE product.id=?",
+//                            categoryTable, categoryTable);
+//                    stmtSelectProduct = conn.prepareStatement(sql);
+//                    stmtSelectProduct.setInt(1, productID);
+//                    ResultSet rs = stmtSelectProduct.executeQuery();
+//
+//                    if (rs.next()) {
+//                        String rsCategory = rs.getString("category");
+//                        switch (rsCategory) {
+//                            case "cpu":
+//                                productResponse.setProductCPU(createProductCPU(rs));
+//                                break;
+//                            case "ram":
+//                                productResponse.setProductRAM(createProductRAM(rs));
+//                                break;
+//                            case "videoCard":
+//                                productResponse.setProductVC(createProductVC(rs));
+//                        }
+//                    }
+//
+//                    productResponse.setMessage("OK");
+//
+//                }
+//            } catch (ClassNotFoundException | SQLException e) {
+//                productResponse.setMessage(e.getMessage());
+//                e.printStackTrace();
+//            } finally {
+//                try {
+//                    if (stmtSelectCat != null) {
+//                        stmtSelectCat.close();
+//                    }
+//                    if (stmtSelectProduct != null) {
+//                        stmtSelectProduct.close();
+//                    }
+//                    if (conn != null) {
+//                        conn.close();
+//                    }
+//                } catch (SQLException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//
+//        Gson gson = new Gson();
+//        String json = gson.toJson(productResponse);
+//
+//        response.setContentType("application/json");
+//        response.setCharacterEncoding("UTF-8");
+//        response.getWriter().write(json);
+//    }
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        ProductResponse productResponse = new ProductResponse();
+        ClientConfig config = new ClientConfig();
+        Client client = ClientBuilder.newClient(config);
+        WebTarget target = client.target(APIConfig.getBaseURI());
+
         HttpSession session = request.getSession(true);
-        if (session.getAttribute("lastViewedList") ==  null) {
-            productResponse.setMessage("Error retrieving last viewed product");
-        }
-        else {
-            Connection conn = null;
-            PreparedStatement stmtSelectCat = null;
-            PreparedStatement stmtSelectProduct = null;
-            List<Integer> lastViewedList = (List<Integer>) session.getAttribute("lastViewedList");
-            int productID = lastViewedList.get(0);  // TODO: should check if size is 0
+        List<Integer> lastViewedList = (List<Integer>) session.getAttribute("lastViewedList");
+        int productID = lastViewedList.get(0);  // TODO: should check if size is 0
 
-            try {
-                conn = Database.dbConnect();
-
-                // Get category of product to use correct category table
-                String sqlSelectCat = "SELECT category FROM product WHERE id=?";
-                stmtSelectCat = conn.prepareStatement(sqlSelectCat);
-                stmtSelectCat.setInt(1, productID);
-                ResultSet rsCat = stmtSelectCat.executeQuery();
-                String category = "";
-                if (rsCat.next()) {
-                    category = rsCat.getString("category");
-                }
-
-                String categoryTable = "";
-                switch (category) {
-                    case "cpu":
-                        categoryTable = "product_cpu";
-                        break;
-                    case "ram":
-                        categoryTable = "product_ram";
-                        break;
-                    case "videoCard":
-                        categoryTable = "product_video_card";
-                }
-
-                // Get product if category exists
-                if (categoryTable.isEmpty()) {
-                    productResponse.setMessage(String.format("No category table for category %s", category));
-                } else {
-                    String sql = String.format("SELECT * FROM product JOIN %s ON product.id=%s.product_id WHERE product.id=?",
-                            categoryTable, categoryTable);
-                    stmtSelectProduct = conn.prepareStatement(sql);
-                    stmtSelectProduct.setInt(1, productID);
-                    ResultSet rs = stmtSelectProduct.executeQuery();
-
-                    if (rs.next()) {
-                        String rsCategory = rs.getString("category");
-                        switch (rsCategory) {
-                            case "cpu":
-                                productResponse.setProductCPU(createProductCPU(rs));
-                                break;
-                            case "ram":
-                                productResponse.setProductRAM(createProductRAM(rs));
-                                break;
-                            case "videoCard":
-                                productResponse.setProductVC(createProductVC(rs));
-                        }
-                    }
-
-                    productResponse.setMessage("OK");
-
-                }
-            } catch (ClassNotFoundException | SQLException e) {
-                productResponse.setMessage(e.getMessage());
-                e.printStackTrace();
-            } finally {
-                try {
-                    if (stmtSelectCat != null) {
-                        stmtSelectCat.close();
-                    }
-                    if (stmtSelectProduct != null) {
-                        stmtSelectProduct.close();
-                    }
-                    if (conn != null) {
-                        conn.close();
-                    }
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        Gson gson = new Gson();
-        String json = gson.toJson(productResponse);
+        String jsonResponse = target.path("v1").path("api").path("products").path(String.valueOf(productID))
+                .request()
+                .accept(MediaType.APPLICATION_JSON)
+                .get(String.class);
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(json);
+        response.getWriter().write(jsonResponse);
     }
 
     private ProductCPU createProductCPU(ResultSet rs) throws SQLException {
