@@ -189,69 +189,6 @@ public class ProductListServlet extends HttpServlet {
         }
     }
 
-    //    private void processGetAllProductsRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-//        ProductListResponse listResponse = new ProductListResponse();
-//        Connection conn = null;
-//        Statement stmt = null;
-//        try {
-//            conn = Database.dbConnect();
-//            stmt = conn.createStatement();
-//            ResultSet rsProductCPU = stmt.executeQuery("SELECT * FROM product JOIN product_cpu ON product.id=product_cpu.product_id");
-//            ResultSet rsProductRAM = stmt.executeQuery("SELECT * FROM product JOIN product_ram ON product.id=product_ram.product_id");
-//            ResultSet rsProductVC = stmt.executeQuery("SELECT * FROM product JOIN product_video_card ON product.id=product_video_card.product_id");
-//
-//            while (rsProductCPU.next()) {
-//                listResponse.addProductCPU(createProductCPU(rsProductCPU));
-//            }
-//            while (rsProductRAM.next()) {
-//                listResponse.addProductRAM(createProductRAM(rsProductRAM));
-//            }
-//            while (rsProductVC.next()) {
-//                listResponse.addProductVC(createProductVC(rsProductVC));
-//            }
-//
-//            listResponse.setMessage("OK");
-//
-//        } catch (SQLException | ClassNotFoundException e) {
-//            listResponse.setMessage(e.getMessage());
-//            e.printStackTrace();
-//        } finally {
-//            try {
-//                if (stmt != null) {
-//                    stmt.close();
-//                }
-//                if (conn != null) {
-//                    conn.close();
-//                }
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//        Gson gson = new Gson();
-//        String json = gson.toJson(listResponse);
-//
-//        response.setContentType("application/json");
-//        response.setCharacterEncoding("UTF-8");
-//
-//        // Include last viewed list if exists
-//        HttpSession session = request.getSession(true);
-//        if (session.getAttribute("lastViewedList") != null) {
-//            List<Integer> lastViewedList = (List<Integer>) session.getAttribute("lastViewedList");
-//            if (lastViewedList.size() > 0) {
-//                response.getWriter().write("{");
-//                response.getWriter().write("\"productListResponse\":" + json + ",");
-//                response.getWriter().write("\"lastViewedListResponse\":");
-//
-//                RequestDispatcher dispatcher = request.getRequestDispatcher("/LastViewedServlet/get");
-//                dispatcher.include(request, response);
-//
-//                response.getWriter().write("}");
-//            }
-//        } else {
-//            response.getWriter().write(json);
-//        }
-//    }
     private void processGetAllProductsRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         ClientConfig config = new ClientConfig();
         Client client = ClientBuilder.newClient(config);
