@@ -36,7 +36,6 @@ function onLoad() {
 
 function onAddClick() {
     if (Number(quantityInput.value) > 0) {
-        let pID = JSON.parse(sessionStorage.getItem('productQueryId'));
         let quantity = quantityInput.value;
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function() {

@@ -3,7 +3,6 @@ public class CartItem {
     private int quantity;
 
     private Product product;
-    private ProductVC videoCard;    // TODO: just need gpu for naming purpose; find better way to do this
 
     public CartItem() {}
 
@@ -34,14 +33,6 @@ public class CartItem {
 
     public void setProduct(Product product) {
         this.product = product;
-    }
-
-    public ProductVC getVideoCard() {
-        return videoCard;
-    }
-
-    public void setVideoCard(ProductVC videoCard) {
-        this.videoCard = videoCard;
     }
 
     @Override

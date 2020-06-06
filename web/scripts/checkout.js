@@ -17,9 +17,6 @@ let currentTotal = 0;
 init();
 
 function init() {
-    // TODO: need to refactor since cID is stored server-side
-    const cIDInput = document.querySelector('#cID');
-    //cIDInput.value = sessionStorage.getItem('cID');
     loadCartList();
     if (zipcodeInput.value) {
         getZipcodeData();
@@ -32,15 +29,11 @@ function loadCartList() {
         if (xhr.readyState === 4 && xhr.status === 200) {
             //console.log(JSON.parse(xhr.responseText));
             let response = JSON.parse(xhr.responseText);
-            if (response.cart && response.cart.cartItems && response.cart.cartItems.length > 0) {
-                response.cart.cartItems.forEach(cartItem => {
-                    if (cartItem.product) {
-                        addCartListItem(cartItem.product, cartItem.quantity)
-                    } else if (cartItem.videoCard){
-                        addCartListItem(cartItem.videoCard, cartItem.quantity);
-                    }
+            if (response.cartItems && response.cartItems.length > 0) {
+                response.cartItems.forEach(cartItem => {
+                    addCartListItem(cartItem.product, cartItem.quantity)
                 })
-                sessionStorage.setItem('cartItemCount', response.cart.cartItems.length);
+                sessionStorage.setItem('cartItemCount', response.cartItems.length);
             }
         }
     }
@@ -56,15 +49,7 @@ function addCartListItem(listItem, quantity) {
     listItemContainer.appendChild(listItemImg);
 
     let listItemName = document.createElement('p');
-    if (listItem.category === "cpu"){
-        listItemName.textContent = createProductName([listItem.brand, listItem.name]);
-    }
-    else if (listItem.category === "ram") {
-        listItemName.textContent = createProductName([listItem.brand, listItem.series]);
-    }
-    else if(listItem.category === "videoCard") {
-        listItemName.textContent = createProductName([listItem.brand, listItem.series, listItem.gpu]);
-    }
+    listItemName.textContent = listItem.displayName;
     listItemContainer.appendChild(listItemName);
 
     let liQtyPriceContainer = document.createElement('div');
@@ -85,18 +70,6 @@ function addCartListItem(listItem, quantity) {
     itemListContainer.appendChild(listItemContainer);
 
     addToSubtotal(listItem.price, quantity);
-}
-
-function createProductName(attributeList) {
-    let name = "";
-    for (let i = 0; i < attributeList.length; i++) {
-        name += ((attributeList[i] === null) ? "" : attributeList[i]);
-        if (i < attributeList.length - 1){
-            name += " ";
-        }
-    }
-
-    return name;
 }
 
 function addToSubtotal(itemPrice, quantity) {

@@ -1,4 +1,5 @@
 import com.google.gson.Gson;
+import org.glassfish.jersey.client.ClientConfig;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -6,6 +7,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.sql.*;
 import java.util.List;
@@ -77,71 +82,35 @@ public class CartServlet extends HttpServlet {
     }
 
     private void processGetAllItemsRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        CartResponse cartResponse = new CartResponse();
         HttpSession session = request.getSession(true);
 
         Cart cart = (Cart) session.getAttribute("cart");
-
         if (cart != null) {
-            Connection conn = null;
-            try {
-                conn = Database.dbConnect();
-                String sql = "SELECT * FROM product WHERE id=?";
-                String sqlVC = "SELECT product.*, product_video_card.gpu FROM product "
-                        + "JOIN product_video_card ON product.id=product_video_card.product_id "
-                        + "WHERE product.id=?";
+            ClientConfig config = new ClientConfig();
+            Client client = ClientBuilder.newClient(config);
+            WebTarget target = client.target(APIConfig.getBaseURI());
 
-                List<CartItem> cartItems = cart.getCartItems();
-                for (CartItem item : cartItems) {
+            List<CartItem> cartItems = cart.getCartItems();
+            for (CartItem item : cartItems) {
+                String jsonResponse = target.path("v1").path("api").path("products").path(String.valueOf(item.getProductID()))
+                        .request()
+                        .accept(MediaType.APPLICATION_JSON)
+                        .get(String.class);
 
-                    try (PreparedStatement stmt = conn.prepareStatement(sql);
-                         PreparedStatement stmtVC = conn.prepareStatement(sqlVC);) {
-
-                        stmt.setInt(1, item.getProductID());
-                        ResultSet rs = stmt.executeQuery();
-
-                        if (rs.next()) {
-                            // Has to be a better way of including gpu field
-                            if (rs.getString("category") != null && rs.getString("category").equals("videoCard")) {
-
-                                stmtVC.setInt(1, item.getProductID());
-                                ResultSet rsVC = stmtVC.executeQuery();
-                                if (rsVC.next()) {
-                                    ProductVC videoCard = new ProductVC(createProduct(rsVC));
-                                    videoCard.setGpu(rsVC.getString("gpu"));
-                                    item.setVideoCard(videoCard);
-                                }
-                            } else {
-                                item.setProduct(createProduct(rs));
-                            }
-                        }
-                    }
-                }
-
-                cart.setCartItems(cartItems); // cartItems update in foreach loop
-                cartResponse.setCart(cart);
-                cartResponse.setMessage("OK");
-
-            } catch (SQLException | ClassNotFoundException e) {
-                e.printStackTrace();
-            } finally {
-                if (conn != null) {
-                    try {
-                        conn.close();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                }
+                Gson gson = new Gson();
+                Product product = gson.fromJson(jsonResponse, Product.class);
+                item.setProduct(product);
             }
 
+            cart.setCartItems(cartItems); // cartItems update in foreach loop
+
+            Gson gson = new Gson();
+            String json = gson.toJson(cart);
+
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(json);
         }
-
-        Gson gson = new Gson();
-        String json = gson.toJson(cartResponse);
-
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(json);
     }
 
     private Product createProduct(ResultSet rs) throws SQLException {

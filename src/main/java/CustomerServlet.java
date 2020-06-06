@@ -1,4 +1,5 @@
 import com.google.gson.Gson;
+import org.glassfish.jersey.client.ClientConfig;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -6,11 +7,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 public class CustomerServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -62,38 +63,17 @@ public class CustomerServlet extends HttpServlet {
     }
 
     private int createCustomer() {
-        int id = -1;    // -1 means no customer record created
+        ClientConfig config = new ClientConfig();
+        Client client = ClientBuilder.newClient(config);
+        WebTarget target = client.target(APIConfig.getBaseURI());
 
-        Connection conn = null;
-        Statement stmt = null;
-        try {
-            conn = Database.dbConnect();
-            stmt = conn.createStatement();
-            int rowsAffected = stmt.executeUpdate("INSERT into customers (firstname, lastname) VALUES ('UNSAVED', 'CUSTOMER')");
-            if (rowsAffected > 0) {
-                ResultSet rs = stmt.executeQuery("SELECT LAST_INSERT_ID()");
-                if (rs.next()) {
-                    id = rs.getInt(1);
-                }
-            }
+        String jsonResponse = target.path("v1").path("api").path("customers")
+                .request()
+                .accept(MediaType.APPLICATION_JSON)
+                .post(null, String.class);
 
-        } catch (ClassNotFoundException | SQLException e) {
-            // TODO: throw exception up to processRequest to add its message to response object?
-            // maybe Ajax already has a way of knowing if there was an exception here
-            e.printStackTrace();
-        } finally {
-            try {
-                if (stmt != null) {
-                    stmt.close();
-                }
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return id;
+        Gson gson = new Gson();
+        Customer newCustomer = gson.fromJson(jsonResponse, Customer.class);
+        return newCustomer.getId();
     }
 }
