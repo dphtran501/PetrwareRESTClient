@@ -22,15 +22,6 @@ function onLoad() {
             productImage.src = "images/" + product.imgSrc;
             productPriceText.textContent = new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(product.price);
             productNameText.textContent = product.displayName;
-            // if (product.category === "cpu"){
-            //     productNameText.textContent = createProductName([product.brand, product.name]);
-            // }
-            // else if (product.category === "ram") {
-            //     productNameText.textContent = createProductName([product.brand, product.series]);
-            // }
-            // else if(product.category === "videoCard") {
-            //     productNameText.textContent = createProductName([product.brand, product.series, product.gpu]);
-            // }
             productModelText.textContent = "Model: " + product.model;
             productDescriptionText.textContent = product.description;
 
@@ -42,18 +33,6 @@ function onLoad() {
     xhr.send();
 
 }
-
-// function createProductName(attributeList) {
-//     let name = "";
-//     for (let i = 0; i < attributeList.length; i++) {
-//         name += ((attributeList[i] == null) ? "" : attributeList[i]);
-//         if (i < attributeList.length - 1){
-//             name += " ";
-//         }
-//     }
-//
-//     return name;
-// }
 
 function onAddClick() {
     if (Number(quantityInput.value) > 0) {
