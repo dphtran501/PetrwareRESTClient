@@ -108,7 +108,7 @@ public class Product {
 
     @Override
     public String toString() {
-        return "edu.uci.inf124.petrwarerestclient.model.Product{" +
+        return "Product{" +
                 "id=" + id +
                 ", model='" + model + '\'' +
                 ", brand='" + brand + '\'' +

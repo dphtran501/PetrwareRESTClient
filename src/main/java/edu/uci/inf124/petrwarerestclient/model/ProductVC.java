@@ -96,7 +96,7 @@ public class ProductVC extends Product {
 
     @Override
     public String toString() {
-        return "edu.uci.inf124.petrwarerestclient.model.ProductVC{" +
+        return "ProductVC{" +
                 "interfaceVC='" + interfaceVC + '\'' +
                 ", chipset='" + chipset + '\'' +
                 ", gpu='" + gpu + '\'' +

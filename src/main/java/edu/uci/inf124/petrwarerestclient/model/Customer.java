@@ -108,7 +108,7 @@ public class Customer {
 
     @Override
     public String toString() {
-        return "edu.uci.inf124.petrwarerestclient.model.Customer{" +
+        return "Customer{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastname='" + lastName + '\'' +

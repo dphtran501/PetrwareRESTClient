@@ -56,7 +56,7 @@ public class Cart {
 
     @Override
     public String toString() {
-        return "edu.uci.inf124.petrwarerestclient.model.Cart{" +
+        return "Cart{" +
                 "customerID=" + customerID +
                 ", cartItems=" + cartItems +
                 '}';

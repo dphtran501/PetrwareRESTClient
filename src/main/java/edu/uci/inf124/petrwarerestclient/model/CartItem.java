@@ -39,7 +39,7 @@ public class CartItem {
 
     @Override
     public String toString() {
-        return "edu.uci.inf124.petrwarerestclient.model.CartItem{" +
+        return "CartItem{" +
                 "productID=" + productID +
                 ", quantity=" + quantity +
                 '}';

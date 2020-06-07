@@ -69,7 +69,7 @@ public class ProductRAM extends Product {
 
     @Override
     public String toString() {
-        return "edu.uci.inf124.petrwarerestclient.model.ProductRAM{" +
+        return "ProductRAM{" +
                 "capacity='" + capacity + '\'' +
                 ", speed='" + speed + '\'' +
                 ", latency=" + latency +
