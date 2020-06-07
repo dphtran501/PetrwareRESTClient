@@ -84,13 +84,12 @@ function getZipcodeData() {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            console.log(xhr.responseText);
+            //console.log(xhr.responseText);
             let response = JSON.parse(xhr.responseText);
-            let data = (response.length > 0) ? response[0] : null;
-            if (data){
-                cityInput.value = data.city;
-                stateInput.value = data.state;
-                currentTaxRate = data.combinedRate;
+            if (response){
+                cityInput.value = response.city;
+                stateInput.value = response.state;
+                currentTaxRate = response.combinedRate;
             }
             else {
                 cityInput.value = "";

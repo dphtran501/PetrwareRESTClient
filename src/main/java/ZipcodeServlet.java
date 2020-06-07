@@ -1,56 +1,40 @@
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import org.glassfish.jersey.client.ClientConfig;
 
-import javax.annotation.Resource;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.sql.DataSource;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 @WebServlet(name = "ZipcodeServlet", urlPatterns = "/api/zipcode")
 public class ZipcodeServlet extends HttpServlet {
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("application/json");
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        ClientConfig config = new ClientConfig();
+        Client client = ClientBuilder.newClient(config);
+        WebTarget target = client.target(APIConfig.getBaseURI());
 
         String zipcode = request.getParameter("zipcode");
+        String jsonResponse = target.path("v1").path("api").path("checkout").path("zipcode").queryParam("zipcode", zipcode)
+                .request()
+                .accept(MediaType.APPLICATION_JSON)
+                .get(String.class);
 
-        PrintWriter out = response.getWriter();
-
-        try {
-            String query = "SELECT z.state as state, city, combinedRate FROM zip_codes z JOIN tax_rates tr ON zip=zipcode WHERE zip=?";
-            Connection dbcon = Database.dbConnect();
-            PreparedStatement pstatement = dbcon.prepareStatement(query);
-            pstatement.setString(1, zipcode);
-            ResultSet rs = pstatement.executeQuery();
-
-            JsonArray jsonArray = new JsonArray();
-            JsonObject jsonObject = new JsonObject();
-            while(rs.next()) {
-                jsonObject.addProperty("city", rs.getString("city"));
-                jsonObject.addProperty("state", rs.getString("state"));
-                jsonObject.addProperty("combinedRate", rs.getDouble("combinedRate"));
-
-                jsonArray.add(jsonObject);
-            }
-            pstatement.close();
-            rs.close();
-
-            out.write(jsonArray.toString());
-            response.setStatus(200);
-
-            out.close();
-            dbcon.close();
-
-        } catch (SQLException | ClassNotFoundException throwables) {
-            throwables.printStackTrace();
-        }
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write(jsonResponse);
     }
 }
