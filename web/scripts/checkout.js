@@ -77,7 +77,6 @@ function addToSubtotal(itemPrice, quantity) {
     calculateTotal();
 }
 
-// TODO: refactor to use Java servlets
 function getZipcodeData() {
     let zipcode = zipcodeInput.value;
 

@@ -40,30 +40,15 @@ const getItemSummary = function() {
     let cartTotal = document.getElementById('cartTotal');
     cartTotal.textContent += new Intl.NumberFormat('en-US', {style: 'currency', currency: 'USD'}).format(sessionStorage.getItem('cartTotal'));
 
-    let cID = sessionStorage.getItem('cID');
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
         if (xhr.readyState === 4 && xhr.status === 200) {
             console.log(JSON.parse(xhr.responseText));
             let response = JSON.parse(xhr.responseText);
-            if (response.cart && response.cart.cartItems && response.cart.cartItems.length > 0) {
-                response.cart.cartItems.forEach(cartItem => {
-                    let itemName;
+            if (response.cartItems && response.cartItems.length > 0) {
+                response.cartItems.forEach(cartItem => {
+                    let itemName = cartItem.product.displayName;
                     let item = document.createElement("H1");
-                    if (cartItem.product) {
-                        if (cartItem.product.category === "cpu"){
-                            itemName = createProductName([cartItem.product.brand, cartItem.product.name]);
-                        }
-                        else if (cartItem.product.category === "ram") {
-                            itemName = createProductName([cartItem.product.brand, cartItem.product.series]);
-                        }
-                    }
-                    else if (cartItem.videoCard) {
-                        if(cartItem.videoCard.category === "videoCard") {
-                            itemName = createProductName([cartItem.videoCard.brand, cartItem.videoCard.series,
-                                cartItem.videoCard.gpu]);
-                        }
-                    }
 
                     item.textContent = cartItem.quantity + " x " + itemName;
                     itemSummaryDiv.appendChild(item);
@@ -73,18 +58,6 @@ const getItemSummary = function() {
     }
     xhr.open("GET", "CartServlet/get", false);
     xhr.send();
-}
-
-function createProductName(attributeList) {
-    let name = "";
-    for (let i = 0; i < attributeList.length; i++) {
-        name += ((attributeList[i] == null) ? "" : attributeList[i]);
-        if (i < attributeList.length - 1){
-            name += " ";
-        }
-    }
-
-    return name;
 }
 
 getItemSummary();
