@@ -1,6 +1,8 @@
+package edu.uci.inf124.petrwarerestclient.servlet;
+
+import edu.uci.inf124.petrwarerestclient.resourcetarget.APIConfig;
 import org.glassfish.jersey.client.ClientConfig;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

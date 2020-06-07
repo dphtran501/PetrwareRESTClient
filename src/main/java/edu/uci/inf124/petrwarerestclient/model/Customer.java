@@ -1,3 +1,5 @@
+package edu.uci.inf124.petrwarerestclient.model;
+
 public class Customer {
 
     private int id;
@@ -106,7 +108,7 @@ public class Customer {
 
     @Override
     public String toString() {
-        return "Customer{" +
+        return "edu.uci.inf124.petrwarerestclient.model.Customer{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastname='" + lastName + '\'' +

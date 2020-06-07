@@ -1,3 +1,5 @@
+package edu.uci.inf124.petrwarerestclient.model;
+
 public class CartItem {
     private int productID;
     private int quantity;
@@ -37,7 +39,7 @@ public class CartItem {
 
     @Override
     public String toString() {
-        return "CartItem{" +
+        return "edu.uci.inf124.petrwarerestclient.model.CartItem{" +
                 "productID=" + productID +
                 ", quantity=" + quantity +
                 '}';

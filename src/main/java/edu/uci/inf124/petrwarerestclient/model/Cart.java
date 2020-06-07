@@ -1,3 +1,5 @@
+package edu.uci.inf124.petrwarerestclient.model;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +56,7 @@ public class Cart {
 
     @Override
     public String toString() {
-        return "Cart{" +
+        return "edu.uci.inf124.petrwarerestclient.model.Cart{" +
                 "customerID=" + customerID +
                 ", cartItems=" + cartItems +
                 '}';

@@ -1,4 +1,11 @@
+package edu.uci.inf124.petrwarerestclient.servlet;
+
 import com.google.gson.Gson;
+import edu.uci.inf124.petrwarerestclient.model.Cart;
+import edu.uci.inf124.petrwarerestclient.model.CartItem;
+import edu.uci.inf124.petrwarerestclient.model.Product;
+import edu.uci.inf124.petrwarerestclient.resourcetarget.APIConfig;
+import edu.uci.inf124.petrwarerestclient.response.CartResponse;
 import org.glassfish.jersey.client.ClientConfig;
 
 import javax.servlet.RequestDispatcher;

@@ -1,3 +1,7 @@
+package edu.uci.inf124.petrwarerestclient.response;
+
+import edu.uci.inf124.petrwarerestclient.model.Customer;
+
 public class CustomerResponse {
     private String message;
 

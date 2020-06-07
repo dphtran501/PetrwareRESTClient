@@ -1,7 +1,12 @@
+package edu.uci.inf124.petrwarerestclient.servlet;
+
 import com.google.gson.Gson;
+import edu.uci.inf124.petrwarerestclient.model.CreditCard;
+import edu.uci.inf124.petrwarerestclient.model.Customer;
+import edu.uci.inf124.petrwarerestclient.model.OrderSummary;
+import edu.uci.inf124.petrwarerestclient.resourcetarget.APIConfig;
 import org.glassfish.jersey.client.ClientConfig;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

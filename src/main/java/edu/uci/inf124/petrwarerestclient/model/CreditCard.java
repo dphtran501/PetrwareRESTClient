@@ -1,3 +1,5 @@
+package edu.uci.inf124.petrwarerestclient.model;
+
 public class CreditCard {
     int id;
     String cardNumber;
@@ -38,7 +40,7 @@ public class CreditCard {
 
     @Override
     public String toString() {
-        return "CreditCard{" +
+        return "edu.uci.inf124.petrwarerestclient.model.CreditCard{" +
                 "id=" + id +
                 ", cardNumber='" + cardNumber + '\'' +
                 ", expiration='" + expiration + '\'' +

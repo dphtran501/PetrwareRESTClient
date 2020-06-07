@@ -1,3 +1,5 @@
+package edu.uci.inf124.petrwarerestclient.model;
+
 public class ProductCPU extends Product {
 
     private String processorsType;
@@ -76,7 +78,7 @@ public class ProductCPU extends Product {
 
     @Override
     public String toString() {
-        return "ProductCPU{" +
+        return "edu.uci.inf124.petrwarerestclient.model.ProductCPU{" +
                 "processorsType='" + processorsType + '\'' +
                 ", socketType='" + socketType + '\'' +
                 ", coreName='" + coreName + '\'' +

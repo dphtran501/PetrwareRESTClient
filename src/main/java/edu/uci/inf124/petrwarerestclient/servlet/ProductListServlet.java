@@ -1,3 +1,6 @@
+package edu.uci.inf124.petrwarerestclient.servlet;
+
+import edu.uci.inf124.petrwarerestclient.resourcetarget.APIConfig;
 import org.glassfish.jersey.client.ClientConfig;
 
 import javax.servlet.RequestDispatcher;

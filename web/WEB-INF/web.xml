@@ -6,11 +6,7 @@
 <web-app version="4.0" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
     <servlet>
         <servlet-name>ProductListServlet</servlet-name>
-        <servlet-class>ProductListServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>PlacedOrderServlet</servlet-name>
-        <servlet-class>PlacedOrderServlet</servlet-class>
+        <servlet-class>edu.uci.inf124.petrwarerestclient.servlet.ProductListServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ProductListServlet</servlet-name>
@@ -18,7 +14,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>ProductServlet</servlet-name>
-        <servlet-class>ProductServlet</servlet-class>
+        <servlet-class>edu.uci.inf124.petrwarerestclient.servlet.ProductServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ProductServlet</servlet-name>
@@ -26,7 +22,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>CustomerServlet</servlet-name>
-        <servlet-class>CustomerServlet</servlet-class>
+        <servlet-class>edu.uci.inf124.petrwarerestclient.servlet.CustomerServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CustomerServlet</servlet-name>
@@ -34,7 +30,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>CartServlet</servlet-name>
-        <servlet-class>CartServlet</servlet-class>
+        <servlet-class>edu.uci.inf124.petrwarerestclient.servlet.CartServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CartServlet</servlet-name>
@@ -42,7 +38,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>LastViewedServlet</servlet-name>
-        <servlet-class>LastViewedServlet</servlet-class>
+        <servlet-class>edu.uci.inf124.petrwarerestclient.servlet.LastViewedServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LastViewedServlet</servlet-name>
@@ -50,7 +46,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>CheckoutServlet</servlet-name>
-        <servlet-class>CheckoutServlet</servlet-class>
+        <servlet-class>edu.uci.inf124.petrwarerestclient.servlet.CheckoutServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>CheckoutServlet</servlet-name>
@@ -64,6 +60,10 @@
         <servlet-name>placedOrder</servlet-name>
         <url-pattern>/placedOrder.html</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>PlacedOrderServlet</servlet-name>
+        <servlet-class>edu.uci.inf124.petrwarerestclient.servlet.PlacedOrderServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>PlacedOrderServlet</servlet-name>
         <url-pattern>/PlacedOrderServlet</url-pattern>

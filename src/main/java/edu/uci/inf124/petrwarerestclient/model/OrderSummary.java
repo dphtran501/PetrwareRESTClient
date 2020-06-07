@@ -1,3 +1,5 @@
+package edu.uci.inf124.petrwarerestclient.model;
+
 public class OrderSummary {
     private int cID;
     private String firstName;

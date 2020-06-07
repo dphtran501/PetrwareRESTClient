@@ -1,3 +1,5 @@
+package edu.uci.inf124.petrwarerestclient.model;
+
 public class ProductVC extends Product {
 
     private String interfaceVC; // interface is keyword
@@ -94,7 +96,7 @@ public class ProductVC extends Product {
 
     @Override
     public String toString() {
-        return "ProductVC{" +
+        return "edu.uci.inf124.petrwarerestclient.model.ProductVC{" +
                 "interfaceVC='" + interfaceVC + '\'' +
                 ", chipset='" + chipset + '\'' +
                 ", gpu='" + gpu + '\'' +

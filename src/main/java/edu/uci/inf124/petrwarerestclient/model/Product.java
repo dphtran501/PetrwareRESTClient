@@ -1,3 +1,5 @@
+package edu.uci.inf124.petrwarerestclient.model;
+
 public class Product {
     private int id;
     private String model;
@@ -106,7 +108,7 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product{" +
+        return "edu.uci.inf124.petrwarerestclient.model.Product{" +
                 "id=" + id +
                 ", model='" + model + '\'' +
                 ", brand='" + brand + '\'' +
