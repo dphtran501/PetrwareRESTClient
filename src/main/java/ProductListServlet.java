@@ -44,7 +44,7 @@ public class ProductListServlet extends HttpServlet {
         }
     }
 
-    private void processGetProductRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void processGetProductRequest(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession(true);
         String productID = request.getParameter("pID");
 

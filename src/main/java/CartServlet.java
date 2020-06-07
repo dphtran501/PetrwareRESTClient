@@ -80,7 +80,7 @@ public class CartServlet extends HttpServlet {
         response.getWriter().write(json);
     }
 
-    private void processGetAllItemsRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void processGetAllItemsRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession(true);
 
         Cart cart = (Cart) session.getAttribute("cart");
