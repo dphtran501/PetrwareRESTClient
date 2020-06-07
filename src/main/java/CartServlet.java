@@ -12,7 +12,6 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
-import java.sql.*;
 import java.util.List;
 
 public class CartServlet extends HttpServlet {
@@ -111,18 +110,5 @@ public class CartServlet extends HttpServlet {
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write(json);
         }
-    }
-
-    private Product createProduct(ResultSet rs) throws SQLException {
-        Product product = new Product(rs.getInt("id"));
-        product.setModel(rs.getString("model"));
-        product.setBrand(rs.getString("brand"));
-        product.setName(rs.getString("name"));
-        product.setSeries(rs.getString("series"));
-        product.setCategory(rs.getString("category"));
-        product.setPrice(rs.getDouble("price"));
-        product.setDescription(rs.getString("description"));
-        product.setImgSrc(rs.getString("imgSrc"));
-        return product;
     }
 }

@@ -1,6 +1,4 @@
-import com.google.gson.Gson;
 import org.glassfish.jersey.client.ClientConfig;
-import org.json.JSONObject;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,7 +10,6 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
-import java.sql.*;
 import java.util.List;
 
 public class ProductServlet extends HttpServlet {

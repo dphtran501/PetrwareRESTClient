@@ -1,4 +1,3 @@
-import com.google.gson.Gson;
 import org.glassfish.jersey.client.ClientConfig;
 
 import javax.servlet.RequestDispatcher;
@@ -11,10 +10,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.UriBuilder;
 import java.io.IOException;
-import java.net.URI;
-import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -219,55 +215,5 @@ public class ProductListServlet extends HttpServlet {
         } else {
             response.getWriter().write(jsonResponse);
         }
-    }
-
-    private ProductCPU createProductCPU(ResultSet rs) throws SQLException {
-        ProductCPU productCPU = new ProductCPU(createProduct(rs));
-        productCPU.setProcessorsType(rs.getString("processorsType"));
-        productCPU.setSocketType(rs.getString("socketType"));
-        productCPU.setCoreName(rs.getString("coreName"));
-        productCPU.setNumOfCores(rs.getInt("numOfCores"));
-        productCPU.setNumOfThreads(rs.getInt("numOfThreads"));
-        productCPU.setOperatingFrequency(rs.getDouble("operatingFrequency"));
-        productCPU.setMaxTurboFrequency(rs.getDouble("maxTurboFrequency"));
-        return productCPU;
-    }
-
-    private ProductRAM createProductRAM(ResultSet rs) throws SQLException {
-        ProductRAM productRAM = new ProductRAM(createProduct(rs));
-        productRAM.setCapacity(rs.getString("capacity"));
-        productRAM.setSpeed(rs.getString("speed"));
-        productRAM.setLatency(rs.getInt("latency"));
-        productRAM.setTiming(rs.getString("timing"));
-        productRAM.setColor(rs.getString("color"));
-        productRAM.setColorLED(rs.getString("colorLED"));
-        return productRAM;
-    }
-
-    private ProductVC createProductVC(ResultSet rs) throws SQLException {
-        ProductVC productVC = new ProductVC(createProduct(rs));
-        productVC.setInterfaceVC(rs.getString("interface"));
-        productVC.setChipset(rs.getString("chipset"));
-        productVC.setGpu(rs.getString("gpu"));
-        productVC.setMemorySize(rs.getInt("memorySize"));
-        productVC.setMemoryType(rs.getString("memoryType"));
-        productVC.setMaxResolution(rs.getString("maxResolution"));
-        productVC.setCooler(rs.getString("cooler"));
-        productVC.setMaxGPULength(rs.getInt("maxGPULength"));
-        productVC.setCardDimensions(rs.getString("cardDimensions"));
-        return productVC;
-    }
-
-    private Product createProduct(ResultSet rs) throws SQLException {
-        Product product = new Product(rs.getInt("id"));
-        product.setModel(rs.getString("model"));
-        product.setBrand(rs.getString("brand"));
-        product.setName(rs.getString("name"));
-        product.setSeries(rs.getString("series"));
-        product.setCategory(rs.getString("category"));
-        product.setPrice(rs.getDouble("price"));
-        product.setDescription(rs.getString("description"));
-        product.setImgSrc(rs.getString("imgSrc"));
-        return product;
     }
 }
