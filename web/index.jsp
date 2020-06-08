@@ -12,10 +12,10 @@
     <!--?php $filename = $_SERVER['SCRIPT_NAME']; ?-->
     <!--?php include './header.php'; ?-->
     <header>
-        <h1 class="siteName"><a href="index.html">Petrware</a></h1>
+        <h1 class="siteName"><a href="index.jsp">Petrware</a></h1>
         <nav>
             <ul class="nav__links">
-                <li><a class="current" href="index.html">Home</a></li>
+                <li><a class="current" href="index.jsp">Home</a></li>
                 <li><a href="about.html">About</a></li>
             </ul>
         </nav>
