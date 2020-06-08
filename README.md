@@ -12,7 +12,9 @@ The "About" page contains information pertaining to Petrware, their business, th
 
 ## Requirements Checklist
 
-- [ ] **Using JSP reimplement the product list page. This is the page that contains the list of your products.** 
+- [x] **Using JSP reimplement the product list page. This is the page that contains the list of your products.** 
+
+    The homepage is a JSP file that lists all the products.
 
 - [x] **Create REST services to allow for interaction with the order and product resources stored in your application 
 database.**
@@ -38,4 +40,4 @@ Group 21: Jevford Barro (72114221), Peter Tang (45193375), Derek Tran (18491795)
 - [x] [PA 1: Building a dynamic website using HTML, JavaScript, and CSS](docs/pa1.md)
 - [x] [PA 2: Building a web application using PHP, Ajax, and MySQL](docs/pa2.md) 
 - [X] [PA 3: Building a web application using Java Servlets](docs/pa3.md)
-- [ ] PA 4: Building a web application using JSP and RESTful web services 
+- [x] PA 4: Building a web application using JSP and RESTful web services 
