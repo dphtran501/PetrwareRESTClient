@@ -15,9 +15,9 @@ The "About" page contains information pertaining to Petrware, their business, th
 - [ ] **Using JSP reimplement the product list page. This is the page that contains the list of your products.** 
 
 - [x] **Create REST services to allow for interaction with the order and product resources stored in your application 
-database.
+database.**
     
-    Refert to the [PetrwareRESTService](https://github.com/dphtran501/PetrwareRESTService) project for this requirement.
+    Refer to the [PetrwareRESTService](https://github.com/dphtran501/PetrwareRESTService) project for this requirement.
     
 - [x] **You will now need to replace all the database interactions in your web application with REST calls. Your web 
 application will now act as a REST client and retrieve the MySQL data indirectly through the new RESTful web service. 
@@ -29,7 +29,7 @@ That is, you will have two applications:**
     
     **(2) an application that is the client of the RESTful APIs, generates the HTML pages, and handles requests from the user.**
     
-    PetrwareRESTClient(this project) is the client of PetrwareRESTService. [Servlets](src/main/java/edu/uci/inf124/petrwarerestclient/servlet) are used to manipulate the MariaDB data indirectly via the PetrwareRESTService web service.
+    PetrwareRESTClient (this project) is the client of PetrwareRESTService. [Servlets](src/main/java/edu/uci/inf124/petrwarerestclient/servlet) are used to manipulate the MariaDB data indirectly via the PetrwareRESTService web service.
 
 ## Authors
 Group 21: Jevford Barro (72114221), Peter Tang (45193375), Derek Tran (18491795)
