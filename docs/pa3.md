@@ -1,4 +1,4 @@
-# INF124 - PA 3: Building a web application using Java Servlets
+# PA 3: Building a web application using Java Servlets
 
 Petrware opens up on the home page which shows the list of products available for purchase. 
 

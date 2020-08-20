@@ -1,4 +1,4 @@
-# INF124 - PA 1 (Building a dynamic website using HTML, JavaScript, and CSS)
+# PA 1 (Building a dynamic website using HTML, JavaScript, and CSS)
 [Petrware homepage](http://circinus-26.ics.uci.edu:8080/project1/index.html)
 
 Petrware opens up on the home page which shows the list of products available for purchase. 

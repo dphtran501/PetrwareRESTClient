@@ -1,4 +1,4 @@
-# INF124 - PA 2: Building a web application using PHP, Ajax, and MySQL 
+# PA 2: Building a web application using PHP, Ajax, and MySQL 
 
 Petrware opens up on the home page which shows the list of products available for purchase. 
 
